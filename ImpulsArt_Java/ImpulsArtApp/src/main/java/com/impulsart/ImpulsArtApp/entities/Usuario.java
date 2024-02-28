@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Date;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name= "Usuarios")
@@ -31,4 +33,37 @@ public class Usuario {
     private String contrasena;
     @Column(name = "TipoUsuario",length = 50,nullable = false)
     private String tipoUsuario;
+
+    //FOREING KEY
+    @ManyToMany
+    @JoinTable(
+            name = "Usuarios_Especialidades",
+            joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
+            inverseJoinColumns = @JoinColumn(name = "FkCod_Especialidad", referencedColumnName = "pk_Especialidad")
+    )
+    private List<Especialidad> especialidades;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Usuarios_Pedido",
+            joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
+            inverseJoinColumns = @JoinColumn(name = "FkCod_Pedido", referencedColumnName = "pk_CodPedido")
+    )
+    private List<PedidoPersonalizado> pedidoPersonalizados;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Usuarios_Obra",
+            joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
+            inverseJoinColumns = @JoinColumn(name = "FkCod_Producto", referencedColumnName = "PkCod_Producto")
+    )
+    private List<Obra> obras;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Usuarios_Ventas",
+            joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
+            inverseJoinColumns = @JoinColumn(name = "FkCod_Venta", referencedColumnName = "PkCod_Venta")
+    )
+    private List<Venta> ventas;
 }
