@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name="despachos")
@@ -26,4 +27,8 @@ public class Despacho {
     private LocalDate FechaE;
     @Column(name = "Fecha_Venta",length = 100)
     private LocalDate Fecha_Venta;
+
+    @ManyToMany(mappedBy = "despachos")
+    private List<Domiciliario> domiciliarios;
+
 }

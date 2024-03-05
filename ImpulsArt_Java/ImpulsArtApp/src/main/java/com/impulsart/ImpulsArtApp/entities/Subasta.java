@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "Subastas")
@@ -32,6 +33,11 @@ public class Subasta {
     @Column(name = "FechaFinalizacion", nullable = false)
     private LocalDate FechaFinalizacion;
 
-    //Hola
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "FkCod_Producto",nullable = false)
+    private Obra obras;
+
+    @OneToMany(mappedBy = "Subastas")
+    private List<Oferta> ofertas;
 
 }

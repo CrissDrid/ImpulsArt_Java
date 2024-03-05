@@ -30,6 +30,12 @@ public class Oferta {
     @Column(name = "HoraOferta")
     private LocalTime HoraOferta;
 
-    //Hola
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Fk_Identificacion",nullable = false)
+    private Usuario Usuarios;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Fk_subasta",nullable = false)
+    private Subasta Subastas;
 
 }

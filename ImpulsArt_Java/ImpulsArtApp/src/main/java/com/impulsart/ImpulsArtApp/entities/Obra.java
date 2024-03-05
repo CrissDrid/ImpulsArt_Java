@@ -39,7 +39,13 @@ public class Obra {
     @OneToMany(mappedBy = "obras",cascade = CascadeType.ALL)
     private List<Venta> ventas;
 
-    //FOREING KEY
+    @OneToMany(mappedBy = "obras",cascade = CascadeType.ALL)
+    private List<Subasta> subastas;
+
+    @OneToMany(mappedBy = "obras")
+    private List<Garantia> garantias;
+
     @ManyToMany(mappedBy = "obras")
     private List<Usuario> usuarios;
+
 }

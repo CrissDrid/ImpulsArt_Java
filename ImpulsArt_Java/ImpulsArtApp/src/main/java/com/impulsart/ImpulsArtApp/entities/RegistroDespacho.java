@@ -24,4 +24,9 @@ public class RegistroDespacho {
     private LocalDate fechaEntrega;
     @Column(name = "HoraEntrega",length = 10)
     private LocalTime hora;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "FkCod_despacho",nullable = false)
+    private Despacho despachos;
+
 }

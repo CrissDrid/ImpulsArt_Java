@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name="vehiculos")
 @Data
@@ -23,4 +25,8 @@ public class Vehiculo {
     private int CantidadVehiculo;
     @Column(name = "modelo")
     private String modelo;
+
+    @OneToMany(mappedBy = "vehiculos")
+    private List<Domiciliario> domiciliarios;
+
 }

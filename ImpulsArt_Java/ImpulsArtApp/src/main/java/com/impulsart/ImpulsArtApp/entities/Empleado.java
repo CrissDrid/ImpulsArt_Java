@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name="Empleados")
 @Data
@@ -20,5 +22,12 @@ public class Empleado {
     private int Salario;
     @Column(name = "CasosPendientes",length = 100)
     private int CasosPendientes;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Fk_Identificacion",nullable = false)
+    private Usuario Usuarios;
+
+    @OneToMany(mappedBy = "Empleados")
+    private List<Pqrs> PQRS;
 
 }

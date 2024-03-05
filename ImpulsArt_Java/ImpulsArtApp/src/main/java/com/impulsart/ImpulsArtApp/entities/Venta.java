@@ -38,4 +38,10 @@ public class Venta {
     //FOREING KEY
     @ManyToMany(mappedBy = "ventas")
     private List<Usuario> usuarios;
+
+    @OneToMany(mappedBy = "ventas")
+    private List<Pqrs> PQRS;
+
+    @OneToMany(mappedBy = "ventas")
+    private List<Devolucion> devoluciones;
 }

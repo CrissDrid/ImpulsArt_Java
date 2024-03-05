@@ -25,4 +25,13 @@ public class Devolucion {
     private String ComprobanteReembolso;
     @Column(name = "TotalDevolver", length = 200)
     private int TotalDevolver;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fkCod_PQRS",nullable = false)
+    private Pqrs PQRS;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fkCod_venta",nullable = false)
+    private Venta ventas;
+
 }

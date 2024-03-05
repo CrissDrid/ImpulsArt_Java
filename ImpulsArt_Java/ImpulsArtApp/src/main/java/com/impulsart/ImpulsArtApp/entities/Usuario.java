@@ -34,6 +34,15 @@ public class Usuario {
     @Column(name = "TipoUsuario",length = 50,nullable = false)
     private String tipoUsuario;
 
+    @OneToMany(mappedBy = "Usuarios")
+    private List<Oferta> ofertas;
+
+    @OneToMany(mappedBy = "Usuarios")
+    private List<Empleado> Empleados;
+
+    @OneToMany(mappedBy = "Usuarios")
+    private List<Domiciliario> domiciliarios;
+
     //FOREING KEY
     @ManyToMany
     @JoinTable(
@@ -66,4 +75,12 @@ public class Usuario {
             inverseJoinColumns = @JoinColumn(name = "FkCod_Venta", referencedColumnName = "PkCod_Venta")
     )
     private List<Venta> ventas;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Usuarios_pqrs",
+            joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
+            inverseJoinColumns = @JoinColumn(name = "fkCod_PQRS", referencedColumnName = "pkCod_PQRS")
+    )
+    private List<Pqrs> PQRS;
 }
