@@ -30,4 +30,6 @@ public class Oferta {
     @Column(name = "HoraOferta")
     private LocalTime HoraOferta;
 
+    //Hola
+
 }

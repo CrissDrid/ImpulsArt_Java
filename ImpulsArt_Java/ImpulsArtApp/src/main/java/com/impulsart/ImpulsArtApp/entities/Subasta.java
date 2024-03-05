@@ -32,4 +32,6 @@ public class Subasta {
     @Column(name = "FechaFinalizacion", nullable = false)
     private LocalDate FechaFinalizacion;
 
+    //Hola
+
 }
