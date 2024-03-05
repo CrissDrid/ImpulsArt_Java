@@ -1,4 +1,4 @@
-package com.impulsart.ImpulsArtApp.Entities;
+package com.impulsart.ImpulsArtApp.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
