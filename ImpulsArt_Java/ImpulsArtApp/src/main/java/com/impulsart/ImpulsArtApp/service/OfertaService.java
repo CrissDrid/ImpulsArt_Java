@@ -7,6 +7,7 @@ import java.util.List;
 public interface OfertaService {
 
     public List<Oferta> findAll() throws Exception;
+    Oferta findById(Long id);
     public void create(Oferta oferta);
     public void delete(Oferta oferta);
     public void update(Oferta oferta);

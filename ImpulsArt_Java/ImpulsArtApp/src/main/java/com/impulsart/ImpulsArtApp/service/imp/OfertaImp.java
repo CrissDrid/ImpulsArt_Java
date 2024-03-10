@@ -11,13 +11,17 @@ import java.util.List;
 @Service 
 
 public class OfertaImp implements OfertaService {
-
     @Autowired
     private OfertaRepository ofertaRepository;
 
     @Override
     public List<Oferta> findAll() throws Exception {
         return this.ofertaRepository.findAll();
+    }
+
+    @Override
+    public Oferta findById(Long id) {
+        return this.ofertaRepository.getById(id);
     }
 
     @Override
