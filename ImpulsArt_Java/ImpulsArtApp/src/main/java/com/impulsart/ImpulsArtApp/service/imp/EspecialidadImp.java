@@ -4,9 +4,10 @@ import com.impulsart.ImpulsArtApp.entities.Especialidad;
 import com.impulsart.ImpulsArtApp.repositories.EspecialidadRepositorio;
 import com.impulsart.ImpulsArtApp.service.EspecialidadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class EspecialidadImp implements EspecialidadService {
     @Autowired
     private EspecialidadRepositorio especialidadRepositorio;

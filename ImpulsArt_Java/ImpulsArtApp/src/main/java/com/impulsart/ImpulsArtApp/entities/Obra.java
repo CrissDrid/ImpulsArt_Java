@@ -32,8 +32,9 @@ public class Obra {
     private String categoria;
     @Column(name = "Descripcion",length = 155,nullable = false)
     private String descripcion;
+    @Lob
     @Column(name = "Imagen")
-    private Clob imagen;
+    private byte[] imagen;
 
     //FOREING KEY
     @OneToMany(mappedBy = "obras",cascade = CascadeType.ALL)
