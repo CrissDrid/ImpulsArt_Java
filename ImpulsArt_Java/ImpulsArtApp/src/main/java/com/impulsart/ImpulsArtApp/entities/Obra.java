@@ -47,5 +47,4 @@ public class Obra {
 
     @ManyToMany(mappedBy = "obras")
     private List<Usuario> usuarios;
-
 }

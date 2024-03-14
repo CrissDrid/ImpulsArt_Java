@@ -34,7 +34,7 @@ public class Subasta {
     private LocalDate FechaFinalizacion;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "FkCod_Producto",nullable = false)
+    @JoinColumn(name = "FkCod_Producto", nullable = false)
     private Obra obras;
 
     @OneToMany(mappedBy = "Subastas")

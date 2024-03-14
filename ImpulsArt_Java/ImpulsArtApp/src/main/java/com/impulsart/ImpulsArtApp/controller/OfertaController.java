@@ -49,7 +49,6 @@ public class OfertaController {
             response.put("data",e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
 
-
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -60,7 +59,7 @@ public class OfertaController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //FIND
+    //FIND ALL
 
     @GetMapping("all")
     public ResponseEntity<Map<String, Object>> findAll(){
@@ -85,7 +84,54 @@ public class OfertaController {
 
     }
 
-    //FIND
+    //FIND ALL
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //FIND ID
+
+    @GetMapping("/list/{PkCod_oferta}")
+    public ResponseEntity<Map<String, Object>> findById(@PathVariable Long PkCod_oferta) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            Oferta oferta = this.ofertaImp.findById(PkCod_oferta);
+            response.put("status","success");
+            response.put("data",oferta);
+        } catch (Exception e) {
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //FIND ID
+    ///////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //DELETE
+
+    @DeleteMapping("delete/{PkCod_oferta}")
+    public ResponseEntity<Map<String,Object>> delete(@PathVariable Long PkCod_oferta){
+        Map<String,Object> response = new HashMap<>();
+
+        try{
+            Oferta oferta = this.ofertaImp.findById(PkCod_oferta);
+            ofertaImp.delete(oferta);
+
+            response.put("status","success");
+            response.put("data","Registro Eliminado Correctamente");
+        }catch (Exception e){
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data",e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //DELETE
+    ///////////////////////////////////////////////
 
 }

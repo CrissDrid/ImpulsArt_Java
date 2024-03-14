@@ -20,8 +20,8 @@ public class OfertaImp implements OfertaService {
     }
 
     @Override
-    public Oferta findById(Long id) {
-        return this.ofertaRepository.getById(id);
+    public Oferta findById(Long PkCod_oferta) {
+        return this.ofertaRepository.findById(PkCod_oferta).orElse(null);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class OfertaImp implements OfertaService {
 
     @Override
     public void delete(Oferta oferta) {
-        this.ofertaRepository.save(oferta);
+        this.ofertaRepository.delete(oferta);
     }
 
     @Override

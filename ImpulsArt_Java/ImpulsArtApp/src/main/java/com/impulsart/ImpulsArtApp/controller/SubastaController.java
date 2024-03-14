@@ -60,7 +60,7 @@ public class SubastaController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //FIND
+    //FIND ALL
 
     @GetMapping("all")
     public ResponseEntity<Map<String, Object>> findAll(){
@@ -85,7 +85,53 @@ public class SubastaController {
 
     }
 
-    //FIND
+    //FIND ALL
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //FIND ID
+
+    @GetMapping("/list/{pkCodSubasta}")
+    public ResponseEntity<Map<String, Object>> findById(@PathVariable Long pkCodSubasta) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            Subasta subasta = this.subastaImp.findById(pkCodSubasta);
+            response.put("status","success");
+            response.put("data",subasta);
+        } catch (Exception e) {
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //FIND ID
+    ///////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //DELETE
+
+    @DeleteMapping("delete/{pkCodSubasta}")
+    public ResponseEntity<Map<String,Object>> delete(@PathVariable Long pkCodSubasta){
+        Map<String,Object> response = new HashMap<>();
+
+        try{
+            Subasta subasta = this.subastaImp.findById(pkCodSubasta);
+            subastaImp.delete(subasta);
+
+            response.put("status","success");
+            response.put("data","Registro Eliminado Correctamente");
+        }catch (Exception e){
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data",e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //DELETE
+    ///////////////////////////////////////////////
 
 }

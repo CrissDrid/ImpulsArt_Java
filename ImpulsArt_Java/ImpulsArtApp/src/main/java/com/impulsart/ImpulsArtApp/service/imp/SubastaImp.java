@@ -22,13 +22,18 @@ public class SubastaImp implements SubastaService {
     }
 
     @Override
+    public Subasta findById(Long pkCodSubasta) {
+        return this.subastaRepository.findById(pkCodSubasta).orElse(null);
+    }
+
+    @Override
     public void create(Subasta subasta) {
         this.subastaRepository.save(subasta);
     }
 
     @Override
     public void delete(Subasta subasta) {
-        this.subastaRepository.save(subasta);
+        this.subastaRepository.delete(subasta);
     }
 
     @Override
