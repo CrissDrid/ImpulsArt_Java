@@ -134,4 +134,35 @@ public class SubastaController {
     //DELETE
     ///////////////////////////////////////////////
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //UPDATE
+
+    @GetMapping("/update/{pkCodSubasta}")
+    public ResponseEntity<Map<String, Object>> update(@PathVariable Long pkCodSubasta, @RequestBody Map<String, Object> request) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            Subasta subasta = this.subastaImp.findById(pkCodSubasta);
+
+            subasta.setEstadoSubasta((String) request.get("EstadoSubasta"));
+            subasta.setFechaFinalizacion(LocalDate.parse((String) request.get("FechaFinalizacion")));
+            subasta.setFechaInicio(LocalDate.parse((String) request.get("FechaInicio")));
+            subasta.setPrecioInicial((Integer)request.get("PrecioInicial"));
+
+            response.put("status","success");
+            response.put("data",subasta);
+
+            this.subastaImp.update(subasta);
+
+        } catch (Exception e) {
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //UPDATE
+    ///////////////////////////////////////////////
+
 }

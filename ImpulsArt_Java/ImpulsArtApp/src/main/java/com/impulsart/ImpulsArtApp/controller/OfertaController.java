@@ -134,4 +134,34 @@ public class OfertaController {
     //DELETE
     ///////////////////////////////////////////////
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //UPDATE
+
+    @GetMapping("/update/{PkCod_oferta}")
+    public ResponseEntity<Map<String, Object>> update(@PathVariable Long PkCod_oferta, @RequestBody Map<String, Object> request) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            Oferta oferta = this.ofertaImp.findById(PkCod_oferta);
+
+            oferta.setMonto((Integer)request.get("Monto"));
+            oferta.setFechaOferta(LocalDate.parse((String) request.get("FechaOferta")));
+            oferta.setHoraOferta(LocalTime.parse((String) request.get("HoraOferta")));
+
+            response.put("status","success");
+            response.put("data",oferta);
+
+            this.ofertaImp.update(oferta);
+
+        } catch (Exception e) {
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //UPDATE
+    ///////////////////////////////////////////////
+
 }
