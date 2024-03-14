@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.controller;
 
+import com.impulsart.ImpulsArtApp.entities.Obra;
 import com.impulsart.ImpulsArtApp.entities.PedidoPersonalizado;
 import com.impulsart.ImpulsArtApp.service.imp.PedidoPersonalizadoImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,31 @@ public class PedidoPersonalizadoController {
     }
 
 //CONTROLLER UPDATE
+    @PutMapping("update/{pk_CodPedido}")
+    public ResponseEntity<Map<String,Object>> update(@PathVariable Integer pk_CodPedido, @RequestBody Map<String,Object> request){
+        Map<String,Object> response = new HashMap<>();
+        try {
+            PedidoPersonalizado pedidoPersonalizado = this.pedidoPersonalizadoImp.findById(pk_CodPedido);
+
+            //CAMPOS DE LA TABLA PEDIDO PERSONALIZADO
+            pedidoPersonalizado.setColor(request.get("color").toString());
+            pedidoPersonalizado.setMateriales(request.get("materiales").toString());
+            pedidoPersonalizado.setContenido(request.get("contenido").toString());
+            pedidoPersonalizado.setTamano(request.get("tamaño").toString());
+            pedidoPersonalizado.setEstadoPedido(request.get("estadoPedido").toString());
+
+            this.pedidoPersonalizadoImp.update(pedidoPersonalizado);
+
+            response.put("status","success");
+            response.put("data","Actualizacion Exitosa");
+        }catch (Exception e){
+            response.put("status",HttpStatus.BAD_GATEWAY);
+            response.put("data",e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
 
 //CONTROLLER DELETE
     @DeleteMapping("/delete/{pk_CodPedido}")

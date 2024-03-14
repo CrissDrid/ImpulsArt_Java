@@ -89,6 +89,36 @@ public class ObraController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 //CONTROLLER UPDATE
+    @PutMapping("update/{PkCod_Producto}")
+    public ResponseEntity<Map<String,Object>> update(@PathVariable Integer PkCod_Producto, @RequestBody Map<String,Object>request){
+        Map<String,Object> response = new HashMap<>();
+        try {
+            Obra obra = this.obraImp.findById(PkCod_Producto);
+
+            obra.setNombre(request.get("nombreProducto").toString());
+            obra.setCosto(Integer.parseInt(request.get("costo").toString()));
+            obra.setPeso(request.get("peso").toString());
+            obra.setTamano(request.get("tamaño").toString());
+            obra.setCantidad(Integer.parseInt(request.get("cantidad").toString()));
+            obra.setCategoria(request.get("categoria").toString());
+            obra.setDescripcion(request.get("descripcion").toString());
+
+            //CONFIG IMAGEN
+            if(request.containsKey("imagen")&& request.get("imagen") !=null){
+                obra.setImagen(request.get("imagen").toString().getBytes());
+            }
+
+            this.obraImp.update(obra);
+
+            response.put("status","success");
+            response.put("data","Actualizacion Exitosa");
+        }catch (Exception e){
+            response.put("status",HttpStatus.BAD_GATEWAY);
+            response.put("data",e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 //CONTROLLER DELETE
     @DeleteMapping("/delete/{PkCod_Producto}")

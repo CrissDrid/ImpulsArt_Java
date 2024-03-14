@@ -90,7 +90,36 @@ public class UserController {
     }
     
 //CONTROLLER UPDATE
+    @PutMapping("update/{identificacion}")
+    public ResponseEntity<Map<String,Object>> update(@PathVariable Integer identificacion, @RequestBody Map<String,Object> request){
+        Map<String, Object> response = new HashMap<>();
+        try{
+            Usuario usuario = this.usuarioImp.findById(identificacion);
 
+            //CAMPOS DE LA TABLA USUARIOS
+            usuario.setIdentificacion(Integer.parseInt(request.get("identificacion").toString()));
+            usuario.setNombre(request.get("nombre").toString());
+            usuario.setApellido(request.get("apellido").toString());
+            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+            java.sql.Date fechaAnalizada = new java.sql.Date(formateador.parse((String) request.get("fechaNacimiento")).getTime());
+            usuario.setFechaNacimiento(fechaAnalizada);
+            usuario.setEmail(request.get("email").toString());
+            usuario.setNumCelular(request.get("numCelular").toString());
+            usuario.setDireccion(request.get("direccion").toString());
+            usuario.setContrasena(request.get("contrasena").toString());
+            usuario.setTipoUsuario(request.get("tipoUsuario").toString());
+
+            this.usuarioImp.update(usuario);
+
+            response.put("status","success");
+            response.put("data","Actualizacion Exitosa");
+        }catch (Exception e){
+            response.put("status",HttpStatus.BAD_GATEWAY);
+            response.put("data",e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 //CONTROLLER DELETE
     @DeleteMapping("/delete/{identificacion}")
     public ResponseEntity<Map<String, Object>> delete(@PathVariable Integer identificacion){

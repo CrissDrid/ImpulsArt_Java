@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,6 +39,7 @@ public class Obra {
 
     //FOREING KEY
     @OneToMany(mappedBy = "obras",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Venta> ventas;
 
     @OneToMany(mappedBy = "obras",cascade = CascadeType.ALL)

@@ -1,6 +1,7 @@
 package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.Especialidad;
+import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.service.imp.EspecialidadImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -79,6 +80,26 @@ public class EspecialidadController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 //CONTROLLER UPDATE
+    @PutMapping("update/{pk_Especialidad}")
+    public ResponseEntity<Map<String,Object>> update(@PathVariable Integer pk_Especialidad, @RequestBody Map<String, Object> request) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Especialidad especialidad = this.especialidadImp.fidnById(pk_Especialidad);
+
+            //CAMPOS DE LA TABLA ESPECIALIDAD
+            especialidad.setNombreEspecialidad(request.get("nombre").toString());
+            especialidad.setDescripcion(request.get("descripcion").toString());
+
+            this.especialidadImp.update(especialidad);
+            response.put("status","success");
+            response.put("data","Actualizacion Exitosa");
+        } catch (Exception e) {
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 //CONTROLLER DELETE
     @DeleteMapping("/delete/{pk_Especialidad}")
