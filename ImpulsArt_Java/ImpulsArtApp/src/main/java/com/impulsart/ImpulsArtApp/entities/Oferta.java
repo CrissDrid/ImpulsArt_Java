@@ -31,11 +31,11 @@ public class Oferta {
     private LocalTime HoraOferta;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Fk_Identificacion",nullable = false)
+    @JoinColumn(name = "Fk_Identificacion", nullable = false)
     private Usuario Usuarios;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Fk_subasta",nullable = false)
+    @JoinColumn(name = "Fk_subasta", nullable = false)
     private Subasta Subastas;
 
 }
