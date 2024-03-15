@@ -22,6 +22,8 @@ public class SubastaController {
 
     @Autowired
     private SubastaImp subastaImp;
+    @Autowired
+    private ObraImp obraImp;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //CREATE
@@ -39,6 +41,10 @@ public class SubastaController {
             subasta.setPrecioInicial(Integer.parseInt(request.get("PrecioInicial").toString()));
             subasta.setFechaInicio(LocalDate.parse(request.get("FechaInicio").toString()));
             subasta.setFechaFinalizacion(LocalDate.parse(request.get("FechaFinalizacion").toString()));
+
+            Obra obra = obraImp.findById(Integer.parseInt(request.get("FkCod_Producto").toString()));
+            subasta.setObras(obra);
+
             this.subastaImp.create(subasta);
 
             response.put("status","success");

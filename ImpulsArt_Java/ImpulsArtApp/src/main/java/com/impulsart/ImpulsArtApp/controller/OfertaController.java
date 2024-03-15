@@ -1,7 +1,10 @@
 package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.Oferta;
+import com.impulsart.ImpulsArtApp.entities.Subasta;
+import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.service.imp.OfertaImp;
+import com.impulsart.ImpulsArtApp.service.imp.SubastaImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,11 @@ public class OfertaController {
 
     @Autowired
     private OfertaImp ofertaImp;
+    @Autowired
+    private SubastaImp subastaImp;
+    @Autowired
+    UsuarioImp usuarioImp;
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //CREATE
@@ -38,10 +46,17 @@ public class OfertaController {
             oferta.setMonto(Integer.parseInt(request.get("Monto").toString()));
             oferta.setFechaOferta(LocalDate.parse(request.get("FechaOferta").toString()));
             oferta.setHoraOferta(LocalTime.parse(request.get("HoraOferta").toString()));
+
+            Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("Fk_Identificacion").toString()));
+            oferta.setUsuarios(usuario);
+
+            Subasta subasta = subastaImp.findById(Long.parseLong(request.get("fk_subasta").toString()));
+            oferta.setSubastas(subasta);
+
             this.ofertaImp.create(oferta);
 
-          response.put("status","success");
-          response.put("data","Registro Exitoso");
+            response.put("status","success");
+            response.put("data","Registro Exitoso");
 
         } catch (Exception e){
 
@@ -57,6 +72,7 @@ public class OfertaController {
 
     //CREATE
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //FIND ALL
