@@ -30,6 +30,7 @@ public class Oferta {
     @Column(name = "HoraOferta")
     private LocalTime HoraOferta;
 
+    //FOREING KEYS
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Fk_Identificacion", nullable = false)
     private Usuario Usuarios;

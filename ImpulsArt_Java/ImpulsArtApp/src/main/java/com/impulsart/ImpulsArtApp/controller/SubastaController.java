@@ -158,7 +158,7 @@ public class SubastaController {
             subasta.setPrecioInicial((Integer)request.get("PrecioInicial"));
 
             response.put("status","success");
-            response.put("data",subasta);
+            response.put("data","Actualizacion Exitosa");
 
             this.subastaImp.update(subasta);
 

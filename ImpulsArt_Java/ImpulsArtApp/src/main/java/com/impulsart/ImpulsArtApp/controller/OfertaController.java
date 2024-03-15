@@ -60,13 +60,10 @@ public class OfertaController {
             response.put("data","Registro Exitoso");
 
         } catch (Exception e){
-
             response.put("status",HttpStatus.BAD_GATEWAY);
             response.put("data",e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
-
         }
-
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
