@@ -5,6 +5,7 @@ import com.impulsart.ImpulsArtApp.entities.Subasta;
 import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.service.imp.OfertaImp;
 import com.impulsart.ImpulsArtApp.service.imp.SubastaImp;
+import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

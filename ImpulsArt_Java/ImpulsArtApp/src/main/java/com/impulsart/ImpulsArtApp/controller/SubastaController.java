@@ -1,7 +1,9 @@
 package com.impulsart.ImpulsArtApp.controller;
 
+import com.impulsart.ImpulsArtApp.entities.Obra;
 import com.impulsart.ImpulsArtApp.entities.Oferta;
 import com.impulsart.ImpulsArtApp.entities.Subasta;
+import com.impulsart.ImpulsArtApp.service.imp.ObraImp;
 import com.impulsart.ImpulsArtApp.service.imp.SubastaImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
