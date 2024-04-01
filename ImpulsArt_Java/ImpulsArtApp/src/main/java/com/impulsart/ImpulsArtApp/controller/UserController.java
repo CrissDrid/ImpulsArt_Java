@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,14 +35,13 @@ public class UserController {
             usuario.setIdentificacion(Integer.parseInt(request.get("identificacion").toString()));
             usuario.setNombre(request.get("nombre").toString());
             usuario.setApellido(request.get("apellido").toString());
-            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-            java.sql.Date fechaAnalizada = new java.sql.Date(formateador.parse((String) request.get("fechaNacimiento")).getTime());
-            usuario.setFechaNacimiento(fechaAnalizada);
+            usuario.setFechaNacimiento(LocalDate.parse(request.get("fechaNacimiento").toString()));
             usuario.setEmail(request.get("email").toString());
             usuario.setNumCelular(request.get("numCelular").toString());
             usuario.setDireccion(request.get("direccion").toString());
             usuario.setContrasena(request.get("contrasena").toString());
             usuario.setTipoUsuario(request.get("tipoUsuario").toString());
+            usuario.setNombreUsuario(request.get("nombreUsuario").toString());
 
             this.usuarioImp.create(usuario);
 
@@ -100,14 +100,13 @@ public class UserController {
             usuario.setIdentificacion(Integer.parseInt(request.get("identificacion").toString()));
             usuario.setNombre(request.get("nombre").toString());
             usuario.setApellido(request.get("apellido").toString());
-            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-            java.sql.Date fechaAnalizada = new java.sql.Date(formateador.parse((String) request.get("fechaNacimiento")).getTime());
-            usuario.setFechaNacimiento(fechaAnalizada);
             usuario.setEmail(request.get("email").toString());
+            usuario.setFechaNacimiento(LocalDate.parse(request.get("fechaNacimiento").toString()));
             usuario.setNumCelular(request.get("numCelular").toString());
             usuario.setDireccion(request.get("direccion").toString());
             usuario.setContrasena(request.get("contrasena").toString());
             usuario.setTipoUsuario(request.get("tipoUsuario").toString());
+            usuario.setNombreUsuario(request.get("nombreUsuario").toString());
 
             this.usuarioImp.update(usuario);
 

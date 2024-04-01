@@ -39,10 +39,10 @@ public class SubastaController {
 
             System.out.println("@@@@"+request);
             Subasta subasta = new Subasta();
-            subasta.setEstadoSubasta(request.get("EstadoSubasta").toString());
-            subasta.setPrecioInicial(Integer.parseInt(request.get("PrecioInicial").toString()));
-            subasta.setFechaInicio(LocalDate.parse(request.get("FechaInicio").toString()));
-            subasta.setFechaFinalizacion(LocalDate.parse(request.get("FechaFinalizacion").toString()));
+            subasta.setEstadoSubasta(request.get("estadoSubasta").toString());
+            subasta.setPrecioInicial(Integer.parseInt(request.get("precioInicial").toString()));
+            subasta.setFechaInicio(LocalDate.parse(request.get("fechaInicio").toString()));
+            subasta.setFechaFinalizacion(LocalDate.parse(request.get("fechaFinalizacion").toString()));
 
             Obra obra = obraImp.findById(Integer.parseInt(request.get("FkCod_Producto").toString()));
             subasta.setObras(obra);
@@ -152,10 +152,10 @@ public class SubastaController {
         try {
             Subasta subasta = this.subastaImp.findById(pkCodSubasta);
 
-            subasta.setEstadoSubasta((String) request.get("EstadoSubasta"));
-            subasta.setFechaFinalizacion(LocalDate.parse((String) request.get("FechaFinalizacion")));
-            subasta.setFechaInicio(LocalDate.parse((String) request.get("FechaInicio")));
-            subasta.setPrecioInicial((Integer)request.get("PrecioInicial"));
+            subasta.setEstadoSubasta(request.get("estadoSubasta").toString());
+            subasta.setPrecioInicial(Integer.parseInt(request.get("precioInicial").toString()));
+            subasta.setFechaInicio(LocalDate.parse(request.get("fechaInicio").toString()));
+            subasta.setFechaFinalizacion(LocalDate.parse(request.get("fechaFinalizacion").toString()));
 
             response.put("status","success");
             response.put("data","Actualizacion Exitosa");

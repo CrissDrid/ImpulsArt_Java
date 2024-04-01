@@ -23,7 +23,6 @@ import java.util.Objects;
 @CrossOrigin("*")
 
 public class OfertaController {
-
     @Autowired
     private OfertaImp ofertaImp;
     @Autowired
@@ -48,7 +47,7 @@ public class OfertaController {
             oferta.setFechaOferta(LocalDate.parse(request.get("FechaOferta").toString()));
             oferta.setHoraOferta(LocalTime.parse(request.get("HoraOferta").toString()));
 
-            Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("Fk_Identificacion").toString()));
+            Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("fk_Identificacion").toString()));
             oferta.setUsuarios(usuario);
 
             Subasta subasta = subastaImp.findById(Long.parseLong(request.get("fk_subasta").toString()));
