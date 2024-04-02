@@ -14,15 +14,14 @@ import java.util.List;
 @AllArgsConstructor
 public class Vehiculo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pk_placa")
-    private long id;
+    private long pk_placa;
     @Column(name = "Marca")
     private String marca;
     @Column(name = "TipoVehiculo")
-    private String TipoVehiculo;
+    private String tipoVehiculo;
     @Column(name = "CantidadVehiculo")
-    private int CantidadVehiculo;
+    private int cantidadVehiculo;
     @Column(name = "modelo")
     private String modelo;
 

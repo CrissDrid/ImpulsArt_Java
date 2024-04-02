@@ -17,14 +17,14 @@ public class Despacho {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pkCod_Despacho")
-    private long id;
+    private long pkCod_Despacho;
 
     @Column(name = "estado",length = 100)
     private String estado;
     @Column(name = "comprobante",length = 100)
     private String comprobante;
     @Column(name = "FechaEntrega",length = 100)
-    private LocalDate FechaE;
+    private LocalDate FechaEntrega;
     @Column(name = "Fecha_Venta",length = 100)
     private LocalDate Fecha_Venta;
 
