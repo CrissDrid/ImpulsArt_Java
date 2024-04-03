@@ -31,10 +31,10 @@ public class ObraController {
             //INSTACIA DEL OBJETO OBRA
             Obra obra = new Obra();
             //CAMPOS DE LA TABLA OBRA
-            obra.setNombre(request.get("nombreProducto").toString());
+            obra.setNombreProducto(request.get("nombreProducto").toString());
             obra.setCosto(Integer.parseInt(request.get("costo").toString()));
             obra.setPeso(request.get("peso").toString());
-            obra.setTamano(request.get("tamaño").toString());
+            obra.setTamano(request.get("tamano").toString());
             obra.setCantidad(Integer.parseInt(request.get("cantidad").toString()));
             obra.setCategoria(request.get("categoria").toString());
             obra.setDescripcion(request.get("descripcion").toString());
@@ -95,7 +95,7 @@ public class ObraController {
         try {
             Obra obra = this.obraImp.findById(PkCod_Producto);
 
-            obra.setNombre(request.get("nombreProducto").toString());
+            obra.setNombreProducto(request.get("nombreProducto").toString());
             obra.setCosto(Integer.parseInt(request.get("costo").toString()));
             obra.setPeso(request.get("peso").toString());
             obra.setTamano(request.get("tamaño").toString());

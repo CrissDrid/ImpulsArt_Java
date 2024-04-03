@@ -23,16 +23,16 @@ public class Subasta {
     private Long pkCodSubasta;
 
     @Column(name = "EstadoSubasta", nullable = false, length = 50)
-    private String EstadoSubasta;
+    private String estadoSubasta;
 
     @Column(name = "PrecioInicial", nullable = false, length = 255)
-    private int PrecioInicial;
+    private int precioInicial;
 
     @Column(name = "FechaInicio", nullable = false)
-    private LocalDate FechaInicio;
+    private LocalDate fechaInicio;
 
     @Column(name = "FechaFinalizacion", nullable = false)
-    private LocalDate FechaFinalizacion;
+    private LocalDate fechaFinalizacion;
 
     //FOREING KEYS
     @ManyToOne(fetch = FetchType.EAGER)

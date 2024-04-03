@@ -18,9 +18,9 @@ public class Obra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PkCod_Producto")
-    private int PkCod_Producto;
+    private int pkCod_Producto;
     @Column(name = "NombreProducto",length = 200)
-    private String nombre;
+    private String nombreProducto;
     @Column(name = "Costo",nullable = false)
     private int costo;
     @Column(name = "Peso",length = 10,nullable = false)
