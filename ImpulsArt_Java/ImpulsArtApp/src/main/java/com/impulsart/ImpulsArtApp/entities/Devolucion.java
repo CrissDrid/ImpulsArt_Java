@@ -1,4 +1,4 @@
-package com.impulsart.ImpulsArtApp.Entities;
+package com.impulsart.ImpulsArtApp.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,13 +16,13 @@ public class Devolucion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pk_CodDevolucion")
-    private long id;
+    private long pk_CodDevolucion;
     @Column(name = "FechaDevolucion", length = 200)
     private LocalDate fechaDevolucion;
     @Column(name = "TotalReembolso", length = 200)
-    private int TotalReembolso;
+    private int totalReembolso;
     @Column(name = "ComprobanteReembolso", length = 200)
-    private String ComprobanteReembolso;
+    private String comprobanteReembolso;
     @Column(name = "TotalDevolver", length = 200)
-    private int TotalDevolver;
+    private int totalDevolver;
 }

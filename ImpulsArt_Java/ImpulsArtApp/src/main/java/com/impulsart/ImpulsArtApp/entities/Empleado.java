@@ -1,4 +1,4 @@
-package com.impulsart.ImpulsArtApp.Entities;
+package com.impulsart.ImpulsArtApp.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,11 +14,11 @@ public class Empleado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pkCod_Empleado")
-    private long id;
+    private long pkCod_Empleado;
 
     @Column(name = "Salario",length = 100)
-    private int Salario;
+    private int salario;
     @Column(name = "CasosPendientes",length = 100)
-    private int CasosPendientes;
+    private int casosPendientes;
 
 }
