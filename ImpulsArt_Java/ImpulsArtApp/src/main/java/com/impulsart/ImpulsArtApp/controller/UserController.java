@@ -55,6 +55,33 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> request) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            String email = (String) request.get("email");
+            String contrasena = (String) request.get("contrasena");
+
+            // Aquí iría la lógica para buscar el usuario en la base de datos
+            Usuario usuario = usuarioImp.findByEmail(email);
+
+            // Verificar si el usuario existe y si la contraseña es correcta
+            if (usuario != null && usuario.getContrasena().equals(contrasena)) {
+                response.put("success", true);
+                response.put("data", "Inicio de sesión exitoso");
+            } else {
+                response.put("success", false);
+                response.put("data", "Credenciales inválidas");
+                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception e) {
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 //CONTROLLER READ
     //READ ALL
     @GetMapping("/all")
@@ -88,7 +115,7 @@ public class UserController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
 //CONTROLLER UPDATE
     @PutMapping("update/{identificacion}")
     public ResponseEntity<Map<String,Object>> update(@PathVariable Integer identificacion, @RequestBody Map<String,Object> request){
