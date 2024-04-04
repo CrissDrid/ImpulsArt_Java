@@ -14,10 +14,10 @@ public class TipoPQRS {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pkCod_TipoPQRS")
-    private long id;
+    private long pkCod_TipoPQRS;
     @Column(name = "NombreTipo",length = 50)
-    private String NombreTipo;
+    private String nombreTipo;
     @Column(name = "Descripcion",length = 50)
-    private String Descripcion;
+    private String descripcion;
 
 }

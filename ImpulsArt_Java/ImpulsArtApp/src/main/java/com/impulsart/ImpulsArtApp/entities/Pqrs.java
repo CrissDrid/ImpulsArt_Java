@@ -17,15 +17,15 @@ public class Pqrs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pkCod_PQRS")
-    private long id;
+    private long pkCod_PQRS;
     @Column(name = "Descripcion", length = 200)
-    private String Descripcion;
+    private String descripcion;
     @Column(name = "Motivo", length = 200)
-    private String Motivo;
+    private String motivo;
     @Column(name = "Respuesta", length = 200)
-    private String Respuesta;
+    private String respuesta;
     @Column(name = "Estado", length = 200)
-    private String Estado;
+    private String estado;
     @Column(name = "FechaPQRS", length = 200)
     private LocalDate fechaPQRS;
     @Column(name = "FechaCierre", length = 200)
