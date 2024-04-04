@@ -17,13 +17,13 @@ public class RegistroDespacho {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pkCod_registro")
-    private long id;
+    private long pkCod_registro;
     @Column(name = "FechaSalida",length = 50)
     private LocalDate fechaSalida;
     @Column(name = "FechaEntrega",length = 50)
     private LocalDate fechaEntrega;
     @Column(name = "HoraEntrega",length = 10)
-    private LocalTime hora;
+    private LocalTime HoraEntrega;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "FkCod_despacho",nullable = false)
