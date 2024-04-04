@@ -22,20 +22,21 @@ public class Oferta {
     private Long PkCod_oferta;
 
     @Column(name = "Monto", length = 255, nullable = false)
-    private int Monto;
+    private int monto;
 
     @Column(name = "FechaOferta")
-    private LocalDate FechaOferta;
+    private LocalDate fechaOferta;
 
     @Column(name = "HoraOferta")
-    private LocalTime HoraOferta;
+    private LocalTime horaOferta;
 
+    //FOREING KEYS
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Fk_Identificacion",nullable = false)
+    @JoinColumn(name = "Fk_Identificacion", nullable = false)
     private Usuario Usuarios;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Fk_subasta",nullable = false)
+    @JoinColumn(name = "Fk_subasta", nullable = false)
     private Subasta Subastas;
 
 }

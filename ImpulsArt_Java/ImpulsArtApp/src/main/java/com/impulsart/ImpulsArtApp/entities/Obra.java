@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,9 +18,9 @@ public class Obra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PkCod_Producto")
-    private int PkCod_Producto;
+    private int pkCod_Producto;
     @Column(name = "NombreProducto",length = 200)
-    private String nombre;
+    private String nombreProducto;
     @Column(name = "Costo",nullable = false)
     private int costo;
     @Column(name = "Peso",length = 10,nullable = false)
@@ -32,14 +33,17 @@ public class Obra {
     private String categoria;
     @Column(name = "Descripcion",length = 155,nullable = false)
     private String descripcion;
+    @Lob
     @Column(name = "Imagen")
-    private Clob imagen;
+    private byte[] imagen;
 
     //FOREING KEY
     @OneToMany(mappedBy = "obras",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Venta> ventas;
 
     @OneToMany(mappedBy = "obras",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Subasta> subastas;
 
     @OneToMany(mappedBy = "obras")

@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,22 +23,24 @@ public class Subasta {
     private Long pkCodSubasta;
 
     @Column(name = "EstadoSubasta", nullable = false, length = 50)
-    private String EstadoSubasta;
+    private String estadoSubasta;
 
     @Column(name = "PrecioInicial", nullable = false, length = 255)
-    private int PrecioInicial;
+    private int precioInicial;
 
     @Column(name = "FechaInicio", nullable = false)
-    private LocalDate FechaInicio;
+    private LocalDate fechaInicio;
 
     @Column(name = "FechaFinalizacion", nullable = false)
-    private LocalDate FechaFinalizacion;
+    private LocalDate fechaFinalizacion;
 
+    //FOREING KEYS
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "FkCod_Producto",nullable = false)
+    @JoinColumn(name = "FkCod_Producto", nullable = false)
     private Obra obras;
 
-    @OneToMany(mappedBy = "Subastas")
+    @OneToMany(mappedBy = "Subastas", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Oferta> ofertas;
 
 }
