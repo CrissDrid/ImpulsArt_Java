@@ -1,11 +1,13 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
+import com.impulsart.ImpulsArtApp.entities.Obra;
 import com.impulsart.ImpulsArtApp.entities.Subasta;
 import com.impulsart.ImpulsArtApp.repositories.SubastaRepository;
 import com.impulsart.ImpulsArtApp.service.SubastaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -39,4 +41,10 @@ public class SubastaImp implements SubastaService {
     public void update(Subasta subasta) {
         this.subastaRepository.save(subasta);
     }
+
+    @Override
+    public List<Subasta> findByEstadoSubastaContainingIgnoreCase(String estadoSubasta) {
+        return subastaRepository.findByEstadoSubastaContainingIgnoreCase(estadoSubasta);
+    }
+
 }

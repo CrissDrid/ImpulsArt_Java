@@ -6,6 +6,7 @@ import com.impulsart.ImpulsArtApp.entities.Subasta;
 import com.impulsart.ImpulsArtApp.service.imp.ObraImp;
 import com.impulsart.ImpulsArtApp.service.imp.SubastaImp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -117,6 +118,22 @@ public class SubastaController {
 
     //FIND ID
     ///////////////////////////////////////////////
+
+    @GetMapping("/estado/{estadoSubasta}")
+    public ResponseEntity<Map<String, Object>> findByEstadoSubastaContainingIgnoreCase(@PathVariable String estadoSubasta) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Subasta> subastas = subastaImp.findByEstadoSubastaContainingIgnoreCase(estadoSubasta);
+            response.put("status", "success");
+            response.put("data", subastas);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("message", "Error al buscar obras por nombre de producto que contenga la cadena.");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //DELETE
