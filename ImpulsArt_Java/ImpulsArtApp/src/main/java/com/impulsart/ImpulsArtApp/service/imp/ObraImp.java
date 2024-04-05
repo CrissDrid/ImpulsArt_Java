@@ -20,6 +20,20 @@ public class ObraImp implements ObraService {
     }
 
     @Override
+    public List<Obra> findByCategoriaContainingIgnoreCase(String categoria) {
+        return obraRepositorio.findByCategoriaContainingIgnoreCase(categoria);
+    }
+
+    public List<Obra> findByNombreProductoContainingIgnoreCase(String nombreProducto) {
+        return obraRepositorio.findByNombreProductoContainingIgnoreCase(nombreProducto);
+    }
+
+    @Override
+    public List<Obra> findByNombreProductoContainingIgnoreCaseAndCategoriaContainingIgnoreCase(String nombreProducto, String categoria) {
+        return obraRepositorio.findByNombreProductoContainingIgnoreCaseAndCategoriaContainingIgnoreCase(nombreProducto, categoria);
+    }
+
+    @Override
     public Obra findById(Integer PkCod_Producto) {
         return this.obraRepositorio.findById(PkCod_Producto).orElse(null);
     }

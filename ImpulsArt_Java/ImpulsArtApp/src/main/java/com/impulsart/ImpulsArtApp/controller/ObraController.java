@@ -2,6 +2,7 @@
 package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.Obra;
+import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.service.imp.ObraImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,6 +73,62 @@ public class ObraController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    //FIND BY CATEGORIA
+    @GetMapping("/categoria/{categoria}")
+    public ResponseEntity<Map<String, Object>> findByCategoriaContaining(@PathVariable String categoria) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Obra> obras = obraImp.findByCategoriaContainingIgnoreCase(categoria);
+            response.put("status", "success");
+            response.put("data", obras);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("message", "Error al buscar obras por categoría que contenga la cadena.");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //FIND BY NAME
+    @GetMapping("/nombreProducto/{nombreProducto}")
+    public ResponseEntity<Map<String, Object>> findByNombreProductoContaining(@PathVariable String nombreProducto) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Obra> obras = obraImp.findByNombreProductoContainingIgnoreCase(nombreProducto);
+            response.put("status", "success");
+            response.put("data", obras);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("message", "Error al buscar obras por nombre de producto que contenga la cadena.");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/categoria/{categoria}/nombreProducto/{nombreProducto}")
+    public ResponseEntity<Map<String, Object>> findByNombreProductoAndCategoriaContaining(
+            @PathVariable(required = false) String nombreProducto,
+            @PathVariable (required = false ) String categoria) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Obra> obras;
+
+            obras = obraImp.findByNombreProductoContainingIgnoreCaseAndCategoriaContainingIgnoreCase(nombreProducto, categoria);
+
+            response.put("status", "success");
+            response.put("data", obras);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("message", "Error al buscar obras por nombre de producto y categoría que contengan las cadenas respectivamente.");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     //READ ID
     @GetMapping("/list/{PkCod_Producto}")
     public ResponseEntity<Map<String,Object>> findById(@PathVariable Integer PkCod_Producto){

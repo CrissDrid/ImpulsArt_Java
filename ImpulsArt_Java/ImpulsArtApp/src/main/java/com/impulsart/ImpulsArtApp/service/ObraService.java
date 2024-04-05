@@ -6,6 +6,9 @@ import java.util.List;
 
 public interface ObraService {
     public List<Obra> findAll() throws Exception;
+    List<Obra> findByCategoriaContainingIgnoreCase(String categoria);
+    List<Obra> findByNombreProductoContainingIgnoreCase(String nombreProducto);
+    List<Obra> findByNombreProductoContainingIgnoreCaseAndCategoriaContainingIgnoreCase(String nombreProducto, String categoria);
     public Obra findById(Integer PkCod_Producto);
     public void create (Obra obra);
     public void update (Obra obra);
