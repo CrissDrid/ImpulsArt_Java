@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,22 +32,26 @@ public class Pqrs {
     @Column(name = "FechaCierre", length = 200)
     private LocalDate fechaCierre;
 
-    @ManyToMany(mappedBy = "PQRS")
+    @ManyToMany(mappedBy = "PQRS", cascade = CascadeType.ALL)
     private List<Usuario> usuarios;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "FkCod_Venta",nullable = false)
     private Venta ventas;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "fkCod_Empleado",nullable = false)
     private Empleado Empleados;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "fkCod_TipoPQRS",nullable = false)
     private TipoPQRS tipoPQRS;
 
-    @OneToMany(mappedBy = "PQRS")
+    @OneToMany(mappedBy = "pqrs", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Devolucion> devoluciones;
 
 }

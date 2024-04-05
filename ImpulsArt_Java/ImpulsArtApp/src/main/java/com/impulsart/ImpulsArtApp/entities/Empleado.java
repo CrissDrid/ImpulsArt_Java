@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,11 +24,13 @@ public class Empleado {
     @Column(name = "CasosPendientes",length = 100)
     private int casosPendientes;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "Fk_Identificacion",nullable = false)
     private Usuario Usuarios;
 
-    @OneToMany(mappedBy = "Empleados")
+    @OneToMany(mappedBy = "Empleados", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Pqrs> PQRS;
 
 }

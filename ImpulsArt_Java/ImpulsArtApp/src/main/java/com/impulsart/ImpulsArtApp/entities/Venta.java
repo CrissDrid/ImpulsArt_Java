@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class Venta {
     @Column(name = "PkCod_Venta")
     private int PkCod_Venta;
     @Column(name = "FechaVenta",nullable = false)
-    private Date fechaVenta;
+    private LocalDate fechaVenta;
     @Column(name = "TotalPago",nullable = false)
     private int totalPago;
     @Column(name = "ReciboVenta",length = 150,nullable = false)
@@ -32,17 +33,17 @@ public class Venta {
     private String metodoPago;
 
     //FOREING KEYS
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "FkCod_Producto",nullable = false)
     private Obra obras;
 
     //FOREING KEY
-    @ManyToMany(mappedBy = "ventas")
+    @ManyToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
     private List<Usuario> usuarios;
 
-    @OneToMany(mappedBy = "ventas")
+    @OneToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
     private List<Pqrs> PQRS;
 
-    @OneToMany(mappedBy = "ventas")
+    @OneToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
     private List<Devolucion> devoluciones;
 }

@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,4 +26,15 @@ public class Devolucion {
     private String comprobanteReembolso;
     @Column(name = "TotalDevolver", length = 200)
     private int totalDevolver;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JoinColumn(name = "fkCod_PQRS",nullable = false)
+    private Pqrs pqrs;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JoinColumn(name = "fkCod_Venta",nullable = false)
+    private Venta ventas;
+
 }

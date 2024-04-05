@@ -1,8 +1,7 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
 import com.impulsart.ImpulsArtApp.entities.Subasta;
-import com.impulsart.ImpulsArtApp.repository.OfertaRepository;
-import com.impulsart.ImpulsArtApp.repository.SubastaRepository;
+import com.impulsart.ImpulsArtApp.repositories.SubastaRepository;
 import com.impulsart.ImpulsArtApp.service.SubastaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

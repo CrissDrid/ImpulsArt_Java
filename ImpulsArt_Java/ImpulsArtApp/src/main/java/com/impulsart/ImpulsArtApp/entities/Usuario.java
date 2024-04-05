@@ -42,10 +42,10 @@ public class Usuario {
     @JsonIgnore
     private List<Oferta> ofertas;
 
-    @OneToMany(mappedBy = "Usuarios")
+    @OneToMany(mappedBy = "Usuarios", cascade = CascadeType.ALL)
     private List<Empleado> Empleados;
 
-    @OneToMany(mappedBy = "Usuarios")
+    @OneToMany(mappedBy = "Usuarios", cascade = CascadeType.ALL)
     private List<Domiciliario> domiciliarios;
 
     //FOREING KEY

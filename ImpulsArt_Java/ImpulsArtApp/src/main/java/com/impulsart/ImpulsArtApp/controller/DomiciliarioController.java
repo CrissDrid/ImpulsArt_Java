@@ -1,9 +1,13 @@
 package com.impulsart.ImpulsArtApp.controller;
 
-import com.impulsart.ImpulsArtApp.entities.Despacho;
-import com.impulsart.ImpulsArtApp.entities.Domiciliario;
+import com.impulsart.ImpulsArtApp.entities.*;
 import com.impulsart.ImpulsArtApp.service.imp.DespachoImp;
 import com.impulsart.ImpulsArtApp.service.imp.DomiciliarioImp;
+import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
+import com.impulsart.ImpulsArtApp.service.imp.VehiculoImp;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +26,10 @@ public class DomiciliarioController {
     //INYECCION DE DEPENDECIAS
     @Autowired
     private DomiciliarioImp domiciliarioImp;
+    @Autowired
+    private UsuarioImp usuarioImp;
+    @Autowired
+    private VehiculoImp vehiculoImp;
 
     //CONTROLLER CREATE
     @PostMapping("/create")
@@ -35,6 +43,11 @@ public class DomiciliarioController {
             domiciliario.setEntregasPendientes(Integer.parseInt(request.get("entregasPendientes").toString()));
             domiciliario.setSalario(Integer.parseInt(request.get("salario").toString()));
 
+            Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("Fk_Identificacion").toString()));
+            domiciliario.setUsuarios(usuario);
+
+            Vehiculo vehiculo = vehiculoImp.findById(Long.valueOf(request.get("fk_placa").toString()));
+            domiciliario.setVehiculos(vehiculo);
 
             this.domiciliarioImp.create(domiciliario);
 

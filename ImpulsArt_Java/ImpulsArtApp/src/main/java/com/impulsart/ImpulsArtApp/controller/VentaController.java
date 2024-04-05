@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,13 +36,11 @@ public class VentaController {
             //INSTANCIA DEL OBJETO VENTA
             Venta venta = new Venta();
             //CAMPOS DE LA TABLA USUARIOS
-            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-            java.sql.Date fechaAnalizada = new java.sql.Date(formateador.parse((String) request.get("fechaVenta")).getTime());
-            venta.setFechaVenta(fechaAnalizada);
             venta.setTotalPago(Integer.parseInt(request.get("totalPago").toString()));
             venta.setReciboVenta(request.get("reciboVenta").toString());
             venta.setCantidad(Integer.parseInt(request.get("cantidad").toString()));
             venta.setMetodoPago(request.get("metodoPago").toString());
+            venta.setFechaVenta(LocalDate.parse(request.get("fechaVenta").toString()));
 
             Obra obra = obraImp.findById(Integer.parseInt(request.get("FkCod_Producto").toString()));
             venta.setObras(obra);
@@ -100,9 +99,7 @@ public class VentaController {
             Venta venta = this.ventaImp.findById(PkCod_Venta);
 
             //CAMPOS DE LA TABLA USUARIOS
-            SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-            java.sql.Date fechaAnalizada = new java.sql.Date(formateador.parse((String) request.get("fechaVenta")).getTime());
-            venta.setFechaVenta(fechaAnalizada);
+            venta.setFechaVenta(LocalDate.parse(request.get("fechaVenta").toString()));
             venta.setTotalPago(Integer.parseInt(request.get("totalPago").toString()));
             venta.setReciboVenta(request.get("reciboVenta").toString());
             venta.setCantidad(Integer.parseInt(request.get("cantidad").toString()));

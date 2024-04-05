@@ -31,11 +31,11 @@ public class Oferta {
     private LocalTime horaOferta;
 
     //FOREING KEYS
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "Fk_Identificacion", nullable = false)
     private Usuario Usuarios;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "Fk_subasta", nullable = false)
     private Subasta Subastas;
 

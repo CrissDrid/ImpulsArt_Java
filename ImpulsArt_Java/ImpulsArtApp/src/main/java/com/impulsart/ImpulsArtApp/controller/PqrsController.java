@@ -1,10 +1,14 @@
 package com.impulsart.ImpulsArtApp.controller;
 
-import com.impulsart.ImpulsArtApp.entities.Empleado;
-import com.impulsart.ImpulsArtApp.entities.Pqrs;
+import com.impulsart.ImpulsArtApp.entities.*;
 import com.impulsart.ImpulsArtApp.service.imp.EmpleadoImp;
 import com.impulsart.ImpulsArtApp.service.imp.PqrsImp;
+import com.impulsart.ImpulsArtApp.service.imp.TipoPQRSImp;
+import com.impulsart.ImpulsArtApp.service.imp.VentaImp;
 import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +26,12 @@ public class PqrsController {
 
     @Autowired
     PqrsImp pqrsImp;
+    @Autowired
+    EmpleadoImp empleadoImp;
+    @Autowired
+    VentaImp ventaImp;
+    @Autowired
+    TipoPQRSImp tipoPQRSImp;
 
     //CONTROLLER CREATE
     @PostMapping("/create")
@@ -38,6 +48,15 @@ public class PqrsController {
             pqrs.setEstado(request.get("estado").toString());
             pqrs.setFechaPQRS(LocalDate.parse(request.get("fechaPQRS").toString()));
             pqrs.setFechaCierre(LocalDate.parse(request.get("fechaCierre").toString()));
+
+            Venta venta = ventaImp.findById(Integer.parseInt(request.get("FkCod_Venta").toString()));
+            pqrs.setVentas(venta);
+
+            Empleado empleado = empleadoImp.findById(Long.valueOf(request.get("FkCod_Empleado").toString()));
+            pqrs.setEmpleados(empleado);
+
+            TipoPQRS tipoPQRS = tipoPQRSImp.findById(Long.valueOf(request.get("FkCod_TipoPQRS").toString()));
+            pqrs.setTipoPQRS(tipoPQRS);
 
             this.pqrsImp.create(pqrs);
 

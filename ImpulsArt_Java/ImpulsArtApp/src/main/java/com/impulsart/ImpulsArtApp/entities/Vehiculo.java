@@ -25,7 +25,7 @@ public class Vehiculo {
     @Column(name = "modelo")
     private String modelo;
 
-    @OneToMany(mappedBy = "vehiculos")
+    @OneToMany(mappedBy = "vehiculos", cascade = CascadeType.ALL)
     private List<Domiciliario> domiciliarios;
 
 }

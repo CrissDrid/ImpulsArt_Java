@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class Domiciliario {
     private int EntregasPendientes;
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "Domiciliarios_Despachos",
             joinColumns = @JoinColumn(name = "fkCod_domiciliario", referencedColumnName = "pkCod_Domiciliario"),
@@ -31,11 +33,13 @@ public class Domiciliario {
 
     private List<Despacho> despachos;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "Fk_Identificacion",nullable = false)
     private Usuario Usuarios;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "Fk_placa",nullable = false)
     private Vehiculo vehiculos;
 

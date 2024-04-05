@@ -6,9 +6,11 @@ import com.impulsart.ImpulsArtApp.repositories.PqrsRepository;
 import com.impulsart.ImpulsArtApp.repositories.TipoPQRSRepository;
 import com.impulsart.ImpulsArtApp.service.TipoPQRSService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class TipoPQRSImp implements TipoPQRSService {
 
     @Autowired

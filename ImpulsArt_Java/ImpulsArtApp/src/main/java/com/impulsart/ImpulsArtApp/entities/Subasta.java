@@ -35,7 +35,7 @@ public class Subasta {
     private LocalDate fechaFinalizacion;
 
     //FOREING KEYS
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "FkCod_Producto", nullable = false)
     private Obra obras;
 

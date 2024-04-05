@@ -25,7 +25,7 @@ public class RegistroDespacho {
     @Column(name = "HoraEntrega",length = 10)
     private LocalTime HoraEntrega;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "FkCod_despacho",nullable = false)
     private Despacho despachos;
 

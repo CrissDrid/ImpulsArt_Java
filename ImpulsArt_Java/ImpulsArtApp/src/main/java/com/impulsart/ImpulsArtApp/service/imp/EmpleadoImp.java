@@ -4,9 +4,11 @@ import com.impulsart.ImpulsArtApp.entities.Empleado;
 import com.impulsart.ImpulsArtApp.repositories.EmpleadoRepository;
 import com.impulsart.ImpulsArtApp.service.EmpleadoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class EmpleadoImp implements EmpleadoService {
 
     @Autowired

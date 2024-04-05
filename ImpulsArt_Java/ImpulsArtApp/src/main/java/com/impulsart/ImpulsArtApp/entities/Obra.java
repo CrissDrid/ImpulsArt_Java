@@ -46,7 +46,7 @@ public class Obra {
     @JsonIgnore
     private List<Subasta> subastas;
 
-    @OneToMany(mappedBy = "obras")
+    @OneToMany(mappedBy = "obras", cascade = CascadeType.ALL)
     private List<Garantia> garantias;
 
     @ManyToMany(mappedBy = "obras")

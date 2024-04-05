@@ -1,10 +1,16 @@
 package com.impulsart.ImpulsArtApp.controller;
 
+import com.impulsart.ImpulsArtApp.entities.Despacho;
 import com.impulsart.ImpulsArtApp.entities.Domiciliario;
 import com.impulsart.ImpulsArtApp.entities.RegistroDespacho;
+import com.impulsart.ImpulsArtApp.entities.TipoPQRS;
+import com.impulsart.ImpulsArtApp.service.imp.DespachoImp;
 import com.impulsart.ImpulsArtApp.service.imp.DomiciliarioImp;
 import com.impulsart.ImpulsArtApp.service.imp.RegistroDespachoImp;
 import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +30,8 @@ public class RegistroDespachoController {
     //INYECCION DE DEPENDECIAS
     @Autowired
     private RegistroDespachoImp registroDespachoImp;
+    @Autowired
+    private DespachoImp despachoImp;
 
     //CONTROLLER CREATE
     @PostMapping("/create")
@@ -34,10 +42,12 @@ public class RegistroDespachoController {
             //INSTANCIA DEL OBJETO DOMICILIARIO
             RegistroDespacho registroDespacho = new RegistroDespacho();
             //CAMPOS DE LA TABLA DOMICILIARIO
-            registroDespacho.setFechaEntrega(LocalDate.ofEpochDay(Integer.parseInt(request.get("fechaEntrega").toString())));
-            registroDespacho.setFechaSalida(LocalDate.ofEpochDay(Integer.parseInt(request.get("fechaSalida").toString())));
-            registroDespacho.setHoraEntrega(LocalTime.ofSecondOfDay(Integer.parseInt(request.get("horaEntrega").toString())));
+            registroDespacho.setFechaEntrega(LocalDate.parse(request.get("fechaEntrega").toString()));
+            registroDespacho.setFechaSalida(LocalDate.parse(request.get("fechaSalida").toString()));
+            registroDespacho.setHoraEntrega(LocalTime.parse(request.get("horaEntrega").toString()));
 
+            Despacho despacho = despachoImp.findById(Long.valueOf(request.get("FkCod_despacho").toString()));
+            registroDespacho.setDespachos(despacho);
 
             this.registroDespachoImp.create(registroDespacho);
 
@@ -95,9 +105,9 @@ public class RegistroDespachoController {
             RegistroDespacho registroDespacho = this.registroDespachoImp.findById(pkCod_registro);
 
             //CAMPOS DE LA TABLA DOMICILIARIO
-            registroDespacho.setFechaEntrega(LocalDate.ofEpochDay(Integer.parseInt(request.get("fechaEntrega").toString())));
-            registroDespacho.setFechaSalida(LocalDate.ofEpochDay(Integer.parseInt(request.get("fechaSalida").toString())));
-            registroDespacho.setHoraEntrega(LocalTime.ofSecondOfDay(Integer.parseInt(request.get("horaEntrega").toString())));
+            registroDespacho.setFechaEntrega(LocalDate.parse(request.get("fechaEntrega").toString()));
+            registroDespacho.setFechaSalida(LocalDate.parse(request.get("fechaSalida").toString()));
+            registroDespacho.setHoraEntrega(LocalTime.parse(request.get("horaEntrega").toString()));
 
             this.registroDespachoImp.update(registroDespacho);
             response.put("status","success");

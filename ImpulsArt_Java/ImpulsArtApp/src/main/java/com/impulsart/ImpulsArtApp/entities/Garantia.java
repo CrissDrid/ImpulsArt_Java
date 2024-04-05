@@ -24,7 +24,7 @@ public class Garantia {
     @Column(name = "Condiciones",length = 150)
     private String Condiciones;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "FkCod_Producto",nullable = false)
     private Obra obras;
 

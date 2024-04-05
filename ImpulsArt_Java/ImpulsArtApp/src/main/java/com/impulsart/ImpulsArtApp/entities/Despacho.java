@@ -28,7 +28,7 @@ public class Despacho {
     @Column(name = "Fecha_Venta",length = 100)
     private LocalDate Fecha_Venta;
 
-    @ManyToMany(mappedBy = "despachos")
+    @ManyToMany(mappedBy = "despachos", cascade = CascadeType.ALL)
     private List<Domiciliario> domiciliarios;
 
 }

@@ -2,8 +2,13 @@ package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.Devolucion;
 import com.impulsart.ImpulsArtApp.entities.Empleado;
+import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.service.imp.DevolucionImp;
 import com.impulsart.ImpulsArtApp.service.imp.EmpleadoImp;
+import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +20,14 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "/api/devolucion", method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
+@RequestMapping(path = "/api/empleado", method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
 @CrossOrigin("*")
 public class EmpleadoController {
 
     @Autowired
     EmpleadoImp empleadoImp;
+    @Autowired
+    UsuarioImp usuarioImp;
 
     //CONTROLLER CREATE
     @PostMapping("/create")
@@ -33,6 +40,9 @@ public class EmpleadoController {
             //CAMPOS DE LA TABLA ESPECIALIDAD
             empleado.setSalario(Integer.parseInt(request.get("salario").toString()));
             empleado.setCasosPendientes(Integer.parseInt(request.get("casosPendientes").toString()));
+
+            Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("Fk_Identificacion").toString()));
+            empleado.setUsuarios(usuario);
 
             this.empleadoImp.create(empleado);
 

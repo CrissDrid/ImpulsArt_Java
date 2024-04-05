@@ -1,7 +1,7 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
 import com.impulsart.ImpulsArtApp.entities.Oferta;
-import com.impulsart.ImpulsArtApp.repository.OfertaRepository;
+import com.impulsart.ImpulsArtApp.repositories.OfertaRepository;
 import com.impulsart.ImpulsArtApp.service.OfertaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

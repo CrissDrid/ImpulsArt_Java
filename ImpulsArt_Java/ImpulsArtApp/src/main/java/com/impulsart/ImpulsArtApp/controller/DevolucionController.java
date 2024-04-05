@@ -1,8 +1,15 @@
 package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.Devolucion;
+import com.impulsart.ImpulsArtApp.entities.Pqrs;
+import com.impulsart.ImpulsArtApp.entities.Venta;
 import com.impulsart.ImpulsArtApp.service.imp.DevolucionImp;
+import com.impulsart.ImpulsArtApp.service.imp.PqrsImp;
+import com.impulsart.ImpulsArtApp.service.imp.VentaImp;
 import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +24,12 @@ import java.util.Map;
 @RequestMapping(path = "/api/devolucion", method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
 @CrossOrigin("*")
 public class DevolucionController {
-
     @Autowired
     DevolucionImp devolucionImp;
+    @Autowired
+    VentaImp ventaImp;
+    @Autowired
+    PqrsImp pqrsImp;
 
     //CONTROLLER CREATE
     @PostMapping("/create")
@@ -34,6 +44,13 @@ public class DevolucionController {
             devolucion.setTotalReembolso(Integer.parseInt(request.get("totalReembolso").toString()));
             devolucion.setComprobanteReembolso(request.get("comprobanteReembolso").toString());
             devolucion.setTotalDevolver(Integer.parseInt(request.get("totalDevolver").toString()));
+
+
+            Venta venta = ventaImp.findById(Integer.parseInt(request.get("FkCod_Venta").toString()));
+            devolucion.setVentas(venta);
+
+            Pqrs pqrs = pqrsImp.findById(Long.valueOf(request.get("FkCod_PQRS").toString()));
+            devolucion.setPqrs(pqrs);
 
             this.devolucionImp.create(devolucion);
 
