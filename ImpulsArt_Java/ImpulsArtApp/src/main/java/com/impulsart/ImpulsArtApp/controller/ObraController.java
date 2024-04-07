@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.sql.Clob;
 import java.util.HashMap;
 import java.util.List;
@@ -19,43 +21,58 @@ import java.util.Map;
 @CrossOrigin("*")
 public class ObraController {
 
-//INYECCION DE DEPENDECIAS
+    //Directorio para guardar imagenes
+    private static String imageDirectory = System.getProperty("user.dir") + "/ImpulsArt_Java/ImpulsArtApp/src/main/java/com/impulsart/ImpulsArtApp/imagen/";
+
+
+    //INYECCION DE DEPENDECIAS
 @Autowired
     private ObraImp obraImp;
 
 //CONTROLLER CREATE
-    @PostMapping("/create")
-    public ResponseEntity<Map<String,Object>> create(@RequestBody Map<String, Object> request){
-        Map<String, Object> response = new HashMap<>();
-        try {
-            System.out.println("@@@@"+request);
-            //INSTACIA DEL OBJETO OBRA
-            Obra obra = new Obra();
-            //CAMPOS DE LA TABLA OBRA
-            obra.setNombreProducto(request.get("nombreProducto").toString());
-            obra.setCosto(Integer.parseInt(request.get("costo").toString()));
-            obra.setPeso(request.get("peso").toString());
-            obra.setTamano(request.get("tamano").toString());
-            obra.setCantidad(Integer.parseInt(request.get("cantidad").toString()));
-            obra.setCategoria(request.get("categoria").toString());
-            obra.setDescripcion(request.get("descripcion").toString());
+@PostMapping("/create")
+public ResponseEntity<Map<String, Object>> create(
+        @RequestParam("imagen") MultipartFile imagen,
+        @RequestParam("nombreProducto") String nombreProducto,
+        @RequestParam("costo") int costo,
+        @RequestParam("peso") String peso,
+        @RequestParam("tamano") String tamano,
+        @RequestParam("cantidad") int cantidad,
+        @RequestParam("categoria") String categoria,
+        @RequestParam("descripcion") String descripcion) {
 
-            //CONFIG IMAGEN
-            if(request.containsKey("imagen")&& request.get("imagen") !=null){
-                obra.setImagen(request.get("imagen").toString().getBytes());
-            }
+    Map<String, Object> response = new HashMap<>();
 
-            this.obraImp.create(obra);
+    try {
+        // Guardar la imagen en el sistema de archivos y obtener la ruta
+        String fileName = imagen.getOriginalFilename();
+        String filePath = imageDirectory + fileName;
+        File dest = new File(filePath);
+        imagen.transferTo(dest);
 
-            response.put("status","succses");
-            response.put("data","Registro Exitoso");
-        }catch (Exception e){
-            response.put("status", HttpStatus.BAD_GATEWAY);
-            response.put("data",e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
-        }
+        // Instanciar el objeto Obra y establecer los campos
+        Obra obra = new Obra();
+        obra.setNombreProducto(nombreProducto);
+        obra.setCosto(costo);
+        obra.setPeso(peso);
+        obra.setTamano(tamano);
+        obra.setCantidad(cantidad);
+        obra.setCategoria(categoria);
+        obra.setDescripcion(descripcion);
+        obra.setImagen(filePath.getBytes());
+
+        // Guardar la obra en la base de datos
+        this.obraImp.create(obra);
+
+        response.put("status", "success");
+        response.put("data", "Registro Exitoso");
         return new ResponseEntity<>(response, HttpStatus.OK);
+    } catch (Exception e) {
+        response.put("status", HttpStatus.BAD_REQUEST);
+        response.put("data", e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+}
 //CONTROLLER READ
     //READ ALL
     @GetMapping("/all")
