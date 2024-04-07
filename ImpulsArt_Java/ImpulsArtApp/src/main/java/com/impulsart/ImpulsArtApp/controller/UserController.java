@@ -41,7 +41,7 @@ public class UserController {
             usuario.setDireccion(request.get("direccion").toString());
             usuario.setContrasena(request.get("contrasena").toString());
             usuario.setTipoUsuario(request.get("tipoUsuario").toString());
-            usuario.setNombreUsuario(request.get("userName").toString());
+            usuario.setUserName(request.get("userName").toString());
 
             this.usuarioImp.create(usuario);
 
@@ -69,7 +69,7 @@ public class UserController {
             if (usuario != null && usuario.getContrasena().equals(contrasena)) {
                 response.put("success", true);
                 response.put("data", "Inicio de sesión exitoso");
-                response.put("userName", usuario.getNombreUsuario()); // Incluye el nombre de usuario en la respuesta
+                response.put("userName", usuario.getUserName()); // Incluye el nombre de usuario en la respuesta
             } else {
                 response.put("success", false);
                 response.put("data", "Credenciales inválidas");
@@ -134,7 +134,7 @@ public class UserController {
             usuario.setDireccion(request.get("direccion").toString());
             usuario.setContrasena(request.get("contrasena").toString());
             usuario.setTipoUsuario(request.get("tipoUsuario").toString());
-            usuario.setNombreUsuario(request.get("userName").toString());
+            usuario.setUserName(request.get("userName").toString());
 
             this.usuarioImp.update(usuario);
 

@@ -34,8 +34,8 @@ public class ObraImp implements ObraService {
     }
 
     @Override
-    public Obra findById(Integer PkCod_Producto) {
-        return this.obraRepositorio.findById(PkCod_Producto).orElse(null);
+    public Obra findById(Integer pkCod_Producto) {
+        return this.obraRepositorio.findById(pkCod_Producto).orElse(null);
     }
 
     @Override

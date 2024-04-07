@@ -9,7 +9,7 @@ public interface ObraService {
     List<Obra> findByCategoriaContainingIgnoreCase(String categoria);
     List<Obra> findByNombreProductoContainingIgnoreCase(String nombreProducto);
     List<Obra> findByNombreProductoContainingIgnoreCaseAndCategoriaContainingIgnoreCase(String nombreProducto, String categoria);
-    public Obra findById(Integer PkCod_Producto);
+    public Obra findById(Integer pkCod_Producto);
     public void create (Obra obra);
     public void update (Obra obra);
     public void delete (Obra obra);

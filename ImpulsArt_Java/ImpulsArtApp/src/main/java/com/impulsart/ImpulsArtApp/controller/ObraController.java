@@ -146,16 +146,16 @@ public class ObraController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 //CONTROLLER UPDATE
-    @PutMapping("update/{PkCod_Producto}")
-    public ResponseEntity<Map<String,Object>> update(@PathVariable Integer PkCod_Producto, @RequestBody Map<String,Object>request){
+    @PutMapping("update/{pkCod_Producto}")
+    public ResponseEntity<Map<String,Object>> update(@PathVariable Integer pkCod_Producto, @RequestBody Map<String,Object>request){
         Map<String,Object> response = new HashMap<>();
         try {
-            Obra obra = this.obraImp.findById(PkCod_Producto);
+            Obra obra = this.obraImp.findById(pkCod_Producto);
 
             obra.setNombreProducto(request.get("nombreProducto").toString());
             obra.setCosto(Integer.parseInt(request.get("costo").toString()));
             obra.setPeso(request.get("peso").toString());
-            obra.setTamano(request.get("tamaño").toString());
+            obra.setTamano(request.get("tamano").toString());
             obra.setCantidad(Integer.parseInt(request.get("cantidad").toString()));
             obra.setCategoria(request.get("categoria").toString());
             obra.setDescripcion(request.get("descripcion").toString());

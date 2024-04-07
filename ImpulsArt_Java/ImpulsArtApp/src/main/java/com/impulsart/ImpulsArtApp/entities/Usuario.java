@@ -23,8 +23,8 @@ public class Usuario {
     private String nombre;
     @Column(name = "Apellido", length = 20, nullable = false)
     private String apellido;
-    @Column(name = "NombreUsuario", length = 20, nullable = false)
-    private String nombreUsuario;
+    @Column(name = "userName", length = 20, nullable = false)
+    private String userName;
     @Column(name = "FechaNacimiento", nullable = false)
     private LocalDate fechaNacimiento;
     @Column(name = "Email", nullable = false)
