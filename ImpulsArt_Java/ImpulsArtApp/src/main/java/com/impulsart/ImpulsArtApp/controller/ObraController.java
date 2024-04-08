@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Clob;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +36,7 @@ public class ObraController {
 //CONTROLLER CREATE
 @PostMapping("/create")
 public ResponseEntity<Map<String, Object>> create(
-        @RequestParam("imagen") MultipartFile imagen,
+        @RequestParam(value = "imagen", required = false) MultipartFile imagen,
         @RequestParam("nombreProducto") String nombreProducto,
         @RequestParam("costo") int costo,
         @RequestParam("peso") String peso,
@@ -44,11 +48,16 @@ public ResponseEntity<Map<String, Object>> create(
     Map<String, Object> response = new HashMap<>();
 
     try {
-        // Guardar la imagen en el sistema de archivos y obtener la ruta
-        String fileName = imagen.getOriginalFilename();
-        String filePath = imageDirectory + fileName;
-        File dest = new File(filePath);
-        imagen.transferTo(dest);
+        String imageUrl = null;
+        if (imagen != null) {
+            // Guardar la imagen en el directorio especificado
+            String fileName = imagen.getOriginalFilename();
+            Path imagePath = Paths.get(imageDirectory, fileName);
+            Files.copy(imagen.getInputStream(), imagePath);
+
+            // Construir la URL completa de la imagen
+            imageUrl = "http://localhost:8086/imagen/" + fileName;
+        }
 
         // Instanciar el objeto Obra y establecer los campos
         Obra obra = new Obra();
@@ -59,7 +68,7 @@ public ResponseEntity<Map<String, Object>> create(
         obra.setCantidad(cantidad);
         obra.setCategoria(categoria);
         obra.setDescripcion(descripcion);
-        obra.setImagen(filePath.getBytes());
+        obra.setImagen(imageUrl); // Establecer la URL de la imagen si no es nula
 
         // Guardar la obra en la base de datos
         this.obraImp.create(obra);
@@ -179,7 +188,7 @@ public ResponseEntity<Map<String, Object>> create(
 
             //CONFIG IMAGEN
             if(request.containsKey("imagen")&& request.get("imagen") !=null){
-                obra.setImagen(request.get("imagen").toString().getBytes());
+                obra.setImagen(request.get("imagen").toString());
             }
 
             this.obraImp.update(obra);

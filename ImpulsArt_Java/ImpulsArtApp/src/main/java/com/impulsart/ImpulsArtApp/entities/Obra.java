@@ -34,8 +34,8 @@ public class Obra {
     @Column(name = "Descripcion",length = 155,nullable = false)
     private String descripcion;
     @Lob
-    @Column(name = "Imagen")
-    private byte[] imagen;
+    @Column(name = "imagen", columnDefinition = "TEXT")
+    private String imagen;
 
     //FOREING KEY
     @OneToMany(mappedBy = "obras",cascade = CascadeType.ALL)
