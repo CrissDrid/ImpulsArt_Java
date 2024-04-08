@@ -37,12 +37,12 @@ public class Pqrs {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    @JoinColumn(name = "FkCod_Venta",nullable = false)
+    @JoinColumn(name = "FkCod_Venta",nullable = true)
     private Venta ventas;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    @JoinColumn(name = "fkCod_Empleado",nullable = false)
+    @JoinColumn(name = "fkCod_Empleado",nullable = true)
     private Empleado Empleados;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

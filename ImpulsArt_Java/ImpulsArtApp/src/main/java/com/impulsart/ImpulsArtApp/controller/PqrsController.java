@@ -49,11 +49,11 @@ public class PqrsController {
             pqrs.setFechaPQRS(LocalDate.parse(request.get("fechaPQRS").toString()));
             pqrs.setFechaCierre(LocalDate.parse(request.get("fechaCierre").toString()));
 
-            Venta venta = ventaImp.findById(Integer.parseInt(request.get("FkCod_Venta").toString()));
-            pqrs.setVentas(venta);
+            //Venta venta = ventaImp.findById(Integer.parseInt(request.get("FkCod_Venta").toString()));
+            //pqrs.setVentas(venta);
 
-            Empleado empleado = empleadoImp.findById(Long.valueOf(request.get("FkCod_Empleado").toString()));
-            pqrs.setEmpleados(empleado);
+            //Empleado empleado = empleadoImp.findById(Long.valueOf(request.get("FkCod_Empleado").toString()));
+            //pqrs.setEmpleados(empleado);
 
             TipoPQRS tipoPQRS = tipoPQRSImp.findById(Long.valueOf(request.get("FkCod_TipoPQRS").toString()));
             pqrs.setTipoPQRS(tipoPQRS);
