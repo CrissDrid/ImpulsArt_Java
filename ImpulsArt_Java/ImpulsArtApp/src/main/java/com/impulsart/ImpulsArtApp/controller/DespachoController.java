@@ -84,7 +84,7 @@ public class DespachoController {
     }
 
     //CONTROLLER UPDATE
-    @PutMapping("update/{pkCod_Despacho}")
+    @PutMapping("/update/{pkCod_Despacho}")
     public ResponseEntity<Map<String,Object>> update(@PathVariable Long pkCod_Despacho, @RequestBody Map<String, Object> request) {
         Map<String, Object> response = new HashMap<>();
 
