@@ -17,7 +17,7 @@ public class Despacho {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pkCod_Despacho")
-    private long pkCod_Despacho;
+    private Long pkCod_Despacho;
 
     @Column(name = "estado",length = 100)
     private String estado;

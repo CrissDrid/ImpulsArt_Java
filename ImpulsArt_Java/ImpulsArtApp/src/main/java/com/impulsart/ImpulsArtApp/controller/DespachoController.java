@@ -94,8 +94,6 @@ public class DespachoController {
             //CAMPOS DE LA TABLA ESPECIALIDAD
             despacho.setEstado(request.get("estado").toString());
             despacho.setComprobante(request.get("comprobante").toString());
-            despacho.setFechaEntrega(LocalDate.parse(request.get("fechaEntrega").toString()));
-            despacho.setFecha_Venta(LocalDate.parse(request.get("fecha_venta").toString()));
 
             this.despachoImp.update(despacho);
             response.put("status","success");

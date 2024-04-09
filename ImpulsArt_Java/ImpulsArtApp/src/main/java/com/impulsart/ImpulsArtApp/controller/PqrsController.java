@@ -47,13 +47,7 @@ public class PqrsController {
             pqrs.setRespuesta(request.get("respuesta").toString());
             pqrs.setEstado(request.get("estado").toString());
             pqrs.setFechaPQRS(LocalDate.parse(request.get("fechaPQRS").toString()));
-            pqrs.setFechaCierre(LocalDate.parse(request.get("fechaCierre").toString()));
-
-            //Venta venta = ventaImp.findById(Integer.parseInt(request.get("FkCod_Venta").toString()));
-            //pqrs.setVentas(venta);
-
-            //Empleado empleado = empleadoImp.findById(Long.valueOf(request.get("FkCod_Empleado").toString()));
-            //pqrs.setEmpleados(empleado);
+            pqrs.setFechaCierre(request.get("fechaCierre") != null ? LocalDate.parse(request.get("fechaCierre").toString()) : null);
 
             TipoPQRS tipoPQRS = tipoPQRSImp.findById(Long.valueOf(request.get("FkCod_TipoPQRS").toString()));
             pqrs.setTipoPQRS(tipoPQRS);
@@ -116,10 +110,6 @@ public class PqrsController {
             //CAMPOS DE LA TABLA ESPECIALIDAD
             pqrs.setDescripcion(request.get("descripcion").toString());
             pqrs.setMotivo(request.get("motivo").toString());
-            pqrs.setRespuesta(request.get("respuesta").toString());
-            pqrs.setEstado(request.get("estado").toString());
-            pqrs.setFechaPQRS(LocalDate.parse(request.get("fechaPQRS").toString()));
-            pqrs.setFechaCierre(LocalDate.parse(request.get("fechaCierre").toString()));
 
             this.pqrsImp.update(pqrs);
             response.put("status","success");
