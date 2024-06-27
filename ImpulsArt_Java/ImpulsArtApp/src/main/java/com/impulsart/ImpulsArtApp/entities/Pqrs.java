@@ -45,7 +45,7 @@ public class Pqrs {
     @JoinColumn(name = "fkCod_Empleado",nullable = true)
     private Empleado Empleados;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinColumn(name = "fkCod_TipoPQRS",nullable = false)
     private TipoPQRS tipoPQRS;
