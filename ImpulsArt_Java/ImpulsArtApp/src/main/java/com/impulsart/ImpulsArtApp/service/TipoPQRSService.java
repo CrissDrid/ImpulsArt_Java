@@ -1,16 +1,15 @@
 package com.impulsart.ImpulsArtApp.service;
 
-import com.impulsart.ImpulsArtApp.entities.Pqrs;
-import com.impulsart.ImpulsArtApp.entities.TipoPQRS;
+import com.impulsart.ImpulsArtApp.entities.TipoReclamo;
 
 import java.util.List;
 
 public interface TipoPQRSService {
 
-    public List<TipoPQRS> findAll() throws Exception;
-    public TipoPQRS findById(Long pkCod_TipoPQRS);
-    public void create (TipoPQRS tipoPQRS);
-    public void update (TipoPQRS tipoPQRS);
-    public void delete (TipoPQRS tipoPQRS);
+    public List<TipoReclamo> findAll() throws Exception;
+    public TipoReclamo findById(Long pkCod_TipoPQRS);
+    public void create (TipoReclamo tipoReclamo);
+    public void update (TipoReclamo tipoReclamo);
+    public void delete (TipoReclamo tipoReclamo);
 
 }

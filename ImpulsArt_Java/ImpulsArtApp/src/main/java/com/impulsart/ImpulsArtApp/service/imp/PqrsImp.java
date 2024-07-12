@@ -1,8 +1,6 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
-import com.impulsart.ImpulsArtApp.entities.Empleado;
-import com.impulsart.ImpulsArtApp.entities.Pqrs;
-import com.impulsart.ImpulsArtApp.repositories.EmpleadoRepository;
+import com.impulsart.ImpulsArtApp.entities.Reclamo;
 import com.impulsart.ImpulsArtApp.repositories.PqrsRepository;
 import com.impulsart.ImpulsArtApp.service.PqrsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,28 +15,28 @@ public class PqrsImp implements PqrsService {
     PqrsRepository pqrsRepository;
 
     @Override
-    public List<Pqrs> findAll() throws Exception {
+    public List<Reclamo> findAll() throws Exception {
         return this.pqrsRepository.findAll();
     }
 
     @Override
-    public Pqrs findById(Long pkCod_PQRS) {
+    public Reclamo findById(Long pkCod_PQRS) {
         return this.pqrsRepository.findById(pkCod_PQRS).orElse(null);
     }
 
     @Override
-    public void create(Pqrs pqrs) {
-        this.pqrsRepository.save(pqrs);
+    public void create(Reclamo reclamo) {
+        this.pqrsRepository.save(reclamo);
     }
 
     @Override
-    public void update(Pqrs pqrs) {
-        this.pqrsRepository.save(pqrs);
+    public void update(Reclamo reclamo) {
+        this.pqrsRepository.save(reclamo);
     }
 
     @Override
-    public void delete(Pqrs pqrs) {
-        this.pqrsRepository.delete(pqrs);
+    public void delete(Reclamo reclamo) {
+        this.pqrsRepository.delete(reclamo);
     }
 
 }

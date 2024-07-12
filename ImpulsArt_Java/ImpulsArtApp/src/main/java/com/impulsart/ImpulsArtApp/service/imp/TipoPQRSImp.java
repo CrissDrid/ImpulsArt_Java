@@ -1,8 +1,6 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
-import com.impulsart.ImpulsArtApp.entities.Pqrs;
-import com.impulsart.ImpulsArtApp.entities.TipoPQRS;
-import com.impulsart.ImpulsArtApp.repositories.PqrsRepository;
+import com.impulsart.ImpulsArtApp.entities.TipoReclamo;
 import com.impulsart.ImpulsArtApp.repositories.TipoPQRSRepository;
 import com.impulsart.ImpulsArtApp.service.TipoPQRSService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,28 +15,28 @@ public class TipoPQRSImp implements TipoPQRSService {
     TipoPQRSRepository tipoPQRSRepository;
 
     @Override
-    public List<TipoPQRS> findAll() throws Exception {
+    public List<TipoReclamo> findAll() throws Exception {
         return this.tipoPQRSRepository.findAll();
     }
 
     @Override
-    public TipoPQRS findById(Long pkCod_TipoPQRS) {
+    public TipoReclamo findById(Long pkCod_TipoPQRS) {
         return this.tipoPQRSRepository.findById(pkCod_TipoPQRS).orElse(null);
     }
 
     @Override
-    public void create(TipoPQRS tipoPQRS) {
-        this.tipoPQRSRepository.save(tipoPQRS);
+    public void create(TipoReclamo tipoReclamo) {
+        this.tipoPQRSRepository.save(tipoReclamo);
     }
 
     @Override
-    public void update(TipoPQRS tipoPQRS) {
-        this.tipoPQRSRepository.save(tipoPQRS);
+    public void update(TipoReclamo tipoReclamo) {
+        this.tipoPQRSRepository.save(tipoReclamo);
     }
 
     @Override
-    public void delete(TipoPQRS tipoPQRS) {
-        this.tipoPQRSRepository.delete(tipoPQRS);
+    public void delete(TipoReclamo tipoReclamo) {
+        this.tipoPQRSRepository.delete(tipoReclamo);
     }
 
 }

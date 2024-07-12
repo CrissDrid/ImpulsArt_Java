@@ -1,16 +1,9 @@
 package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.Despacho;
-import com.impulsart.ImpulsArtApp.entities.Domiciliario;
 import com.impulsart.ImpulsArtApp.entities.RegistroDespacho;
-import com.impulsart.ImpulsArtApp.entities.TipoPQRS;
 import com.impulsart.ImpulsArtApp.service.imp.DespachoImp;
-import com.impulsart.ImpulsArtApp.service.imp.DomiciliarioImp;
 import com.impulsart.ImpulsArtApp.service.imp.RegistroDespachoImp;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

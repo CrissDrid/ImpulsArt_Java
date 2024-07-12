@@ -5,10 +5,6 @@ import com.impulsart.ImpulsArtApp.service.imp.EmpleadoImp;
 import com.impulsart.ImpulsArtApp.service.imp.PqrsImp;
 import com.impulsart.ImpulsArtApp.service.imp.TipoPQRSImp;
 import com.impulsart.ImpulsArtApp.service.imp.VentaImp;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,19 +36,19 @@ public class PqrsController {
         try {
             System.out.println("@@@@" + request);
             //INSTANCIA DEL OBJETO ESPECIALIDAD
-            Pqrs pqrs = new Pqrs();
+            Reclamo reclamo = new Reclamo();
             //CAMPOS DE LA TABLA ESPECIALIDAD
-            pqrs.setDescripcion(request.get("descripcion").toString());
-            pqrs.setMotivo(request.get("motivo").toString());
-            pqrs.setRespuesta(request.get("respuesta").toString());
-            pqrs.setEstado(request.get("estado").toString());
-            pqrs.setFechaPQRS(LocalDate.parse(request.get("fechaPQRS").toString()));
-            pqrs.setFechaCierre(request.get("fechaCierre") != null ? LocalDate.parse(request.get("fechaCierre").toString()) : null);
+            reclamo.setDescripcion(request.get("descripcion").toString());
+            reclamo.setMotivo(request.get("motivo").toString());
+            reclamo.setRespuesta(request.get("respuesta").toString());
+            reclamo.setEstado(request.get("estado").toString());
+            reclamo.setFechaPQRS(LocalDate.parse(request.get("fechaPQRS").toString()));
+            reclamo.setFechaCierre(request.get("fechaCierre") != null ? LocalDate.parse(request.get("fechaCierre").toString()) : null);
 
-            TipoPQRS tipoPQRS = tipoPQRSImp.findById(Long.valueOf(request.get("FkCod_TipoPQRS").toString()));
-            pqrs.setTipoPQRS(tipoPQRS);
+            TipoReclamo tipoReclamo = tipoPQRSImp.findById(Long.valueOf(request.get("FkCod_TipoPQRS").toString()));
+            reclamo.setTipoReclamo(tipoReclamo);
 
-            this.pqrsImp.create(pqrs);
+            this.pqrsImp.create(reclamo);
 
             response.put("status", "succses");
             response.put("data", "Registro Exitoso");
@@ -71,9 +67,9 @@ public class PqrsController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<Pqrs> pqrsList = this.pqrsImp.findAll();
+            List<Reclamo> reclamoList = this.pqrsImp.findAll();
             response.put("status", "success");
-            response.put("data", pqrsList);
+            response.put("data", reclamoList);
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());
@@ -88,9 +84,9 @@ public class PqrsController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Pqrs pqrs = this.pqrsImp.findById(pkCod_PQRS);
+            Reclamo reclamo = this.pqrsImp.findById(pkCod_PQRS);
             response.put("status", "success");
-            response.put("data", pqrs);
+            response.put("data", reclamo);
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());
@@ -105,13 +101,13 @@ public class PqrsController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Pqrs pqrs = this.pqrsImp.findById(pkCod_PQRS);
+            Reclamo reclamo = this.pqrsImp.findById(pkCod_PQRS);
 
             //CAMPOS DE LA TABLA ESPECIALIDAD
-            pqrs.setDescripcion(request.get("descripcion").toString());
-            pqrs.setMotivo(request.get("motivo").toString());
+            reclamo.setDescripcion(request.get("descripcion").toString());
+            reclamo.setMotivo(request.get("motivo").toString());
 
-            this.pqrsImp.update(pqrs);
+            this.pqrsImp.update(reclamo);
             response.put("status","success");
             response.put("data","Actualizacion Exitosa");
         } catch (Exception e) {
@@ -128,8 +124,8 @@ public class PqrsController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Pqrs pqrs = this.pqrsImp.findById(pkCod_PQRS);
-            pqrsImp.delete(pqrs);
+            Reclamo reclamo = this.pqrsImp.findById(pkCod_PQRS);
+            pqrsImp.delete(reclamo);
 
             response.put("status", "success");
             response.put("data", "Registro Eliminado Correctamente");

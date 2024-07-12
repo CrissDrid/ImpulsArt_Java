@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.sql.Date;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -45,9 +45,6 @@ public class Usuario {
     @OneToMany(mappedBy = "Usuarios", cascade = CascadeType.ALL)
     private List<Empleado> Empleados;
 
-    @OneToMany(mappedBy = "Usuarios", cascade = CascadeType.ALL)
-    private List<Domiciliario> domiciliarios;
-
     //FOREING KEY
     @ManyToMany
     @JoinTable(
@@ -83,9 +80,9 @@ public class Usuario {
 
     @ManyToMany
     @JoinTable(
-            name = "Usuarios_pqrs",
+            name = "Usuarios_reclamo",
             joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
-            inverseJoinColumns = @JoinColumn(name = "fkCod_PQRS", referencedColumnName = "pkCod_PQRS")
+            inverseJoinColumns = @JoinColumn(name = "fkCod_reclamo", referencedColumnName = "pkCod_Reclamo")
     )
-    private List<Pqrs> PQRS;
+    private List<Reclamo> reclamo;
 }

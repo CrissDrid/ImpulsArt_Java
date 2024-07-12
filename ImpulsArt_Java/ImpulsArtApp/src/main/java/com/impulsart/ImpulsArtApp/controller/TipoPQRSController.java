@@ -1,16 +1,12 @@
 package com.impulsart.ImpulsArtApp.controller;
 
-import com.impulsart.ImpulsArtApp.entities.Pqrs;
-import com.impulsart.ImpulsArtApp.entities.TipoPQRS;
-import com.impulsart.ImpulsArtApp.service.imp.PqrsImp;
+import com.impulsart.ImpulsArtApp.entities.TipoReclamo;
 import com.impulsart.ImpulsArtApp.service.imp.TipoPQRSImp;
-import jakarta.persistence.Column;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,12 +26,12 @@ public class TipoPQRSController {
         try {
             System.out.println("@@@@" + request);
             //INSTANCIA DEL OBJETO ESPECIALIDAD
-            TipoPQRS tipoPQRS = new TipoPQRS();
+            TipoReclamo tipoReclamo = new TipoReclamo();
             //CAMPOS DE LA TABLA ESPECIALIDAD
-            tipoPQRS.setNombreTipo(request.get("nombreTipo").toString());
-            tipoPQRS.setDescripcion(request.get("descripcion").toString());
+            tipoReclamo.setNombreTipo(request.get("nombreTipo").toString());
+            tipoReclamo.setDescripcion(request.get("descripcion").toString());
 
-            this.tipoPQRSImp.create(tipoPQRS);
+            this.tipoPQRSImp.create(tipoReclamo);
 
             response.put("status", "succses");
             response.put("data", "Registro Exitoso");
@@ -54,9 +50,9 @@ public class TipoPQRSController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<TipoPQRS> tipoPQRSList = this.tipoPQRSImp.findAll();
+            List<TipoReclamo> tipoReclamoList = this.tipoPQRSImp.findAll();
             response.put("status", "success");
-            response.put("data", tipoPQRSList);
+            response.put("data", tipoReclamoList);
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());
@@ -71,9 +67,9 @@ public class TipoPQRSController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            TipoPQRS tipoPQRS = this.tipoPQRSImp.findById(pkCod_TipoPQRS);
+            TipoReclamo tipoReclamo = this.tipoPQRSImp.findById(pkCod_TipoPQRS);
             response.put("status", "success");
-            response.put("data", tipoPQRS);
+            response.put("data", tipoReclamo);
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());
@@ -88,13 +84,13 @@ public class TipoPQRSController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            TipoPQRS tipoPQRS = this.tipoPQRSImp.findById(pkCod_TipoPQRS);
+            TipoReclamo tipoReclamo = this.tipoPQRSImp.findById(pkCod_TipoPQRS);
 
             //CAMPOS DE LA TABLA ESPECIALIDAD
-            tipoPQRS.setNombreTipo(request.get("nombreTipo").toString());
-            tipoPQRS.setDescripcion(request.get("descripcion").toString());
+            tipoReclamo.setNombreTipo(request.get("nombreTipo").toString());
+            tipoReclamo.setDescripcion(request.get("descripcion").toString());
 
-            this.tipoPQRSImp.update(tipoPQRS);
+            this.tipoPQRSImp.update(tipoReclamo);
             response.put("status","success");
             response.put("data","Actualizacion Exitosa");
         } catch (Exception e) {
@@ -111,8 +107,8 @@ public class TipoPQRSController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            TipoPQRS tipoPQRS = this.tipoPQRSImp.findById(pkCod_TipoPQRS);
-            tipoPQRSImp.delete(tipoPQRS);
+            TipoReclamo tipoReclamo = this.tipoPQRSImp.findById(pkCod_TipoPQRS);
+            tipoPQRSImp.delete(tipoReclamo);
 
             response.put("status", "success");
             response.put("data", "Registro Eliminado Correctamente");

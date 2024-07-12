@@ -1,15 +1,11 @@
 package com.impulsart.ImpulsArtApp.controller;
 
-import com.impulsart.ImpulsArtApp.entities.Devolucion;
-import com.impulsart.ImpulsArtApp.entities.Pqrs;
+import com.impulsart.ImpulsArtApp.entities.Reembolso;
+import com.impulsart.ImpulsArtApp.entities.Reclamo;
 import com.impulsart.ImpulsArtApp.entities.Venta;
 import com.impulsart.ImpulsArtApp.service.imp.DevolucionImp;
 import com.impulsart.ImpulsArtApp.service.imp.PqrsImp;
 import com.impulsart.ImpulsArtApp.service.imp.VentaImp;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,21 +34,21 @@ public class DevolucionController {
         try {
             System.out.println("@@@@" + request);
             //INSTANCIA DEL OBJETO ESPECIALIDAD
-            Devolucion devolucion = new Devolucion();
+            Reembolso reembolso = new Reembolso();
             //CAMPOS DE LA TABLA ESPECIALIDAD
-            devolucion.setFechaDevolucion(LocalDate.parse(request.get("fechaDevolucion").toString()));
-            devolucion.setTotalReembolso(Integer.parseInt(request.get("totalReembolso").toString()));
-            devolucion.setComprobanteReembolso(request.get("comprobanteReembolso").toString());
-            devolucion.setTotalDevolver(Integer.parseInt(request.get("totalDevolver").toString()));
+            reembolso.setFechaDevolucion(LocalDate.parse(request.get("fechaDevolucion").toString()));
+            reembolso.setTotalReembolso(Integer.parseInt(request.get("totalReembolso").toString()));
+            reembolso.setComprobanteReembolso(request.get("comprobanteReembolso").toString());
+            reembolso.setTotalDevolver(Integer.parseInt(request.get("totalDevolver").toString()));
 
 
             Venta venta = ventaImp.findById(Integer.parseInt(request.get("FkCod_Venta").toString()));
-            devolucion.setVentas(venta);
+            reembolso.setVentas(venta);
 
-            Pqrs pqrs = pqrsImp.findById(Long.valueOf(request.get("FkCod_PQRS").toString()));
-            devolucion.setPqrs(pqrs);
+            Reclamo reclamo = pqrsImp.findById(Long.valueOf(request.get("FkCod_PQRS").toString()));
+            reembolso.setReclamo(reclamo);
 
-            this.devolucionImp.create(devolucion);
+            this.devolucionImp.create(reembolso);
 
             response.put("status", "succses");
             response.put("data", "Registro Exitoso");
@@ -71,9 +67,9 @@ public class DevolucionController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<Devolucion> devolucionList = this.devolucionImp.findAll();
+            List<Reembolso> reembolsoList = this.devolucionImp.findAll();
             response.put("status", "success");
-            response.put("data", devolucionList);
+            response.put("data", reembolsoList);
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());
@@ -88,9 +84,9 @@ public class DevolucionController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Devolucion devolucion = this.devolucionImp.findById(pk_CodDevolucion);
+            Reembolso reembolso = this.devolucionImp.findById(pk_CodDevolucion);
             response.put("status", "success");
-            response.put("data", devolucion);
+            response.put("data", reembolso);
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());
@@ -105,15 +101,15 @@ public class DevolucionController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Devolucion devolucion = this.devolucionImp.findById(pk_CodDevolucion);
+            Reembolso reembolso = this.devolucionImp.findById(pk_CodDevolucion);
 
             //CAMPOS DE LA TABLA ESPECIALIDAD
-            devolucion.setFechaDevolucion(LocalDate.parse(request.get("fechaDevolucion").toString()));
-            devolucion.setTotalReembolso(Integer.parseInt(request.get("totalReembolso").toString()));
-            devolucion.setComprobanteReembolso(request.get("comprobanteReembolso").toString());
-            devolucion.setTotalDevolver(Integer.parseInt(request.get("totalDevolver").toString()));
+            reembolso.setFechaDevolucion(LocalDate.parse(request.get("fechaDevolucion").toString()));
+            reembolso.setTotalReembolso(Integer.parseInt(request.get("totalReembolso").toString()));
+            reembolso.setComprobanteReembolso(request.get("comprobanteReembolso").toString());
+            reembolso.setTotalDevolver(Integer.parseInt(request.get("totalDevolver").toString()));
 
-            this.devolucionImp.update(devolucion);
+            this.devolucionImp.update(reembolso);
             response.put("status","success");
             response.put("data","Actualizacion Exitosa");
         } catch (Exception e) {
@@ -130,8 +126,8 @@ public class DevolucionController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Devolucion devolucion = this.devolucionImp.findById(pk_CodDevolucion);
-            devolucionImp.delete(devolucion);
+            Reembolso reembolso = this.devolucionImp.findById(pk_CodDevolucion);
+            devolucionImp.delete(reembolso);
 
             response.put("status", "success");
             response.put("data", "Registro Eliminado Correctamente");

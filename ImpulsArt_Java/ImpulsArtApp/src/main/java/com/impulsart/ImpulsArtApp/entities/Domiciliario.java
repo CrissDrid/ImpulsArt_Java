@@ -35,8 +35,8 @@ public class Domiciliario {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    @JoinColumn(name = "Fk_Identificacion",nullable = false)
-    private Usuario Usuarios;
+    @JoinColumn(name = "Fk_CodEmpleado",nullable = false)
+    private Empleado empleado;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore

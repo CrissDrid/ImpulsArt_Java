@@ -10,15 +10,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name="PQRS")
+@Table(name="Reclamos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pqrs {
+public class Reclamo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pkCod_PQRS")
-    private long pkCod_PQRS;
+    @Column(name = "pkCod_Reclamo")
+    private long pkCod_Reclamo;
     @Column(name = "Descripcion", length = 200)
     private String descripcion;
     @Column(name = "Motivo", length = 200)
@@ -32,26 +32,26 @@ public class Pqrs {
     @Column(name = "FechaCierre", length = 200)
     private LocalDate fechaCierre;
 
-    @ManyToMany(mappedBy = "PQRS", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "reclamo")
     private List<Usuario> usuarios;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinColumn(name = "FkCod_Venta",nullable = true)
     private Venta ventas;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
-    @JoinColumn(name = "fkCod_Empleado",nullable = true)
-    private Empleado Empleados;
+    @JoinColumn(name = "fkCod_Asesor",nullable = true)
+    private Asesor asesor;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
-    @JoinColumn(name = "fkCod_TipoPQRS",nullable = false)
-    private TipoPQRS tipoPQRS;
+    @JoinColumn(name = "fkCod_TipoReclamo",nullable = false)
+    private TipoReclamo tipoReclamo;
 
-    @OneToMany(mappedBy = "pqrs", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "reclamo")
     @JsonIgnore
-    private List<Devolucion> devoluciones;
+    private List<Reembolso> reembolso;
 
 }

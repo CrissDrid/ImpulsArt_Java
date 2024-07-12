@@ -1,14 +1,11 @@
 package com.impulsart.ImpulsArtApp.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -42,8 +39,8 @@ public class Venta {
     private List<Usuario> usuarios;
 
     @OneToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
-    private List<Pqrs> PQRS;
+    private List<Reclamo> reclamo;
 
     @OneToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
-    private List<Devolucion> devoluciones;
+    private List<Reembolso> reembolso;
 }

@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="devoluciones")
+@Table(name="Reembolsos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Devolucion {
+public class Reembolso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pk_CodDevolucion")
-    private long pk_CodDevolucion;
+    @Column(name = "pk_CodReembolso")
+    private long pk_CodReembolso;
     @Column(name = "FechaDevolucion", length = 200)
     private LocalDate fechaDevolucion;
     @Column(name = "TotalReembolso", length = 200)
@@ -29,8 +29,8 @@ public class Devolucion {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    @JoinColumn(name = "fkCod_PQRS",nullable = false)
-    private Pqrs pqrs;
+    @JoinColumn(name = "fkCod_Reclamo",nullable = false)
+    private Reclamo reclamo;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore

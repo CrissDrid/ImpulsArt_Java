@@ -43,9 +43,6 @@ public class DomiciliarioController {
             domiciliario.setEntregasPendientes(Integer.parseInt(request.get("entregasPendientes").toString()));
             domiciliario.setSalario(Integer.parseInt(request.get("salario").toString()));
 
-            Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("Fk_Identificacion").toString()));
-            domiciliario.setUsuarios(usuario);
-
             Vehiculo vehiculo = vehiculoImp.findById(Long.valueOf(request.get("fk_placa").toString()));
             domiciliario.setVehiculos(vehiculo);
 

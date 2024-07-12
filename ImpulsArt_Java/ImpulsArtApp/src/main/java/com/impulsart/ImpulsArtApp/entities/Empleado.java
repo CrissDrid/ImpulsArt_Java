@@ -21,16 +21,15 @@ public class Empleado {
 
     @Column(name = "Salario",length = 100)
     private int salario;
-    @Column(name = "CasosPendientes",length = 100)
-    private int casosPendientes;
-
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "Fk_Identificacion",nullable = false)
     private Usuario Usuarios;
 
-    @OneToMany(mappedBy = "Empleados", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Pqrs> PQRS;
+    @OneToMany(mappedBy = "empleado")
+    private List<Asesor> asesor;
+
+    @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL)
+    private List<Domiciliario> domiciliario;
 
 }

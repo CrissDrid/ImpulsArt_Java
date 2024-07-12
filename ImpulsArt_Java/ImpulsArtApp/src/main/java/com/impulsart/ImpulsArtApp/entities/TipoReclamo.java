@@ -6,15 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="tipoPQRS")
+@Table(name="tipoReclamos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TipoPQRS {
+public class TipoReclamo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pkCod_TipoPQRS")
-    private long pkCod_TipoPQRS;
+    @Column(name = "pkCod_TipoReclamo")
+    private long pkCod_TipoReclamo;
     @Column(name = "NombreTipo",length = 50)
     private String nombreTipo;
     @Column(name = "Descripcion",length = 50)

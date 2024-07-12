@@ -1,9 +1,9 @@
 package com.impulsart.ImpulsArtApp.repositories;
 
-import com.impulsart.ImpulsArtApp.entities.TipoPQRS;
+import com.impulsart.ImpulsArtApp.entities.TipoReclamo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TipoPQRSRepository extends JpaRepository<TipoPQRS, Long> {
+public interface TipoPQRSRepository extends JpaRepository<TipoReclamo, Long> {
 }
