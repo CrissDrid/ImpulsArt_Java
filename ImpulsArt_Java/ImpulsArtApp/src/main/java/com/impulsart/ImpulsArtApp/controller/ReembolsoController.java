@@ -3,8 +3,8 @@ package com.impulsart.ImpulsArtApp.controller;
 import com.impulsart.ImpulsArtApp.entities.Reembolso;
 import com.impulsart.ImpulsArtApp.entities.Reclamo;
 import com.impulsart.ImpulsArtApp.entities.Venta;
-import com.impulsart.ImpulsArtApp.service.imp.DevolucionImp;
-import com.impulsart.ImpulsArtApp.service.imp.PqrsImp;
+import com.impulsart.ImpulsArtApp.service.imp.ReembolsoImp;
+import com.impulsart.ImpulsArtApp.service.imp.ReclamoImp;
 import com.impulsart.ImpulsArtApp.service.imp.VentaImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "/api/devolucion", method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
+@RequestMapping(path = "/api/reembolso", method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
 @CrossOrigin("*")
-public class DevolucionController {
+public class ReembolsoController {
     @Autowired
-    DevolucionImp devolucionImp;
+    ReembolsoImp devolucionImp;
     @Autowired
     VentaImp ventaImp;
     @Autowired
-    PqrsImp pqrsImp;
+    ReclamoImp pqrsImp;
 
     //CONTROLLER CREATE
     @PostMapping("/create")

@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Clob;
 import java.util.List;
 
 @Entity
@@ -49,7 +48,7 @@ public class Obra {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "FkCod_Categoria",nullable = false)
-    private Categorias categorias;
+    private Categoria categorias;
 
     @ManyToMany(mappedBy = "obras")
     private List<Usuario> usuarios;

@@ -18,8 +18,8 @@ public class Calificacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pkCod_Calificaciones")
-    private long pkCod_Calificaciones;
+    @Column(name = "pkCod_Calificacion")
+    private long pkCod_Calificacion;
 
     @Column(name = "Puntaje")
     private int puntaje;
