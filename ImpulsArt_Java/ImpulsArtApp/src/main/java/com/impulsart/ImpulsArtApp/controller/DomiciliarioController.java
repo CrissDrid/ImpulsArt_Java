@@ -1,10 +1,8 @@
 package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.*;
-import com.impulsart.ImpulsArtApp.service.imp.DespachoImp;
-import com.impulsart.ImpulsArtApp.service.imp.DomiciliarioImp;
-import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
-import com.impulsart.ImpulsArtApp.service.imp.VehiculoImp;
+import com.impulsart.ImpulsArtApp.service.imp.*;
+import com.impulsart.ImpulsArtApp.service.imp.EmpleadoImp;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -27,7 +25,7 @@ public class DomiciliarioController {
     @Autowired
     private DomiciliarioImp domiciliarioImp;
     @Autowired
-    private UsuarioImp usuarioImp;
+    private EmpleadoImp empleadoImp;
     @Autowired
     private VehiculoImp vehiculoImp;
 
@@ -42,6 +40,9 @@ public class DomiciliarioController {
             //CAMPOS DE LA TABLA DOMICILIARIO
             domiciliario.setEntregasPendientes(Integer.parseInt(request.get("entregasPendientes").toString()));
             domiciliario.setSalario(Integer.parseInt(request.get("salario").toString()));
+
+            Empleado empleado = empleadoImp.findById(Long.valueOf(request.get("Fk_CodEmpleado").toString()));
+            domiciliario.setEmpleado(empleado);
 
             Vehiculo vehiculo = vehiculoImp.findById(Long.valueOf(request.get("fk_placa").toString()));
             domiciliario.setVehiculos(vehiculo);
@@ -77,12 +78,12 @@ public class DomiciliarioController {
     }
 
     //READ ID
-    @GetMapping("/list/{pkCod_Despacho}")
-    public ResponseEntity<Map<String, Object>> findById(@PathVariable Long pkCod_Despacho) {
+    @GetMapping("/list/{pkCod_Domiciliario}")
+    public ResponseEntity<Map<String, Object>> findById(@PathVariable Long pkCod_Domiciliario) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Domiciliario domiciliario = this.domiciliarioImp.findById(pkCod_Despacho);
+            Domiciliario domiciliario = this.domiciliarioImp.findById(pkCod_Domiciliario);
             response.put("status", "success");
             response.put("data", domiciliario);
         } catch (Exception e) {

@@ -1,7 +1,11 @@
 package com.impulsart.ImpulsArtApp.controller;
 
-import com.impulsart.ImpulsArtApp.entities.*;
-import com.impulsart.ImpulsArtApp.service.imp.*;
+import com.impulsart.ImpulsArtApp.entities.Asesor;
+import com.impulsart.ImpulsArtApp.entities.Calificacion;
+import com.impulsart.ImpulsArtApp.entities.Reclamo;
+import com.impulsart.ImpulsArtApp.entities.TipoReclamo;
+import com.impulsart.ImpulsArtApp.service.imp.AsesorImp;
+import com.impulsart.ImpulsArtApp.service.imp.CalificacionImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +17,13 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "/api/reclamo", method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
+@RequestMapping(path = "/api/calificacion", method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
 @CrossOrigin("*")
-public class ReclamoController {
+public class CalificacionController {
 
     @Autowired
-    ReclamoImp reclamoImp;
-    @Autowired
-    TipoReclamoImp tipoReclamoImp;
-    @Autowired
-    VentaImp ventaImp;
+    CalificacionImp calificacionImp;
+
     @Autowired
     AsesorImp asesorImp;
 
@@ -32,26 +33,16 @@ public class ReclamoController {
         Map<String, Object> response = new HashMap<>();
         try {
             System.out.println("@@@@" + request);
-            //INSTANCIA DEL OBJETO RECLAMO
-            Reclamo reclamo = new Reclamo();
-            //CAMPOS DE LA TABLA RECLAMO
-            reclamo.setDescripcion(request.get("descripcion").toString());
-            reclamo.setMotivo(request.get("motivo").toString());
-            reclamo.setRespuesta(request.get("respuesta").toString());
-            reclamo.setEstado(request.get("estado").toString());
-            reclamo.setFechaPQRS(LocalDate.parse(request.get("fechaPQRS").toString()));
-            reclamo.setFechaCierre(request.get("fechaCierre") != null ? LocalDate.parse(request.get("fechaCierre").toString()) : null);
+            //INSTANCIA DEL OBJETO CALIFICACION
+            Calificacion calificacion = new Calificacion();
+            //CAMPOS DE LA TABLA CALIFICACION
+            calificacion.setPuntaje(Integer.parseInt(request.get("puntaje").toString()));
+            calificacion.setComentarios(request.get("comentarios").toString());
 
-            TipoReclamo tipoReclamo = tipoReclamoImp.findById(Long.valueOf(request.get("fkCod_TipoReclamo").toString()));
-            reclamo.setTipoReclamo(tipoReclamo);
+            Asesor asesor = asesorImp.findById(Long.valueOf(request.get("FkCod_Asesor").toString()));
+            calificacion.setAsesor(asesor);
 
-            Venta venta = ventaImp.findById(Integer.valueOf(request.get("FkCod_Venta").toString()));
-            reclamo.setVentas(venta);
-
-            Asesor asesor = asesorImp.findById(Long.valueOf(request.get("fkCod_Asesor").toString()));
-            reclamo.setAsesor(asesor);
-
-            this.reclamoImp.create(reclamo);
+            this.calificacionImp.create(calificacion);
 
             response.put("status", "succses");
             response.put("data", "Registro Exitoso");
@@ -70,9 +61,9 @@ public class ReclamoController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<Reclamo> reclamoList = this.reclamoImp.findAll();
+            List<Calificacion> calificacionList = this.calificacionImp.findAll();
             response.put("status", "success");
-            response.put("data", reclamoList);
+            response.put("data", calificacionList);
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());
@@ -82,14 +73,14 @@ public class ReclamoController {
     }
 
     //READ ID
-    @GetMapping("/list/{pkCod_Reclamo}")
-    public ResponseEntity<Map<String, Object>> findById(@PathVariable Long pkCod_Reclamo) {
+    @GetMapping("/list/{pkCod_Calificacion}")
+    public ResponseEntity<Map<String, Object>> findById(@PathVariable Long pkCod_Calificacion) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Reclamo reclamo = this.reclamoImp.findById(pkCod_Reclamo);
+            Calificacion calificacion = this.calificacionImp.findById(pkCod_Calificacion);
             response.put("status", "success");
-            response.put("data", reclamo);
+            response.put("data", calificacion);
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());
@@ -99,22 +90,18 @@ public class ReclamoController {
     }
 
     //CONTROLLER UPDATE
-    @PutMapping("update/{pkCod_Reclamo}")
-    public ResponseEntity<Map<String,Object>> update(@PathVariable Long pkCod_Reclamo, @RequestBody Map<String, Object> request) {
+    @PutMapping("update/{pkCod_Calificacion}")
+    public ResponseEntity<Map<String,Object>> update(@PathVariable Long pkCod_Calificacion, @RequestBody Map<String, Object> request) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Reclamo reclamo = this.reclamoImp.findById(pkCod_Reclamo);
+            Calificacion calificacion = this.calificacionImp.findById(pkCod_Calificacion);
 
-            //CAMPOS DE LA TABLA RECLAMO
-            reclamo.setDescripcion(request.get("descripcion").toString());
-            reclamo.setMotivo(request.get("motivo").toString());
-            reclamo.setRespuesta(request.get("respuesta").toString());
-            reclamo.setEstado(request.get("estado").toString());
-            reclamo.setFechaPQRS(LocalDate.parse(request.get("fechaPQRS").toString()));
-            reclamo.setFechaCierre(request.get("fechaCierre") != null ? LocalDate.parse(request.get("fechaCierre").toString()) : null);
+            //CAMPOS DE LA TABLA CALIFICACION
+            calificacion.setPuntaje(Integer.parseInt(request.get("puntaje").toString()));
+            calificacion.setComentarios(request.get("comentarios").toString());
 
-            this.reclamoImp.update(reclamo);
+            this.calificacionImp.update(calificacion);
             response.put("status","success");
             response.put("data","Actualizacion Exitosa");
         } catch (Exception e) {
@@ -126,13 +113,13 @@ public class ReclamoController {
     }
 
     //CONTROLLER DELETE
-    @DeleteMapping("/delete/{pkCod_Reclamo}")
-    public ResponseEntity<Map<String, Object>> delete(@PathVariable Long pkCod_Reclamo) {
+    @DeleteMapping("/delete/{pkCod_Calificacion}")
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable Long pkCod_Calificacion) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Reclamo reclamo = this.reclamoImp.findById(pkCod_Reclamo);
-            reclamoImp.delete(reclamo);
+            Calificacion calificacion = this.calificacionImp.findById(pkCod_Calificacion);
+            calificacionImp.delete(calificacion);
 
             response.put("status", "success");
             response.put("data", "Registro Eliminado Correctamente");

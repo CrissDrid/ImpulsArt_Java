@@ -1,8 +1,9 @@
 
 package com.impulsart.ImpulsArtApp.controller;
 
+import com.impulsart.ImpulsArtApp.entities.Categoria;
 import com.impulsart.ImpulsArtApp.entities.Obra;
-import com.impulsart.ImpulsArtApp.entities.Usuario;
+import com.impulsart.ImpulsArtApp.service.imp.CategoriaImp;
 import com.impulsart.ImpulsArtApp.service.imp.ObraImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,9 @@ public class ObraController {
 
     //INYECCION DE DEPENDECIAS
 @Autowired
-    private ObraImp obraImp;
+private ObraImp obraImp;
+@Autowired
+private CategoriaImp categoriaImp;
 
 //CONTROLLER CREATE
 @PostMapping("/create")
@@ -42,7 +45,7 @@ public ResponseEntity<Map<String, Object>> create(
         @RequestParam("peso") String peso,
         @RequestParam("tamano") String tamano,
         @RequestParam("cantidad") int cantidad,
-        @RequestParam("categoria") String categoria,
+        @RequestParam("categoria") Long categoriaId,
         @RequestParam("descripcion") String descripcion) {
 
     Map<String, Object> response = new HashMap<>();
@@ -66,9 +69,14 @@ public ResponseEntity<Map<String, Object>> create(
         obra.setPeso(peso);
         obra.setTamano(tamano);
         obra.setCantidad(cantidad);
-        obra.setCategoria(categoria);
         obra.setDescripcion(descripcion);
         obra.setImagen(imageUrl); // Establecer la URL de la imagen si no es nula
+
+        Categoria categoria = categoriaImp.findById(categoriaId);
+        if (categoria == null) {
+            throw new RuntimeException("Categoría no encontrada");
+        }
+        obra.setCategoria(categoria); // Establecer la categoría en la obra
 
         // Guardar la obra en la base de datos
         this.obraImp.create(obra);
@@ -100,23 +108,6 @@ public ResponseEntity<Map<String, Object>> create(
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    //FIND BY CATEGORIA
-    @GetMapping("/categoria/{categoria}")
-    public ResponseEntity<Map<String, Object>> findByCategoriaContaining(@PathVariable String categoria) {
-        Map<String, Object> response = new HashMap<>();
-
-        try {
-            List<Obra> obras = obraImp.findByCategoriaContainingIgnoreCase(categoria);
-            response.put("status", "success");
-            response.put("data", obras);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
-            response.put("message", "Error al buscar obras por categoría que contenga la cadena.");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     //FIND BY NAME
     @GetMapping("/nombreProducto/{nombreProducto}")
     public ResponseEntity<Map<String, Object>> findByNombreProductoContaining(@PathVariable String nombreProducto) {
@@ -130,27 +121,6 @@ public ResponseEntity<Map<String, Object>> create(
         } catch (Exception e) {
             response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
             response.put("message", "Error al buscar obras por nombre de producto que contenga la cadena.");
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/categoria/{categoria}/nombreProducto/{nombreProducto}")
-    public ResponseEntity<Map<String, Object>> findByNombreProductoAndCategoriaContaining(
-            @PathVariable(required = false) String nombreProducto,
-            @PathVariable (required = false ) String categoria) {
-        Map<String, Object> response = new HashMap<>();
-
-        try {
-            List<Obra> obras;
-
-            obras = obraImp.findByNombreProductoContainingIgnoreCaseAndCategoriaContainingIgnoreCase(nombreProducto, categoria);
-
-            response.put("status", "success");
-            response.put("data", obras);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
-            response.put("message", "Error al buscar obras por nombre de producto y categoría que contengan las cadenas respectivamente.");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -172,7 +142,7 @@ public ResponseEntity<Map<String, Object>> create(
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 //CONTROLLER UPDATE
-    @PutMapping("update/{pkCod_Producto}")
+    @PutMapping("/update/{pkCod_Producto}")
     public ResponseEntity<Map<String,Object>> update(@PathVariable Integer pkCod_Producto, @RequestBody Map<String,Object>request){
         Map<String,Object> response = new HashMap<>();
         try {
@@ -183,7 +153,6 @@ public ResponseEntity<Map<String, Object>> create(
             obra.setPeso(request.get("peso").toString());
             obra.setTamano(request.get("tamano").toString());
             obra.setCantidad(Integer.parseInt(request.get("cantidad").toString()));
-            obra.setCategoria(request.get("categoria").toString());
             obra.setDescripcion(request.get("descripcion").toString());
 
             //CONFIG IMAGEN

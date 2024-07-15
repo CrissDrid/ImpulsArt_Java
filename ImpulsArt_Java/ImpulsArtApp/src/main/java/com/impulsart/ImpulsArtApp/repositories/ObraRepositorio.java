@@ -10,10 +10,6 @@ import java.util.List;
 @Repository
 public interface ObraRepositorio extends JpaRepository <Obra ,Integer> {
 
-    List<Obra> findByCategoriaContainingIgnoreCase(String categoria);
-
     List<Obra> findByNombreProductoContainingIgnoreCase(String nombreProducto);
-
-    List<Obra> findByNombreProductoContainingIgnoreCaseAndCategoriaContainingIgnoreCase(String nombreProducto, String categoria);
 
 }

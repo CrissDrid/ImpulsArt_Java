@@ -25,7 +25,7 @@ public class ReembolsoController {
     @Autowired
     VentaImp ventaImp;
     @Autowired
-    ReclamoImp pqrsImp;
+    ReclamoImp reclamoImp;
 
     //CONTROLLER CREATE
     @PostMapping("/create")
@@ -45,7 +45,7 @@ public class ReembolsoController {
             Venta venta = ventaImp.findById(Integer.parseInt(request.get("FkCod_Venta").toString()));
             reembolso.setVentas(venta);
 
-            Reclamo reclamo = pqrsImp.findById(Long.valueOf(request.get("FkCod_PQRS").toString()));
+            Reclamo reclamo = reclamoImp.findById(Long.valueOf(request.get("FkCod_Reclamo").toString()));
             reembolso.setReclamo(reclamo);
 
             this.devolucionImp.create(reembolso);

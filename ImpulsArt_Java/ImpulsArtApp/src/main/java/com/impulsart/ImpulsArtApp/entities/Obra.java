@@ -28,8 +28,6 @@ public class Obra {
     private String tamano;
     @Column(name = "Cantidad",nullable = false)
     private int cantidad;
-    @Column(name = "Categoria",length = 50,nullable = false)
-    private String categoria;
     @Column(name = "Descripcion",length = 155,nullable = false)
     private String descripcion;
     @Lob
@@ -48,7 +46,7 @@ public class Obra {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "FkCod_Categoria",nullable = false)
-    private Categoria categorias;
+    private Categoria categoria;
 
     @ManyToMany(mappedBy = "obras")
     private List<Usuario> usuarios;

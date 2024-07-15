@@ -4,9 +4,11 @@ import com.impulsart.ImpulsArtApp.entities.Calificacion;
 import com.impulsart.ImpulsArtApp.repositories.CalificacionRepository;
 import com.impulsart.ImpulsArtApp.service.CalificacionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CalificacionImp implements CalificacionService {
 
     @Autowired
