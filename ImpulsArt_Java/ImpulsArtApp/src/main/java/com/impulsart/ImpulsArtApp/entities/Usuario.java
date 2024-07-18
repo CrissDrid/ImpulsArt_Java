@@ -42,8 +42,8 @@ public class Usuario {
     @JsonIgnore
     private List<Oferta> ofertas;
 
-    @OneToMany(mappedBy = "Usuarios", cascade = CascadeType.ALL)
-    private List<Empleado> Empleados;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Empleado> empleados;
 
     //FOREING KEY
     @ManyToMany

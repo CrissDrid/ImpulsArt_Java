@@ -35,7 +35,7 @@ public class EmpleadoController {
             empleado.setSalario(Integer.parseInt(request.get("salario").toString()));
 
             Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("Fk_Identificacion").toString()));
-            empleado.setUsuarios(usuario);
+            empleado.setUsuario(usuario);
 
             this.empleadoImp.create(empleado);
 

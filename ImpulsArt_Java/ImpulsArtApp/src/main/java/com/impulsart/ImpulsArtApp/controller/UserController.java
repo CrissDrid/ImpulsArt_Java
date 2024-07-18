@@ -23,6 +23,30 @@ public class UserController {
  @Autowired
     private UsuarioImp usuarioImp;
 
+    // Endpoint para validar si un usuario es domiciliario
+    @GetMapping("/validarEmpleado/{identificacion}")
+    public ResponseEntity<Map<String, Object>> validarDomiciliario(@PathVariable int identificacion) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            boolean esDomiciliario = usuarioImp.findByEmpleadosIsNotNullAndIdentificacion(identificacion);
+
+            if (esDomiciliario) {
+                response.put("success", true);
+                response.put("data", "El usuario con userName " + identificacion + " es un domiciliario.");
+            } else {
+                response.put("success", false);
+                response.put("data", "El usuario con userName " + identificacion + " no es un domiciliario.");
+            }
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 //CONTROLLER CREATE
     @PostMapping("/create")
     public ResponseEntity<Map<String,Object>> create(@RequestBody Map<String, Object> request){

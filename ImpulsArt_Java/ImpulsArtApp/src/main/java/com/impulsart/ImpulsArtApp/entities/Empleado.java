@@ -22,9 +22,8 @@ public class Empleado {
     @Column(name = "Salario",length = 100)
     private int salario;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonIgnore
-    @JoinColumn(name = "Fk_Identificacion",nullable = false)
-    private Usuario Usuarios;
+    @JoinColumn(name = "Fk_Identificacion", nullable = false)
+    private Usuario usuario;
 
     @OneToMany(mappedBy = "empleado")
     private List<Asesor> asesor;

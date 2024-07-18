@@ -25,6 +25,13 @@ public class UsuarioImp implements UsuarioService {
     }
 
     @Override
+    public boolean findByEmpleadosIsNotNullAndIdentificacion(int identificacion) {
+        Usuario usuario = usuarioRepositorio.findByEmpleadosIsNotNullAndIdentificacion(identificacion);
+        return usuario != null;
+    }
+
+
+    @Override
     public Usuario findByEmail(String email) {
         return usuarioRepositorio.findByEmail(email);
     }
