@@ -93,7 +93,8 @@ public class UserController {
             if (usuario != null && usuario.getContrasena().equals(contrasena)) {
                 response.put("success", true);
                 response.put("data", "Inicio de sesión exitoso");
-                response.put("userName", usuario.getUserName()); // Incluye el nombre de usuario en la respuesta
+                response.put("userName", usuario.getUserName());
+                response.put("identificacion", usuario.getIdentificacion());// Incluye el nombre de usuario en la respuesta
             } else {
                 response.put("success", false);
                 response.put("data", "Credenciales inválidas");
