@@ -39,8 +39,5 @@ public class Venta {
     private List<Usuario> usuarios;
 
     @OneToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
-    private List<Reclamo> reclamo;
-
-    @OneToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
     private List<Reembolso> reembolso;
 }

@@ -43,7 +43,7 @@ public class Obra {
     @JsonIgnore
     private List<Subasta> subastas;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinColumn(name = "FkCod_Categoria",nullable = false)
     private Categoria categoria;

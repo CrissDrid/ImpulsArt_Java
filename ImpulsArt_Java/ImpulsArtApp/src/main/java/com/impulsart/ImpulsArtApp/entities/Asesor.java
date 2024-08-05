@@ -27,9 +27,6 @@ public class Asesor {
     @Column(name = "EntregasPendientes")
     private int entregasPendientes;
 
-    @OneToMany(mappedBy = "asesor")
-    private List<Reclamo> reclamo;
-
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "FkCod_Empleado",nullable = false)

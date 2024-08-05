@@ -23,6 +23,30 @@ public class UserController {
  @Autowired
     private UsuarioImp usuarioImp;
 
+    //VALIDACION DE ROLES
+    @GetMapping("/validarRoles/{identificacion}")
+    public ResponseEntity<Map<String, Object>> validarRoles(@PathVariable int identificacion) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            boolean domiciliario = usuarioImp.existsByEmpleadosAsesorIsNotNullAndIdentificacion(identificacion);
+            boolean asesor = usuarioImp.existsByEmpleadosDomiciliarioIsNotNullAndIdentificacion(identificacion);
+            Usuario usuario = usuarioImp.findById(identificacion);
+            String tipoUsuario = usuario.getTipoUsuario();
+
+            response.put("identificacion", identificacion);
+            response.put("esAsesor", asesor);
+            response.put("esDomiciliario", domiciliario);
+            response.put("tipoUsuario", tipoUsuario);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 //CONTROLLER CREATE
     @PostMapping("/create")
     public ResponseEntity<Map<String,Object>> create(@RequestBody Map<String, Object> request){
@@ -62,28 +86,46 @@ public class UserController {
             String email = (String) request.get("email");
             String contrasena = (String) request.get("contrasena");
 
-            // Aquí iría la lógica para buscar el usuario en la base de datos
-            Usuario usuario = usuarioImp.findByEmail(email);
+            // Buscar usuarios con el correo electrónico coincidente
+            List<Usuario> usuarios = usuarioImp.findByEmail(email);
 
-            // Verificar si el usuario existe y si la contraseña es correcta
-            if (usuario != null && usuario.getContrasena().equals(contrasena)) {
-                response.put("success", true);
-                response.put("data", "Inicio de sesión exitoso");
-                response.put("userName", usuario.getUserName()); // Incluye el nombre de usuario en la respuesta
-            } else {
+            // Verificar si hay más de un usuario con el mismo correo electrónico
+            if (usuarios.size() > 1) {
+                // Intentar iniciar sesión con el usuario que coincida con la contraseña
+                for (Usuario usuario : usuarios) {
+                    if (usuario.getContrasena().equals(contrasena)) {
+                        response.put("success", true);
+                        response.put("data", usuario);
+                        response.put("identificacion", usuario.getIdentificacion());// Incluye el nombre de usuario en la respuesta
+                        return new ResponseEntity<>(response, HttpStatus.OK);
+                    }
+                }
+                // Si no se encuentra un usuario con la contraseña correcta, devolver error
                 response.put("success", false);
-                response.put("data", "Credenciales inválidas");
+                response.put("message", "Credenciales inválidas");
                 return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            } else {
+                // Si solo hay un usuario con el correo electrónico, verificar la contraseña
+                Usuario usuario = usuarios.get(0);
+                if (usuario.getContrasena().equals(contrasena)) {
+                    response.put("success", true);
+                    response.put("data", usuario);
+                } else {
+                    response.put("success", false);
+                    response.put("message", "Credenciales inválidas");
+                    return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+                }
             }
         } catch (Exception e) {
             response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
-            response.put("data", e.getMessage());
+            response.put("message", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-//CONTROLLER READ
+
+    //CONTROLLER READ
     //READ ALL
     @GetMapping("/all")
     public ResponseEntity<Map<String, Object>> findAll(){
@@ -102,22 +144,22 @@ public class UserController {
     }
     //READ iD
     @GetMapping("/list/{identificacion}")
-    public ResponseEntity<Map<String, Object>> findById(@PathVariable Integer identificacion){
-        Map<String,Object> response = new HashMap<>();
+    public ResponseEntity<Map<String, Object>> findById(@PathVariable Integer identificacion) {
+        Map<String, Object> response = new HashMap<>();
 
-        try{
+        try {
             Usuario usuario = this.usuarioImp.findById(identificacion);
-            response.put("status","success");
-            response.put("data",usuario);
-        }catch (Exception e){
-            response.put("status",HttpStatus.BAD_GATEWAY);
-            response.put("data",e.getMessage());
+            response.put("status", "success");
+            response.put("data", usuario);
+        } catch (Exception e) {
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-//CONTROLLER UPDATE
+    //CONTROLLER UPDATE
     @PutMapping("update/{identificacion}")
     public ResponseEntity<Map<String,Object>> update(@PathVariable Integer identificacion, @RequestBody Map<String,Object> request){
         Map<String, Object> response = new HashMap<>();
@@ -164,7 +206,6 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
-}
-
+    }
 
 }
