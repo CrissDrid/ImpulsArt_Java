@@ -157,10 +157,15 @@ public class UserController {
 
         try {
             Usuario usuario = this.usuarioImp.findById(identificacion);
-            response.put("status", "success");
-            response.put("data", usuario);
+            if (usuario != null) {
+                response.put("status", "success");
+                response.put("data", usuario);
+            } else {
+                response.put("status", "not_found");
+                response.put("data", null);
+            }
         } catch (Exception e) {
-            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("status", "error");
             response.put("data", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
         }
