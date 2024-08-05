@@ -89,6 +89,13 @@ public class UserController {
             // Buscar usuarios con el correo electrónico coincidente
             List<Usuario> usuarios = usuarioImp.findByEmail(email);
 
+            // Verificar si la lista de usuarios está vacía
+            if (usuarios.isEmpty()) {
+                response.put("success", false);
+                response.put("message", "Usuario no encontrado");
+                return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            }
+
             // Verificar si hay más de un usuario con el mismo correo electrónico
             if (usuarios.size() > 1) {
                 // Intentar iniciar sesión con el usuario que coincida con la contraseña
@@ -96,7 +103,7 @@ public class UserController {
                     if (usuario.getContrasena().equals(contrasena)) {
                         response.put("success", true);
                         response.put("data", usuario);
-                        response.put("identificacion", usuario.getIdentificacion());// Incluye el nombre de usuario en la respuesta
+                        response.put("identificacion", usuario.getIdentificacion()); // Incluye la identificación en la respuesta
                         return new ResponseEntity<>(response, HttpStatus.OK);
                     }
                 }
@@ -110,6 +117,8 @@ public class UserController {
                 if (usuario.getContrasena().equals(contrasena)) {
                     response.put("success", true);
                     response.put("data", usuario);
+                    response.put("identificacion", usuario.getIdentificacion()); // Incluye la identificación en la respuesta
+                    return new ResponseEntity<>(response, HttpStatus.OK);
                 } else {
                     response.put("success", false);
                     response.put("message", "Credenciales inválidas");
@@ -121,7 +130,6 @@ public class UserController {
             response.put("message", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
