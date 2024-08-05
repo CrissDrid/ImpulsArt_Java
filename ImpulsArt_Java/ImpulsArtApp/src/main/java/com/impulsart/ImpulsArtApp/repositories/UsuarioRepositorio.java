@@ -8,7 +8,10 @@ import org.springframework.stereotype.Repository;
 public interface UsuarioRepositorio extends JpaRepository<Usuario, Integer> {
     Usuario findByEmail(String email);
 
-    //Validar que sea del rol domiciliario
-    Usuario findByEmpleadosIsNotNullAndIdentificacion(int identificacion);
+    // Verificar si es asesor
+    boolean existsByEmpleadosAsesorIsNotNullAndIdentificacion(int identificacion);
+
+    // Verificar si es domiciliario
+    boolean existsByEmpleadosDomiciliarioIsNotNullAndIdentificacion(int identificacion);
 
 }

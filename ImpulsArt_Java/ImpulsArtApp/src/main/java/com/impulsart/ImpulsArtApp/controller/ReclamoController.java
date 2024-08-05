@@ -45,11 +45,6 @@ public class ReclamoController {
             TipoReclamo tipoReclamo = tipoReclamoImp.findById(Long.valueOf(request.get("fkCod_TipoReclamo").toString()));
             reclamo.setTipoReclamo(tipoReclamo);
 
-            Venta venta = ventaImp.findById(Integer.valueOf(request.get("FkCod_Venta").toString()));
-            reclamo.setVentas(venta);
-
-            Asesor asesor = asesorImp.findById(Long.valueOf(request.get("fkCod_Asesor").toString()));
-            reclamo.setAsesor(asesor);
 
             this.reclamoImp.create(reclamo);
 

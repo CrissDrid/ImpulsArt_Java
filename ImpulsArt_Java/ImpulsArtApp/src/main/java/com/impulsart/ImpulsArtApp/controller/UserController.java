@@ -23,26 +23,25 @@ public class UserController {
  @Autowired
     private UsuarioImp usuarioImp;
 
-    // Endpoint para validar si un usuario es domiciliario
-    @GetMapping("/validarEmpleado/{identificacion}")
-    public ResponseEntity<Map<String, Object>> validarDomiciliario(@PathVariable int identificacion) {
+    @GetMapping("/validarRoles/{identificacion}")
+    public ResponseEntity<Map<String, Object>> validarRoles(@PathVariable int identificacion) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            boolean esDomiciliario = usuarioImp.findByEmpleadosIsNotNullAndIdentificacion(identificacion);
+            boolean domiciliario = usuarioImp.existsByEmpleadosAsesorIsNotNullAndIdentificacion(identificacion);
+            boolean asesor = usuarioImp.existsByEmpleadosDomiciliarioIsNotNullAndIdentificacion(identificacion);
+            Usuario usuario = usuarioImp.findById(identificacion);
+            String tipoUsuario = usuario.getTipoUsuario();
 
-            if (esDomiciliario) {
-                response.put("success", true);
-                response.put("data", "El usuario con userName " + identificacion + " es un domiciliario.");
-            } else {
-                response.put("success", false);
-                response.put("data", "El usuario con userName " + identificacion + " no es un domiciliario.");
-            }
+            response.put("identificacion", identificacion);
+            response.put("esAsesor", asesor);
+            response.put("esDomiciliario", domiciliario);
+            response.put("tipoUsuario", tipoUsuario);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
-            response.put("data", e.getMessage());
+            response.put("message", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

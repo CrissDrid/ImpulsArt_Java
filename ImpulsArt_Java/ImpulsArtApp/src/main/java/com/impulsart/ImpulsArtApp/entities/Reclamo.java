@@ -37,16 +37,6 @@ public class Reclamo {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
-    @JoinColumn(name = "FkCod_Venta",nullable = true)
-    private Venta ventas;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
-    @JoinColumn(name = "fkCod_Asesor",nullable = true)
-    private Asesor asesor;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
     @JoinColumn(name = "fkCod_TipoReclamo",nullable = false)
     private TipoReclamo tipoReclamo;
 
