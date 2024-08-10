@@ -44,7 +44,6 @@ public class Obra {
     private List<Subasta> subastas;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
     @JoinColumn(name = "FkCod_Categoria",nullable = false)
     private Categoria categoria;
 

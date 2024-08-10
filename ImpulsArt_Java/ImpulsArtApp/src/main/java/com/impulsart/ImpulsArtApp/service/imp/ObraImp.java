@@ -24,6 +24,11 @@ public class ObraImp implements ObraService {
     }
 
     @Override
+    public List<Obra> findObrasSinSubasta() {
+        return obraRepositorio.findObrasSinSubasta();
+    }
+
+    @Override
     public Obra findById(Integer pkCod_Producto) {
         return this.obraRepositorio.findById(pkCod_Producto).orElse(null);
     }

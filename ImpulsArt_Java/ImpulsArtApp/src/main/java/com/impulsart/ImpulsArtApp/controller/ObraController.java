@@ -16,10 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Clob;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "/api/obra",method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
@@ -51,15 +48,16 @@ public ResponseEntity<Map<String, Object>> create(
     Map<String, Object> response = new HashMap<>();
 
     try {
+        // Guardar la imagen y obtener su URL
         String imageUrl = null;
         if (imagen != null) {
-            // Guardar la imagen en el directorio especificado
-            String fileName = imagen.getOriginalFilename();
-            Path imagePath = Paths.get(imageDirectory, fileName);
+            String originalFileName = imagen.getOriginalFilename();
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
+            Path imagePath = Paths.get(imageDirectory, uniqueFileName);
             Files.copy(imagen.getInputStream(), imagePath);
 
             // Construir la URL completa de la imagen
-            imageUrl = "http://localhost:8086/imagen/" + fileName;
+            imageUrl = "http://localhost:8086/imagen/" + uniqueFileName;
         }
 
         // Instanciar el objeto Obra y establecer los campos
@@ -70,7 +68,7 @@ public ResponseEntity<Map<String, Object>> create(
         obra.setTamano(tamano);
         obra.setCantidad(cantidad);
         obra.setDescripcion(descripcion);
-        obra.setImagen(imageUrl); // Establecer la URL de la imagen si no es nula
+        obra.setImagen(imageUrl);
 
         Categoria categoria = categoriaImp.findById(categoriaId);
         if (categoria == null) {
@@ -93,11 +91,11 @@ public ResponseEntity<Map<String, Object>> create(
 //CONTROLLER READ
     //READ ALL
     @GetMapping("/all")
-    public ResponseEntity<Map<String,Object>> findAll(){
+    public ResponseEntity<Map<String,Object>> findObraSinSubasta(){
         Map<String,Object> response = new HashMap<>();
 
         try{
-            List<Obra> obraList = this.obraImp.findAll();
+            List<Obra> obraList = this.obraImp.findObrasSinSubasta();
             response.put("status","success");
             response.put("data",obraList);
         }catch (Exception e){
