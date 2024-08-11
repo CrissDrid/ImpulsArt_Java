@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface SubastaService {
+
+    List<Subasta> findHistorialObrasSubasta(@Param("identificacion") Integer identificacion);
     List<Subasta> findSubastaByIdWithObras(@Param("pkCodSubasta") Long pkCodSubasta);
     List<Subasta>findSubastaAndObras();
     public List<Subasta> findAll() throws Exception;

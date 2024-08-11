@@ -3,8 +3,12 @@ package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.Categoria;
 import com.impulsart.ImpulsArtApp.entities.Obra;
+import com.impulsart.ImpulsArtApp.entities.Oferta;
+import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.service.imp.CategoriaImp;
 import com.impulsart.ImpulsArtApp.service.imp.ObraImp;
+import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Clob;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/obra",method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
@@ -32,6 +37,8 @@ public class ObraController {
 private ObraImp obraImp;
 @Autowired
 private CategoriaImp categoriaImp;
+@Autowired
+private UsuarioImp usuarioImp;
 
 //CONTROLLER CREATE
 @PostMapping("/create")
@@ -43,7 +50,8 @@ public ResponseEntity<Map<String, Object>> create(
         @RequestParam(value = "tamano", required = false) String tamano,
         @RequestParam("cantidad") int cantidad,
         @RequestParam("categoriaId") Long categoriaId,
-        @RequestParam("descripcion") String descripcion) {
+        @RequestParam("descripcion") String descripcion,
+        @RequestParam("usuarioIds") List<Integer> usuarioIds) { // Lista de IDs de usuarios
 
     Map<String, Object> response = new HashMap<>();
 
@@ -70,11 +78,26 @@ public ResponseEntity<Map<String, Object>> create(
         obra.setDescripcion(descripcion);
         obra.setImagen(imageUrl);
 
+        // Buscar y establecer la categoría
         Categoria categoria = categoriaImp.findById(categoriaId);
         if (categoria == null) {
             throw new RuntimeException("Categoría no encontrada");
         }
-        obra.setCategoria(categoria); // Establecer la categoría en la obra
+        obra.setCategoria(categoria);
+
+        // Obtener los usuarios por sus IDs
+        List<Usuario> usuarios = usuarioIds.stream()
+                .map(id -> usuarioImp.findById(id))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        // Establecer la relación de usuarios en la obra
+        obra.setUsuarios(usuarios);
+
+        // Sincronizar la relación en el lado de los usuarios
+        for (Usuario usuario : usuarios) {
+            usuario.getObras().add(obra);
+        }
 
         // Guardar la obra en la base de datos
         this.obraImp.create(obra);
@@ -169,6 +192,32 @@ public ResponseEntity<Map<String, Object>> create(
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //FIND HISTORIAL OBRAS
+
+    @GetMapping("/historialObras/{identificacion}")
+    public ResponseEntity<Map<String, Object>> findHistorialObras(@PathVariable Integer identificacion) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Obra> obras = this.obraImp.findHistorialObras(identificacion);
+            response.put("status", "success");
+            response.put("data", obras);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //FIND HISTORIAL OBRAS
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //CONTROLLER DELETE
     @DeleteMapping("/delete/{PkCod_Producto}")

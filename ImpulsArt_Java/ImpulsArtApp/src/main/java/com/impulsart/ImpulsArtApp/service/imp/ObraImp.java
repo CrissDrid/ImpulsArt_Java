@@ -1,8 +1,10 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
 import com.impulsart.ImpulsArtApp.entities.Obra;
+import com.impulsart.ImpulsArtApp.entities.Oferta;
 import com.impulsart.ImpulsArtApp.repositories.ObraRepositorio;
 import com.impulsart.ImpulsArtApp.service.ObraService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,15 @@ public class ObraImp implements ObraService {
     @Override
     public List<Obra> findAll() throws Exception {
         return this.obraRepositorio.findAll();
+    }
+
+    @Override
+    public List<Obra> findHistorialObras(Integer identificacion) {
+        List<Obra> obras = this.obraRepositorio.findHistorialObras(identificacion);
+        if (obras.isEmpty()) {
+            throw new EntityNotFoundException("Obras no encontradas");
+        }
+        return obras;
     }
 
     public List<Obra> findByNombreProductoContainingIgnoreCase(String nombreProducto) {

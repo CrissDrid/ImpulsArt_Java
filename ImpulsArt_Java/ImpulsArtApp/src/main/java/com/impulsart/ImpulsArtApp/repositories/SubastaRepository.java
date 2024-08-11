@@ -15,6 +15,12 @@ import java.util.List;
 
 public interface SubastaRepository extends JpaRepository<Subasta, Long> {
 
+    @Query("SELECT s FROM Subasta s " +
+            "INNER JOIN s.obras o " +
+            "INNER JOIN o.usuarios u " +
+            "WHERE u.identificacion = :identificacion")
+    List<Subasta> findHistorialObrasSubasta(@Param("identificacion") Integer identificacion);
+
     @Query("SELECT s FROM Subasta s INNER JOIN s.obras o WHERE s.pkCodSubasta = :pkCodSubasta")
     List<Subasta> findSubastaByIdWithObras(@Param("pkCodSubasta") Long pkCodSubasta);
     @Query("SELECT s FROM Subasta s INNER JOIN s.obras o")

@@ -1,12 +1,10 @@
 package com.impulsart.ImpulsArtApp.controller;
 
-import com.impulsart.ImpulsArtApp.entities.Categoria;
-import com.impulsart.ImpulsArtApp.entities.Obra;
-import com.impulsart.ImpulsArtApp.entities.Oferta;
-import com.impulsart.ImpulsArtApp.entities.Subasta;
+import com.impulsart.ImpulsArtApp.entities.*;
 import com.impulsart.ImpulsArtApp.service.imp.CategoriaImp;
 import com.impulsart.ImpulsArtApp.service.imp.ObraImp;
 import com.impulsart.ImpulsArtApp.service.imp.SubastaImp;
+import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,10 +18,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/subasta/",method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.HEAD})
@@ -40,6 +36,8 @@ public class SubastaController {
     private ObraImp obraImp;
     @Autowired
     private CategoriaImp categoriaImp;
+    @Autowired
+    private UsuarioImp usuarioImp;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //CREATE
@@ -57,7 +55,8 @@ public class SubastaController {
             @RequestParam("estadoSubasta") String estadoSubasta,
             @RequestParam("precioInicial") int precioInicial,
             @RequestParam("fechaInicio") String fechaInicio,
-            @RequestParam("fechaFinalizacion") String fechaFinalizacion) {
+            @RequestParam("fechaFinalizacion") String fechaFinalizacion,
+            @RequestParam("usuarioIds") List<Integer> usuarioIds) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -90,6 +89,21 @@ public class SubastaController {
             }
             obra.setCategoria(categoria);
 
+
+            // Obtener los usuarios por sus IDs
+            List<Usuario> usuarios = usuarioIds.stream()
+                    .map(id -> usuarioImp.findById(id))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+
+            // Establecer la relación de usuarios en la obra
+            obra.setUsuarios(usuarios);
+
+            // Sincronizar la relación en el lado de los usuarios
+            for (Usuario usuario : usuarios) {
+                usuario.getObras().add(obra);
+            }
+
             // Guardar la obra en la base de datos
             obraImp.create(obra);
 
@@ -114,6 +128,32 @@ public class SubastaController {
         }
     }
     //CREATE
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //FIND HISTORIAL OBRAS SUBASTAS
+
+    @GetMapping("/historialObraSubastas/{identificacion}")
+    public ResponseEntity<Map<String, Object>> findHistorialObrasSubasta(@PathVariable Integer identificacion) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Subasta> subastas = this.subastaImp.findHistorialObrasSubasta(identificacion);
+            response.put("status", "success");
+            response.put("data", subastas);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //FIND HISTORIAL OBRAS SUBASTAS
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

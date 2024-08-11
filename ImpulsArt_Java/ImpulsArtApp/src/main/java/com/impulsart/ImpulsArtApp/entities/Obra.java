@@ -48,6 +48,7 @@ public class Obra {
     private Categoria categoria;
 
     @ManyToMany(mappedBy = "obras")
+    @JsonIgnore
     private List<Usuario> usuarios;
 
 }

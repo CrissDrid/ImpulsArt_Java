@@ -19,6 +19,15 @@ public class SubastaImp implements SubastaService {
     private SubastaRepository subastaRepository;
 
     @Override
+    public List<Subasta> findHistorialObrasSubasta(Integer identificacion) {
+        List<Subasta> subastas = this.subastaRepository.findHistorialObrasSubasta(identificacion);
+        if (subastas.isEmpty()) {
+            throw new EntityNotFoundException("Subastas no encontradas");
+        }
+        return subastas;
+    }
+
+    @Override
     public List<Subasta> findSubastaByIdWithObras(Long pkCodSubasta) {
         List<Subasta> subastas = this.subastaRepository.findSubastaByIdWithObras(pkCodSubasta);
         if (subastas.isEmpty()) {
