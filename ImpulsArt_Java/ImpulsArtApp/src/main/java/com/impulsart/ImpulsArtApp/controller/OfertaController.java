@@ -6,6 +6,7 @@ import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.service.imp.OfertaImp;
 import com.impulsart.ImpulsArtApp.service.imp.SubastaImp;
 import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +44,9 @@ public class OfertaController {
 
             System.out.println("@@@@"+request);
             Oferta oferta = new Oferta();
-            oferta.setMonto(Integer.parseInt(request.get("Monto").toString()));
-            oferta.setFechaOferta(LocalDate.parse(request.get("FechaOferta").toString()));
-            oferta.setHoraOferta(LocalTime.parse(request.get("HoraOferta").toString()));
+            oferta.setMonto(Integer.parseInt(request.get("monto").toString()));
+            oferta.setFechaOferta(LocalDate.parse(request.get("fechaOferta").toString()));
+            oferta.setHoraOferta(LocalTime.parse(request.get("horaOferta").toString()));
 
             Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("fk_Identificacion").toString()));
             oferta.setUsuarios(usuario);
@@ -100,6 +101,57 @@ public class OfertaController {
     //FIND ALL
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //FIND OFERTAS POR SUBASTA
+
+    @GetMapping("/OfertaPorSubasta/{pkCodSubasta}")
+    public ResponseEntity<Map<String, Object>> findOfertasBySubasta(@PathVariable Long pkCodSubasta) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Oferta> ofertas = this.ofertaImp.findOfertasBySubasta(pkCodSubasta);
+            response.put("status", "success");
+            response.put("data", ofertas);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //FIND OFERTAS POR SUBASTA
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //FIND OFERTAS POR SUBASTA
+
+    @GetMapping("/OfertaMasAlta/{pkCodSubasta}")
+    public ResponseEntity<Map<String, Object>> findOfertaMasAlta(@PathVariable Long pkCodSubasta) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            Oferta oferta = this.ofertaImp.findOfertaMasAlta(pkCodSubasta);
+            response.put("status", "success");
+            response.put("data", oferta);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //FIND OFERTAS POR SUBASTA
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //FIND ID

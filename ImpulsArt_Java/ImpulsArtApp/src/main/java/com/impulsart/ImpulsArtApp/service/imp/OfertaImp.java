@@ -1,8 +1,10 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
 import com.impulsart.ImpulsArtApp.entities.Oferta;
+import com.impulsart.ImpulsArtApp.entities.Subasta;
 import com.impulsart.ImpulsArtApp.repositories.OfertaRepository;
 import com.impulsart.ImpulsArtApp.service.OfertaService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,24 @@ import java.util.List;
 public class OfertaImp implements OfertaService {
     @Autowired
     private OfertaRepository ofertaRepository;
+
+    @Override
+    public List<Oferta> findOfertasBySubasta(Long pkCodSubasta) {
+        List<Oferta> ofertas = this.ofertaRepository.findOfertasBySubasta(pkCodSubasta);
+        if (ofertas.isEmpty()) {
+            throw new EntityNotFoundException("Oferta no encontrada");
+        }
+        return ofertas;
+    }
+
+    @Override
+    public Oferta findOfertaMasAlta(Long pkCodSubasta) {
+        Oferta oferta = this.ofertaRepository.findOfertaMasAlta(pkCodSubasta);
+        if (oferta == null) {
+            throw new EntityNotFoundException("La oferta más alta no fue encontrada");
+        }
+        return oferta;
+    }
 
     @Override
     public List<Oferta> findAll() throws Exception {

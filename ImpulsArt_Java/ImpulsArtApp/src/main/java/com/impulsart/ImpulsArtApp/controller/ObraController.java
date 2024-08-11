@@ -40,9 +40,9 @@ public ResponseEntity<Map<String, Object>> create(
         @RequestParam("nombreProducto") String nombreProducto,
         @RequestParam("costo") String costo,
         @RequestParam("peso") String peso,
-        @RequestParam("tamano") String tamano,
+        @RequestParam(value = "tamano", required = false) String tamano,
         @RequestParam("cantidad") int cantidad,
-        @RequestParam("categoria") Long categoriaId,
+        @RequestParam("categoriaId") Long categoriaId,
         @RequestParam("descripcion") String descripcion) {
 
     Map<String, Object> response = new HashMap<>();
@@ -50,7 +50,7 @@ public ResponseEntity<Map<String, Object>> create(
     try {
         // Guardar la imagen y obtener su URL
         String imageUrl = null;
-        if (imagen != null) {
+        if (imagen != null && !imagen.isEmpty()) {
             String originalFileName = imagen.getOriginalFilename();
             String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
             Path imagePath = Paths.get(imageDirectory, uniqueFileName);
@@ -83,7 +83,7 @@ public ResponseEntity<Map<String, Object>> create(
         response.put("data", "Registro Exitoso");
         return new ResponseEntity<>(response, HttpStatus.OK);
     } catch (Exception e) {
-        response.put("status", HttpStatus.BAD_REQUEST);
+        response.put("status", "error");
         response.put("data", e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
