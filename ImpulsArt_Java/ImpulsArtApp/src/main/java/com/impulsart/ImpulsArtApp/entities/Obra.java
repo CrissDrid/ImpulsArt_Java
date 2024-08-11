@@ -21,7 +21,7 @@ public class Obra {
     @Column(name = "NombreProducto",length = 200)
     private String nombreProducto;
     @Column(name = "Costo",nullable = false)
-    private int costo;
+    private String costo;
     @Column(name = "Peso",length = 10,nullable = false)
     private String peso;
     @Column(name = "Tamano",length = 10,nullable = false)

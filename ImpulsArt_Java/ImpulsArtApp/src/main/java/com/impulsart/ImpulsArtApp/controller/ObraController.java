@@ -38,7 +38,7 @@ private CategoriaImp categoriaImp;
 public ResponseEntity<Map<String, Object>> create(
         @RequestParam(value = "imagen", required = false) MultipartFile imagen,
         @RequestParam("nombreProducto") String nombreProducto,
-        @RequestParam("costo") int costo,
+        @RequestParam("costo") String costo,
         @RequestParam("peso") String peso,
         @RequestParam("tamano") String tamano,
         @RequestParam("cantidad") int cantidad,
@@ -147,7 +147,7 @@ public ResponseEntity<Map<String, Object>> create(
             Obra obra = this.obraImp.findById(pkCod_Producto);
 
             obra.setNombreProducto(request.get("nombreProducto").toString());
-            obra.setCosto(Integer.parseInt(request.get("costo").toString()));
+            obra.setCosto(request.get("costo").toString());
             obra.setPeso(request.get("peso").toString());
             obra.setTamano(request.get("tamano").toString());
             obra.setCantidad(Integer.parseInt(request.get("cantidad").toString()));
