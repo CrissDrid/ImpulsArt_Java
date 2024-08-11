@@ -48,7 +48,7 @@ public class SubastaController {
     public ResponseEntity<Map<String, Object>> create(
             @RequestParam(value = "imagen", required = false) MultipartFile imagen,
             @RequestParam("nombreProducto") String nombreProducto,
-            @RequestParam("costo") int costo,
+            @RequestParam("costo") String costo,
             @RequestParam("peso") String peso,
             @RequestParam("tamano") String tamano,
             @RequestParam("cantidad") int cantidad,
@@ -249,7 +249,7 @@ public class SubastaController {
             @PathVariable Long pkCodSubasta,
             @RequestParam(value = "imagen", required = false) MultipartFile imagen,
             @RequestParam("nombreProducto") String nombreProducto,
-            @RequestParam("costo") int costo,
+            @RequestParam("costo") String costo,
             @RequestParam("peso") String peso,
             @RequestParam("tamano") String tamano,
             @RequestParam("cantidad") int cantidad,
