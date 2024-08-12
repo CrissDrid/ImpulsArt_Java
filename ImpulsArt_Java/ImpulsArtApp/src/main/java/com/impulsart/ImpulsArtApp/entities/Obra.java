@@ -51,7 +51,7 @@ public class Obra {
     @JoinColumn(name = "FkCod_Categoria",nullable = false)
     private Categoria categoria;
 
-    @ManyToMany(mappedBy = "obras")
+    @ManyToMany(mappedBy = "obras", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Usuario> usuarios;
 
