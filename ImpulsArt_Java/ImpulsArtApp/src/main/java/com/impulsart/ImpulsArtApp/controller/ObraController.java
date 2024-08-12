@@ -1,10 +1,7 @@
 
 package com.impulsart.ImpulsArtApp.controller;
 
-import com.impulsart.ImpulsArtApp.entities.Categoria;
-import com.impulsart.ImpulsArtApp.entities.Obra;
-import com.impulsart.ImpulsArtApp.entities.Oferta;
-import com.impulsart.ImpulsArtApp.entities.Usuario;
+import com.impulsart.ImpulsArtApp.entities.*;
 import com.impulsart.ImpulsArtApp.service.imp.CategoriaImp;
 import com.impulsart.ImpulsArtApp.service.imp.ObraImp;
 import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
@@ -20,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Clob;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -162,36 +160,74 @@ public ResponseEntity<Map<String, Object>> create(
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-//CONTROLLER UPDATE
-    @PutMapping("/update/{pkCod_Producto}")
-    public ResponseEntity<Map<String,Object>> update(@PathVariable Integer pkCod_Producto, @RequestBody Map<String,Object>request){
-        Map<String,Object> response = new HashMap<>();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //UPDATE
+
+    @PutMapping("/update/{PkCod_Producto}")
+    public ResponseEntity<Map<String, Object>> update(
+            @PathVariable Integer PkCod_Producto,
+            @RequestParam(value = "imagen", required = false) MultipartFile imagen,
+            @RequestParam("nombreProducto") String nombreProducto,
+            @RequestParam("costo") String costo,
+            @RequestParam("peso") String peso,
+            @RequestParam(value = "tamano", required = false) String tamano,
+            @RequestParam("cantidad") int cantidad,
+            @RequestParam("categoriaId") Long categoriaId,
+            @RequestParam("descripcion") String descripcion) {
+
+        Map<String, Object> response = new HashMap<>();
+
         try {
-            Obra obra = this.obraImp.findById(pkCod_Producto);
-
-            obra.setNombreProducto(request.get("nombreProducto").toString());
-            obra.setCosto(request.get("costo").toString());
-            obra.setPeso(request.get("peso").toString());
-            obra.setTamano(request.get("tamano").toString());
-            obra.setCantidad(Integer.parseInt(request.get("cantidad").toString()));
-            obra.setDescripcion(request.get("descripcion").toString());
-
-            //CONFIG IMAGEN
-            if(request.containsKey("imagen")&& request.get("imagen") !=null){
-                obra.setImagen(request.get("imagen").toString());
+            // Buscar la subasta existente
+            Obra obra = this.obraImp.findById(PkCod_Producto);
+            if (obra == null) {
+                throw new RuntimeException("Subasta no encontrada");
             }
 
-            this.obraImp.update(obra);
+            // Actualizar los campos de la obra
+            obra.setNombreProducto(nombreProducto);
+            obra.setCosto(costo);
+            obra.setPeso(peso);
+            obra.setTamano(tamano);
+            obra.setCantidad(cantidad);
+            obra.setDescripcion(descripcion);
 
-            response.put("status","success");
-            response.put("data","Actualizacion Exitosa");
-        }catch (Exception e){
-            response.put("status",HttpStatus.BAD_GATEWAY);
-            response.put("data",e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+            // Actualizar la imagen si se proporciona una nueva
+            if (imagen != null && !imagen.isEmpty()) {
+                String originalFileName = imagen.getOriginalFilename();
+                String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
+                Path imagePath = Paths.get(imageDirectory, uniqueFileName);
+                Files.copy(imagen.getInputStream(), imagePath);
+
+                // Actualizar la URL de la imagen
+                String imageUrl = "http://localhost:8086/imagen/" + uniqueFileName;
+                obra.setImagen(imageUrl);  // Asegúrate de actualizar la URL en la base de datos
+            }
+
+            // Actualizar la categoría
+            Categoria categoria = categoriaImp.findById(categoriaId);
+            if (categoria == null) {
+                throw new RuntimeException("Categoría no encontrada");
+            }
+            obra.setCategoria(categoria);
+
+            // Guardar la obra actualizada
+            obraImp.update(obra);
+
+            response.put("status", "success");
+            response.put("data", "Actualización Exitosa");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    //UPDATE
+    ///////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //FIND HISTORIAL OBRAS

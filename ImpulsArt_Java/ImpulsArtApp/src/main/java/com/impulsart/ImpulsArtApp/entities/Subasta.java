@@ -26,7 +26,7 @@ public class Subasta {
     private String estadoSubasta;
 
     @Column(name = "PrecioInicial", nullable = false, length = 255)
-    private int precioInicial;
+    private String precioInicial;
 
     @Column(name = "FechaInicio", nullable = false)
     private LocalDate fechaInicio;

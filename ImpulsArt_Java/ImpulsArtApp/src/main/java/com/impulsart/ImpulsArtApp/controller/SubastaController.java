@@ -53,7 +53,7 @@ public class SubastaController {
             @RequestParam("categoriaId") Long categoriaId,
             @RequestParam("descripcion") String descripcion,
             @RequestParam("estadoSubasta") String estadoSubasta,
-            @RequestParam("precioInicial") int precioInicial,
+            @RequestParam("precioInicial") String precioInicial,
             @RequestParam("fechaInicio") String fechaInicio,
             @RequestParam("fechaFinalizacion") String fechaFinalizacion,
             @RequestParam("usuarioIds") List<Integer> usuarioIds) {
@@ -88,7 +88,6 @@ public class SubastaController {
                 throw new RuntimeException("Categoría no encontrada");
             }
             obra.setCategoria(categoria);
-
 
             // Obtener los usuarios por sus IDs
             List<Usuario> usuarios = usuarioIds.stream()
@@ -295,7 +294,7 @@ public class SubastaController {
             @RequestParam("cantidad") int cantidad,
             @RequestParam("categoriaId") Long categoriaId,
             @RequestParam("descripcion") String descripcion,
-            @RequestParam("precioInicial") int precioInicial,
+            @RequestParam("precioInicial") String precioInicial,
             @RequestParam("fechaFinalizacion") String fechaFinalizacion) {
 
         Map<String, Object> response = new HashMap<>();

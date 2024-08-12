@@ -24,7 +24,7 @@ public class Obra {
     private String costo;
     @Column(name = "Peso",length = 10,nullable = false)
     private String peso;
-    @Column(name = "Tamano",length = 10,nullable = false)
+    @Column(name = "Tamano",length = 50,nullable = false)
     private String tamano;
     @Column(name = "Cantidad",nullable = false)
     private int cantidad;
