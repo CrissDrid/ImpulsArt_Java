@@ -26,6 +26,10 @@ public class Obra {
     private String peso;
     @Column(name = "Tamano",length = 50,nullable = false)
     private String tamano;
+    @Column(name = "Alto",length = 50,nullable = false)
+    private String alto;
+    @Column(name = "Ancho",length = 50,nullable = false)
+    private String ancho;
     @Column(name = "Cantidad",nullable = false)
     private int cantidad;
     @Column(name = "Descripcion",length = 155,nullable = false)

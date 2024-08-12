@@ -45,6 +45,8 @@ public ResponseEntity<Map<String, Object>> create(
         @RequestParam("nombreProducto") String nombreProducto,
         @RequestParam("costo") String costo,
         @RequestParam("peso") String peso,
+        @RequestParam("ancho") String ancho,
+        @RequestParam("alto") String alto,
         @RequestParam(value = "tamano", required = false) String tamano,
         @RequestParam("cantidad") int cantidad,
         @RequestParam("categoriaId") Long categoriaId,
@@ -74,6 +76,8 @@ public ResponseEntity<Map<String, Object>> create(
         obra.setTamano(tamano);
         obra.setCantidad(cantidad);
         obra.setDescripcion(descripcion);
+        obra.setAncho(ancho);
+        obra.setAlto(alto);
         obra.setImagen(imageUrl);
 
         // Buscar y establecer la categoría
@@ -171,6 +175,8 @@ public ResponseEntity<Map<String, Object>> create(
             @RequestParam("nombreProducto") String nombreProducto,
             @RequestParam("costo") String costo,
             @RequestParam("peso") String peso,
+            @RequestParam("ancho") String ancho,
+            @RequestParam("alto") String alto,
             @RequestParam(value = "tamano", required = false) String tamano,
             @RequestParam("cantidad") int cantidad,
             @RequestParam("categoriaId") Long categoriaId,
@@ -190,6 +196,8 @@ public ResponseEntity<Map<String, Object>> create(
             obra.setCosto(costo);
             obra.setPeso(peso);
             obra.setTamano(tamano);
+            obra.setAncho(ancho);
+            obra.setAlto(alto);
             obra.setCantidad(cantidad);
             obra.setDescripcion(descripcion);
 
