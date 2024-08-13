@@ -51,8 +51,16 @@ public class Obra {
     @JoinColumn(name = "FkCod_Categoria",nullable = false)
     private Categoria categoria;
 
-    @ManyToMany(mappedBy = "obras", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "obras")
     @JsonIgnore
     private List<Usuario> usuarios;
+
+    // Método para eliminar la asociación con los usuarios
+    @PreRemove
+    private void removeUsuariosFromObra() {
+        for (Usuario usuario : usuarios) {
+            usuario.getObras().remove(this);
+        }
+    }
 
 }

@@ -49,6 +49,8 @@ public class SubastaController {
             @RequestParam("costo") String costo,
             @RequestParam("peso") String peso,
             @RequestParam("tamano") String tamano,
+            @RequestParam("alto") String alto,
+            @RequestParam("ancho") String ancho,
             @RequestParam("cantidad") int cantidad,
             @RequestParam("categoriaId") Long categoriaId,
             @RequestParam("descripcion") String descripcion,
@@ -78,6 +80,8 @@ public class SubastaController {
             obra.setNombreProducto(nombreProducto);
             obra.setCosto(costo);
             obra.setPeso(peso);
+            obra.setAlto(alto);
+            obra.setAncho(ancho);
             obra.setTamano(tamano);
             obra.setCantidad(cantidad);
             obra.setDescripcion(descripcion);
@@ -292,6 +296,8 @@ public class SubastaController {
             @RequestParam("peso") String peso,
             @RequestParam("tamano") String tamano,
             @RequestParam("cantidad") int cantidad,
+            @RequestParam("alto") String alto,
+            @RequestParam("ancho") String ancho,
             @RequestParam("categoriaId") Long categoriaId,
             @RequestParam("descripcion") String descripcion,
             @RequestParam("precioInicial") String precioInicial,
@@ -317,6 +323,8 @@ public class SubastaController {
             obra.setCosto(costo);
             obra.setPeso(peso);
             obra.setTamano(tamano);
+            obra.setAlto(alto);
+            obra.setAncho(ancho);
             obra.setCantidad(cantidad);
             obra.setDescripcion(descripcion);
 
