@@ -15,16 +15,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Reclamo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pkCod_Reclamo")
     private long pkCod_Reclamo;
     @Column(name = "Descripcion", length = 200)
     private String descripcion;
-    @Column(name = "Motivo", length = 200)
-    private String motivo;
-    @Column(name = "Respuesta", length = 200)
-    private String respuesta;
     @Column(name = "Estado", length = 200)
     private String estado;
     @Column(name = "FechaPQRS", length = 200)
@@ -33,6 +30,7 @@ public class Reclamo {
     private LocalDate fechaCierre;
 
     @ManyToMany(mappedBy = "reclamo")
+    @JsonIgnore
     private List<Usuario> usuarios;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -43,5 +41,9 @@ public class Reclamo {
     @OneToMany(mappedBy = "reclamo")
     @JsonIgnore
     private List<Reembolso> reembolso;
+
+    @OneToMany(mappedBy = "reclamo", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Respuesta> respuestas;
 
 }

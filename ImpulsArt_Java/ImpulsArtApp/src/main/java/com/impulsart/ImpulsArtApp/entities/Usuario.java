@@ -45,6 +45,9 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Empleado> empleados;
 
+    @OneToMany(mappedBy = "usuario")
+    private List<ReporteObra> reportesObras; // Relación con ReporteObra
+
     //FOREING KEY
     @ManyToMany
     @JoinTable(

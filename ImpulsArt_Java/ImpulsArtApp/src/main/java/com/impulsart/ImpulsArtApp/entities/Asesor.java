@@ -32,6 +32,9 @@ public class Asesor {
     @JoinColumn(name = "FkCod_Empleado",nullable = false)
     private Empleado empleado;
 
+    @OneToMany(mappedBy = "asesor")
+    private List<Respuesta> respuestas;
+
     @OneToMany(mappedBy = "asesor", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Calificacion> calificacion;

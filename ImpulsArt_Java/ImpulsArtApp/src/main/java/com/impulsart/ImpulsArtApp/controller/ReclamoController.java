@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/reclamo", method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
@@ -22,41 +24,67 @@ public class ReclamoController {
     @Autowired
     TipoReclamoImp tipoReclamoImp;
     @Autowired
+    UsuarioImp usuarioImp;
+    @Autowired
     VentaImp ventaImp;
     @Autowired
     AsesorImp asesorImp;
 
-    //CONTROLLER CREATE
     @PostMapping("/create")
-    public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Object> request) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            System.out.println("@@@@" + request);
-            //INSTANCIA DEL OBJETO RECLAMO
-            Reclamo reclamo = new Reclamo();
-            //CAMPOS DE LA TABLA RECLAMO
-            reclamo.setDescripcion(request.get("descripcion").toString());
-            reclamo.setMotivo(request.get("motivo").toString());
-            reclamo.setRespuesta(request.get("respuesta").toString());
-            reclamo.setEstado(request.get("estado").toString());
-            reclamo.setFechaPQRS(LocalDate.parse(request.get("fechaPQRS").toString()));
-            reclamo.setFechaCierre(request.get("fechaCierre") != null ? LocalDate.parse(request.get("fechaCierre").toString()) : null);
+    public ResponseEntity<Map<String, Object>> create(
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("motivo") String motivo,
+            @RequestParam("respuesta") String respuesta,
+            @RequestParam("estado") String estado,
+            @RequestParam("fechaPQRS") String fechaPQRS,
+            @RequestParam(value = "fechaCierre", required = false) String fechaCierre,
+            @RequestParam("fkCod_TipoReclamo") Long fkCodTipoReclamo,
+            @RequestParam("usuarioIds") List<Integer> usuarioIds) {
 
-            TipoReclamo tipoReclamo = tipoReclamoImp.findById(Long.valueOf(request.get("fkCod_TipoReclamo").toString()));
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            // Instanciar el objeto Reclamo y establecer los campos
+            Reclamo reclamo = new Reclamo();
+            reclamo.setDescripcion(descripcion);
+            reclamo.setEstado(estado);
+            reclamo.setFechaPQRS(LocalDate.parse(fechaPQRS));
+            reclamo.setFechaCierre(fechaCierre != null ? LocalDate.parse(fechaCierre) : null);
+
+            // Obtener y establecer el tipo de reclamo
+            TipoReclamo tipoReclamo = tipoReclamoImp.findById(fkCodTipoReclamo);
+            if (tipoReclamo == null) {
+                throw new RuntimeException("Tipo de reclamo no encontrado");
+            }
             reclamo.setTipoReclamo(tipoReclamo);
 
+            // Obtener los usuarios por sus IDs
+            List<Usuario> usuarios = usuarioIds.stream()
+                    .map(id -> usuarioImp.findById(id))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
 
+            // Establecer la relación de usuarios en el reclamo
+            reclamo.setUsuarios(usuarios);
+
+            // Sincronizar la relación en el lado de los usuarios
+            for (Usuario usuario : usuarios) {
+                usuario.getReclamo().add(reclamo);
+            }
+
+            // Guardar el reclamo en la base de datos
             this.reclamoImp.create(reclamo);
 
-            response.put("status", "succses");
+            response.put("status", "success");
             response.put("data", "Registro Exitoso");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("status", "error");
             response.put("data", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     //CONTROLLER READ
     //READ ALL
@@ -103,8 +131,6 @@ public class ReclamoController {
 
             //CAMPOS DE LA TABLA RECLAMO
             reclamo.setDescripcion(request.get("descripcion").toString());
-            reclamo.setMotivo(request.get("motivo").toString());
-            reclamo.setRespuesta(request.get("respuesta").toString());
             reclamo.setEstado(request.get("estado").toString());
             reclamo.setFechaPQRS(LocalDate.parse(request.get("fechaPQRS").toString()));
             reclamo.setFechaCierre(request.get("fechaCierre") != null ? LocalDate.parse(request.get("fechaCierre").toString()) : null);

@@ -55,6 +55,9 @@ public class Obra {
     @JsonIgnore
     private List<Usuario> usuarios;
 
+    @OneToMany(mappedBy = "obra")
+    private List<ReporteObra> reportesObras; // Relación con ReporteObra
+
     // Método para eliminar la asociación con los usuarios
     @PreRemove
     private void removeUsuariosFromObra() {
