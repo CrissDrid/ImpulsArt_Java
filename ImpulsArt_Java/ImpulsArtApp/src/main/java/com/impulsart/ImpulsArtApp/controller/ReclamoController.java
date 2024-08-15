@@ -2,6 +2,7 @@ package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.*;
 import com.impulsart.ImpulsArtApp.service.imp.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,6 +88,33 @@ public class ReclamoController {
 
 
     //CONTROLLER READ
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //FIND HISTORIAL RECLAMOS
+
+    @GetMapping("/historialReclamos/{identificacion}")
+    public ResponseEntity<Map<String, Object>> findHistorialReclamos(@PathVariable Integer identificacion) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Reclamo> reclamos = this.reclamoImp.findHistorialReclamos(identificacion);
+            response.put("status", "success");
+            response.put("data", reclamos);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //FIND HISTORIAL RECLAMOS
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     //READ ALL
     @GetMapping("/all")
     public ResponseEntity<Map<String, Object>> findAll() {

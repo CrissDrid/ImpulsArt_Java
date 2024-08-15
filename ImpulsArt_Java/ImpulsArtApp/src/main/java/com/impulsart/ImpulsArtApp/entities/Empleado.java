@@ -26,9 +26,11 @@ public class Empleado {
     private Usuario usuario;
 
     @OneToMany(mappedBy = "empleado")
+    @JsonIgnore
     private List<Asesor> asesor;
 
     @OneToMany(mappedBy = "empleado", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Domiciliario> domiciliario;
 
 }

@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,5 +26,6 @@ public class Especialidad {
 
     //FOREING KEY
     @ManyToMany(mappedBy = "especialidades")
+    @JsonIgnore
     private List<Usuario> usuarios;
 }

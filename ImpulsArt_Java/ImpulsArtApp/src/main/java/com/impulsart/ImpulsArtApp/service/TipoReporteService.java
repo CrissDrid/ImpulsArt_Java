@@ -1,6 +1,5 @@
 package com.impulsart.ImpulsArtApp.service;
 
-import com.impulsart.ImpulsArtApp.entities.Respuesta;
 import com.impulsart.ImpulsArtApp.entities.TipoReporte;
 
 import java.util.List;

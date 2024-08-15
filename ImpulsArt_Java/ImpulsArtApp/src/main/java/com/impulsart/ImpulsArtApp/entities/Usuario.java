@@ -1,6 +1,8 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,13 +45,16 @@ public class Usuario {
     private List<Oferta> ofertas;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Empleado> empleados;
 
     @OneToMany(mappedBy = "usuario")
+    @JsonIgnore
     private List<ReporteObra> reportesObras; // Relación con ReporteObra
 
     //FOREING KEY
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "Usuarios_Especialidades",
             joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
@@ -58,6 +63,7 @@ public class Usuario {
     private List<Especialidad> especialidades;
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "Usuarios_Pedido",
             joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
@@ -66,6 +72,7 @@ public class Usuario {
     private List<PedidoPersonalizado> pedidoPersonalizados;
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "Usuarios_Obra",
             joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
@@ -74,6 +81,7 @@ public class Usuario {
     private List<Obra> obras;
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "Usuarios_Ventas",
             joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
@@ -82,6 +90,7 @@ public class Usuario {
     private List<Venta> ventas;
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "Usuarios_reclamo",
             joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),

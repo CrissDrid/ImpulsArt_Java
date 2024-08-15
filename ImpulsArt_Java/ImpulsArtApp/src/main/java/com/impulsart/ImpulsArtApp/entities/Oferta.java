@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,6 +37,7 @@ public class Oferta {
     private Usuario Usuarios;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "Fk_subasta", nullable = false)
     private Subasta Subastas;
 

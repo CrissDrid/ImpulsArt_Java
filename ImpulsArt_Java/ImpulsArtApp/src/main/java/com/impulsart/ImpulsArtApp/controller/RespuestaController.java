@@ -40,10 +40,10 @@ public class RespuestaController {
             respuesta.setComentario(request.get("comentario").toString());
             respuesta.setFechaRespuesta(LocalDate.parse(request.get("fechaRespuesta").toString()));
 
-            Asesor asesor = asesorImp.findById(Long.parseLong(request.get("Fk_Asesor").toString()));
+            Asesor asesor = asesorImp.findById(Long.parseLong(request.get("fk_Asesor").toString()));
             respuesta.setAsesor(asesor);
 
-            Reclamo reclamo = reclamoImp.findById(Long.parseLong(request.get("Fk_Reclamo").toString()));
+            Reclamo reclamo = reclamoImp.findById(Long.parseLong(request.get("fk_Reclamo").toString()));
             respuesta.setReclamo(reclamo);
 
             this.respuestaImp.create(respuesta);

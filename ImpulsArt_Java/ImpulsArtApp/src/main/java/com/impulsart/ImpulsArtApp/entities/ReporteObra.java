@@ -1,5 +1,8 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,15 +27,15 @@ public class ReporteObra {
     private LocalDate fechaReporte;
 
     @ManyToOne
-    @JoinColumn(name = "Fk_Usuario", nullable = false)
-    private Usuario usuario; // Relación con Usuario
+    @JoinColumn(name = "fk_usuario", nullable = false)
+    private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "Fk_Obra", nullable = false)
-    private Obra obra; // Relación con Obra
+    @JoinColumn(name = "fk_obra", nullable = false)
+    private Obra obra;
 
     @ManyToOne
-    @JoinColumn(name = "Fk_TipoReporte", nullable = false)
-    private TipoReporte tipoReporte; // Relación con Obra
+    @JoinColumn(name = "fk_tipo_reporte", nullable = false)
+    private TipoReporte tipoReporte;
 
 }

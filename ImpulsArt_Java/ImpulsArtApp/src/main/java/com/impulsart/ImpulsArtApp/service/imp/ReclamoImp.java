@@ -1,8 +1,10 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
 import com.impulsart.ImpulsArtApp.entities.Reclamo;
+import com.impulsart.ImpulsArtApp.entities.ReporteObra;
 import com.impulsart.ImpulsArtApp.repositories.ReclamoRepository;
 import com.impulsart.ImpulsArtApp.service.ReclamoService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,15 @@ public class ReclamoImp implements ReclamoService {
     @Override
     public List<Reclamo> findAll() throws Exception {
         return this.reclamoRepository.findAll();
+    }
+
+    @Override
+    public List<Reclamo> findHistorialReclamos(Integer identificacion) {
+        List<Reclamo> reclamos = this.reclamoRepository.findHistorialReclamos(identificacion);
+        if (reclamos.isEmpty()) {
+            throw new EntityNotFoundException("Reporte de las obras no encontradas");
+        }
+        return reclamos;
     }
 
     @Override

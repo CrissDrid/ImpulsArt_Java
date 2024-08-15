@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,11 +25,12 @@ public class Respuesta {
     private LocalDate fechaRespuesta;
 
     @ManyToOne
-    @JoinColumn(name = "Fk_Asesor", nullable = false)
+    @JoinColumn(name = "fk_Asesor", nullable = false)
     private Asesor asesor; // Relación con Obra
 
     @ManyToOne
-    @JoinColumn(name = "Fk_Reclamo", nullable = false)
+    @JsonIgnore
+    @JoinColumn(name = "fk_Reclamo", nullable = false)
     private Reclamo reclamo; // Relación con reclamo
 
 }

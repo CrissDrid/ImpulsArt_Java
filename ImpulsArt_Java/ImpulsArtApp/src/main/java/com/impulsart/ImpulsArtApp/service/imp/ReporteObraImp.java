@@ -1,8 +1,10 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
 import com.impulsart.ImpulsArtApp.entities.ReporteObra;
+import com.impulsart.ImpulsArtApp.entities.Subasta;
 import com.impulsart.ImpulsArtApp.repositories.ReporteObraRepository;
 import com.impulsart.ImpulsArtApp.service.ReporteObraService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,15 @@ public class ReporteObraImp implements ReporteObraService {
     @Override
     public List<ReporteObra> findAll() throws Exception {
         return this.reporteObraRepository.findAll();
+    }
+
+    @Override
+    public List<ReporteObra> findObrasConReportesPorUsuario(Integer identificacion) {
+        List<ReporteObra> reporteObras = this.reporteObraRepository.findObrasConReportesPorUsuario(identificacion);
+        if (reporteObras.isEmpty()) {
+            throw new EntityNotFoundException("Reporte de las obras no encontradas");
+        }
+        return reporteObras;
     }
 
     @Override

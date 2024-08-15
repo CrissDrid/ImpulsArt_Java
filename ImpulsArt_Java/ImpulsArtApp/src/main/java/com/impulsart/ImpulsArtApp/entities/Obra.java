@@ -1,6 +1,7 @@
 package com.impulsart.ImpulsArtApp.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -56,6 +57,7 @@ public class Obra {
     private List<Usuario> usuarios;
 
     @OneToMany(mappedBy = "obra")
+    @JsonIgnore
     private List<ReporteObra> reportesObras; // Relación con ReporteObra
 
     // Método para eliminar la asociación con los usuarios

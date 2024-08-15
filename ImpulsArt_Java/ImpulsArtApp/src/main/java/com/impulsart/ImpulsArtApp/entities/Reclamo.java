@@ -30,11 +30,9 @@ public class Reclamo {
     private LocalDate fechaCierre;
 
     @ManyToMany(mappedBy = "reclamo")
-    @JsonIgnore
     private List<Usuario> usuarios;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
     @JoinColumn(name = "fkCod_TipoReclamo",nullable = false)
     private TipoReclamo tipoReclamo;
 

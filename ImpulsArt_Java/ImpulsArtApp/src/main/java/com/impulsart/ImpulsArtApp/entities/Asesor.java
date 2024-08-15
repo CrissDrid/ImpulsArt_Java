@@ -33,6 +33,7 @@ public class Asesor {
     private Empleado empleado;
 
     @OneToMany(mappedBy = "asesor")
+    @JsonIgnore
     private List<Respuesta> respuestas;
 
     @OneToMany(mappedBy = "asesor", cascade = CascadeType.ALL)
