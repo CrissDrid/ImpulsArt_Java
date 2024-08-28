@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name="ReportesObras")
@@ -27,15 +28,15 @@ public class ReporteObra {
     private LocalDate fechaReporte;
 
     @ManyToOne
-    @JoinColumn(name = "fk_usuario", nullable = false)
-    private Usuario usuario;
-
-    @ManyToOne
     @JoinColumn(name = "fk_obra", nullable = false)
     private Obra obra;
 
     @ManyToOne
     @JoinColumn(name = "fk_tipo_reporte", nullable = false)
     private TipoReporte tipoReporte;
+
+    //FOREING KEY
+    @ManyToMany(mappedBy = "reporteObra")
+    private List<Usuario> usuario;
 
 }

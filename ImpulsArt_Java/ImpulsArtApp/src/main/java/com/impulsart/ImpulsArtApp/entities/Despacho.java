@@ -28,7 +28,8 @@ public class Despacho {
     @Column(name = "Fecha_Venta",length = 100)
     private LocalDate Fecha_Venta;
 
-    @ManyToMany(mappedBy = "despachos", cascade = CascadeType.ALL)
-    private List<Domiciliario> domiciliarios;
+    //FOREING KEY
+    @ManyToMany(mappedBy = "despacho")
+    private List<Usuario> usuario;
 
 }

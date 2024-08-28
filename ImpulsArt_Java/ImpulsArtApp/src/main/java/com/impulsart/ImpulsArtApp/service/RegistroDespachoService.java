@@ -1,6 +1,5 @@
 package com.impulsart.ImpulsArtApp.service;
 
-import com.impulsart.ImpulsArtApp.entities.Domiciliario;
 import com.impulsart.ImpulsArtApp.entities.RegistroDespacho;
 
 import java.util.List;

@@ -1,8 +1,6 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
-import com.impulsart.ImpulsArtApp.entities.Domiciliario;
 import com.impulsart.ImpulsArtApp.entities.RegistroDespacho;
-import com.impulsart.ImpulsArtApp.repositories.DomiciliarioRepository;
 import com.impulsart.ImpulsArtApp.repositories.RegistroDespachoRepository;
 import com.impulsart.ImpulsArtApp.service.RegistroDespachoService;
 import org.springframework.beans.factory.annotation.Autowired;

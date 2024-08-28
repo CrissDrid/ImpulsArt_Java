@@ -28,8 +28,6 @@ public class ReclamoController {
     UsuarioImp usuarioImp;
     @Autowired
     VentaImp ventaImp;
-    @Autowired
-    AsesorImp asesorImp;
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> create(

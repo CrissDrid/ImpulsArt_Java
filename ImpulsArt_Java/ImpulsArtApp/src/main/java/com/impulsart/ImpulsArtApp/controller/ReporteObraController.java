@@ -45,9 +45,6 @@ public class ReporteObraController {
             reporteObra.setComentario(request.get("comentario").toString());
             reporteObra.setFechaReporte(LocalDate.parse(request.get("fechaReporte").toString()));
 
-            Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("fk_Identificacion").toString()));
-            reporteObra.setUsuario(usuario);
-
             Obra obra = obraImp.findById(Integer.parseInt(request.get("fk_obra").toString()));
             reporteObra.setObra(obra);
 
@@ -144,32 +141,5 @@ public class ReporteObraController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //FIND HISTORIAL REPORTES OBRA
-
-    @GetMapping("/historialReportes/{identificacion}")
-    public ResponseEntity<Map<String, Object>> findHistorialObrasSubasta(@PathVariable Integer identificacion) {
-        Map<String, Object> response = new HashMap<>();
-
-        try {
-            List<ReporteObra> reporteObras = this.reporteObraImp.findObrasConReportesPorUsuario(identificacion);
-            response.put("status", "success");
-            response.put("data", reporteObras);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-            response.put("status", "error");
-            response.put("data", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            response.put("status", "error");
-            response.put("data", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    //FIND HISTORIAL REPORTES OBRA
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 }

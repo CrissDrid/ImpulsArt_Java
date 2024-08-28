@@ -1,7 +1,6 @@
 package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.*;
-import com.impulsart.ImpulsArtApp.service.imp.AsesorImp;
 import com.impulsart.ImpulsArtApp.service.imp.ReclamoImp;
 import com.impulsart.ImpulsArtApp.service.imp.RespuestaImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,6 @@ public class RespuestaController {
     private RespuestaImp respuestaImp;
 
     @Autowired
-    private AsesorImp asesorImp;
-
-    @Autowired
     private ReclamoImp reclamoImp;
 
     //CONTROLLER CREATE
@@ -39,9 +35,6 @@ public class RespuestaController {
             //CAMPOS DE LA TABLA PEDIDO PERSONALIZADO
             respuesta.setComentario(request.get("comentario").toString());
             respuesta.setFechaRespuesta(LocalDate.parse(request.get("fechaRespuesta").toString()));
-
-            Asesor asesor = asesorImp.findById(Long.parseLong(request.get("fk_Asesor").toString()));
-            respuesta.setAsesor(asesor);
 
             Reclamo reclamo = reclamoImp.findById(Long.parseLong(request.get("fk_Reclamo").toString()));
             respuesta.setReclamo(reclamo);

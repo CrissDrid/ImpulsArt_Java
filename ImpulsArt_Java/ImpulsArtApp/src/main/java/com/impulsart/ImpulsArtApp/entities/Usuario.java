@@ -46,26 +46,34 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Empleado> empleados;
+    private List<Rol> rol;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<ReporteObra> reportesObras; // Relación con ReporteObra
+    private List<Respuesta> respuesta;
 
-    //FOREING KEY
     @ManyToMany
     @JsonIgnore
     @JoinTable(
-            name = "Usuarios_Especialidades",
+            name = "Usuarios_Reportes",
             joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
-            inverseJoinColumns = @JoinColumn(name = "FkCod_Especialidad", referencedColumnName = "pk_Especialidad")
+            inverseJoinColumns = @JoinColumn(name = "FkCod_Reporte", referencedColumnName = "pkCod_Reporte")
     )
-    private List<Especialidad> especialidades;
+    private List<ReporteObra> reporteObra;
 
     @ManyToMany
     @JsonIgnore
     @JoinTable(
-            name = "Usuarios_Pedido",
+            name = "Usuarios_Despachos",
+            joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
+            inverseJoinColumns = @JoinColumn(name = "FkCod_Despacho", referencedColumnName = "pkCod_Despacho")
+    )
+    private List<Despacho> despacho;
+
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(
+            name = "Usuarios_Pedidos",
             joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
             inverseJoinColumns = @JoinColumn(name = "FkCod_Pedido", referencedColumnName = "pk_CodPedido")
     )
@@ -74,7 +82,7 @@ public class Usuario {
     @ManyToMany
     @JsonIgnore
     @JoinTable(
-            name = "Usuarios_Obra",
+            name = "Usuarios_Obras",
             joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
             inverseJoinColumns = @JoinColumn(name = "FkCod_Producto", referencedColumnName = "PkCod_Producto")
     )
@@ -92,7 +100,7 @@ public class Usuario {
     @ManyToMany
     @JsonIgnore
     @JoinTable(
-            name = "Usuarios_reclamo",
+            name = "Usuarios_reclamos",
             joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
             inverseJoinColumns = @JoinColumn(name = "fkCod_reclamo", referencedColumnName = "pkCod_Reclamo")
     )

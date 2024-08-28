@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
@@ -45,8 +46,7 @@ public class OfertaController {
             System.out.println("@@@@"+request);
             Oferta oferta = new Oferta();
             oferta.setMonto(Integer.parseInt(request.get("monto").toString()));
-            oferta.setFechaOferta(LocalDate.parse(request.get("fechaOferta").toString()));
-            oferta.setHoraOferta(LocalTime.parse(request.get("horaOferta").toString()));
+            oferta.setFechaOferta(LocalDateTime.parse(request.get("fechaOferta").toString()));
 
             Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("fk_Identificacion").toString()));
             oferta.setUsuarios(usuario);
@@ -210,8 +210,7 @@ public class OfertaController {
             Oferta oferta = this.ofertaImp.findById(PkCod_oferta);
 
             oferta.setMonto((Integer)request.get("Monto"));
-            oferta.setFechaOferta(LocalDate.parse((String) request.get("FechaOferta")));
-            oferta.setHoraOferta(LocalTime.parse((String) request.get("HoraOferta")));
+            oferta.setFechaOferta(LocalDateTime.parse((String) request.get("FechaOferta")));
 
             response.put("status","success");
             response.put("data",oferta);

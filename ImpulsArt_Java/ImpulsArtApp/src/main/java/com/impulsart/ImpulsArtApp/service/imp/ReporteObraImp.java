@@ -21,15 +21,6 @@ public class ReporteObraImp implements ReporteObraService {
     }
 
     @Override
-    public List<ReporteObra> findObrasConReportesPorUsuario(Integer identificacion) {
-        List<ReporteObra> reporteObras = this.reporteObraRepository.findObrasConReportesPorUsuario(identificacion);
-        if (reporteObras.isEmpty()) {
-            throw new EntityNotFoundException("Reporte de las obras no encontradas");
-        }
-        return reporteObras;
-    }
-
-    @Override
     public ReporteObra findById(Long pkCod_Reporte) {
         return this.reporteObraRepository.findById(pkCod_Reporte).orElse(null);
     }

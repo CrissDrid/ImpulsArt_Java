@@ -23,30 +23,6 @@ public class UserController {
  @Autowired
     private UsuarioImp usuarioImp;
 
-    //VALIDACION DE ROLES
-    @GetMapping("/validarRoles/{identificacion}")
-    public ResponseEntity<Map<String, Object>> validarRoles(@PathVariable int identificacion) {
-        Map<String, Object> response = new HashMap<>();
-
-        try {
-            boolean domiciliario = usuarioImp.existsByEmpleadosAsesorIsNotNullAndIdentificacion(identificacion);
-            boolean asesor = usuarioImp.existsByEmpleadosDomiciliarioIsNotNullAndIdentificacion(identificacion);
-            Usuario usuario = usuarioImp.findById(identificacion);
-            String tipoUsuario = usuario.getTipoUsuario();
-
-            response.put("identificacion", identificacion);
-            response.put("esAsesor", asesor);
-            response.put("esDomiciliario", domiciliario);
-            response.put("tipoUsuario", tipoUsuario);
-
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            response.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
-            response.put("message", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 //CONTROLLER CREATE
     @PostMapping("/create")
     public ResponseEntity<Map<String,Object>> create(@RequestBody Map<String, Object> request){

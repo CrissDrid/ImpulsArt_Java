@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -32,7 +33,7 @@ public class Subasta {
     private LocalDate fechaInicio;
 
     @Column(name = "FechaFinalizacion", nullable = false)
-    private LocalDate fechaFinalizacion;
+    private LocalDateTime fechaFinalizacion;
 
     //FOREING KEYS
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

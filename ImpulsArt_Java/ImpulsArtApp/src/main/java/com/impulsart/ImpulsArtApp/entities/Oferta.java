@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -26,10 +27,7 @@ public class Oferta {
     private int monto;
 
     @Column(name = "FechaOferta")
-    private LocalDate fechaOferta;
-
-    @Column(name = "HoraOferta")
-    private LocalTime horaOferta;
+    private LocalDateTime fechaOferta;
 
     //FOREING KEYS
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

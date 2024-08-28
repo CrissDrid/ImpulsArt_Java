@@ -13,9 +13,4 @@ public interface UsuarioRepositorio extends JpaRepository<Usuario, Integer> {
     @Query("SELECT u FROM Usuario u WHERE u.email = :email")
     List<Usuario> findByEmail(@Param("email") String email);
 
-    // Verificar si es asesor
-    boolean existsByEmpleadosAsesorIsNotNullAndIdentificacion(int identificacion);
-
-    // Verificar si es domiciliario
-    boolean existsByEmpleadosDomiciliarioIsNotNullAndIdentificacion(int identificacion);
 }

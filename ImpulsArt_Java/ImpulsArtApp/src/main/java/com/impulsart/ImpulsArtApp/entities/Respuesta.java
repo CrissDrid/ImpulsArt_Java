@@ -24,9 +24,10 @@ public class Respuesta {
     @Column(name = "FechaRespuesta", length = 200)
     private LocalDate fechaRespuesta;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_Asesor", nullable = false)
-    private Asesor asesor; // Relación con Obra
+    //FOREING KEYS
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "Fk_Identificacion", nullable = false)
+    private Usuario usuario;
 
     @ManyToOne
     @JsonIgnore

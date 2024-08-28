@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -115,7 +116,7 @@ public class SubastaController {
             subasta.setEstadoSubasta(estadoSubasta);
             subasta.setPrecioInicial(precioInicial);
             subasta.setFechaInicio(LocalDate.parse(fechaInicio));
-            subasta.setFechaFinalizacion(LocalDate.parse(fechaFinalizacion));
+            subasta.setFechaFinalizacion(LocalDateTime.parse(fechaFinalizacion));
             subasta.setObras(obra);
 
             // Guardar la subasta en la base de datos
@@ -352,7 +353,7 @@ public class SubastaController {
 
             // Actualizar los campos de la subasta
             subasta.setPrecioInicial(precioInicial);
-            subasta.setFechaFinalizacion(LocalDate.parse(fechaFinalizacion));
+            subasta.setFechaFinalizacion(LocalDateTime.parse(fechaFinalizacion));
 
             // Guardar la subasta actualizada
             subastaImp.update(subasta);

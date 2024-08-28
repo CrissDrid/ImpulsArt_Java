@@ -10,11 +10,4 @@ import java.util.List;
 
 public interface ReporteObraRepository extends JpaRepository<ReporteObra, Long> {
 
-    @Query("SELECT r FROM ReporteObra r " +
-            "JOIN FETCH r.obra o " +
-            "JOIN FETCH o.categoria c " +
-            "JOIN FETCH r.tipoReporte tr " +
-            "WHERE r.usuario.identificacion = :identificacion")
-    List<ReporteObra> findObrasConReportesPorUsuario(@Param("identificacion") Integer identificacion);
-
 }
