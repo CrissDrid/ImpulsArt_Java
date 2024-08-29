@@ -4,6 +4,6 @@ public class ConstantesSeguridad {
 
     //Limite de tiempo de expiracion del token
     public static final long JWT_EXPIRATION_TOKEN = 300000;
-    public static final String JWT_FIRMA = "firma";
+    public static final String JWT_FIRMA = "SECRET_KEY_IMPULSART_SENA_CSF";
 
 }

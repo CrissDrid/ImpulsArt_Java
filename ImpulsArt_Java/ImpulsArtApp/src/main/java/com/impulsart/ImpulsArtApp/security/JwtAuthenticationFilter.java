@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtGenerador jwtGenerador;
 
-    public String obtenerTokenDeSolicitud(HttpServletRequest request){
+    private String obtenerTokenDeSolicitud(HttpServletRequest request){
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){
             return bearerToken.substring(7, bearerToken.length());
@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails = customUsersDetailsService.loadUserByUsername(email);
             List<String> userRol = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
-            if(userRol.contains("USER") || userRol.contains("ADMIN")){
+            if(userRol.contains("USER") || userRol.contains("ADMIN") || userRol.contains("ASESOR") || userRol.contains("DOMICILIARIO")){
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
                         null, userDetails.getAuthorities());

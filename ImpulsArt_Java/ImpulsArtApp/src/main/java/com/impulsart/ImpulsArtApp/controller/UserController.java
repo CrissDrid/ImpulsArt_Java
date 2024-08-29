@@ -1,15 +1,24 @@
 package com.impulsart.ImpulsArtApp.controller;
 
+import com.impulsart.ImpulsArtApp.entities.Obra;
+import com.impulsart.ImpulsArtApp.entities.Rol;
 import com.impulsart.ImpulsArtApp.entities.Usuario;
+import com.impulsart.ImpulsArtApp.security.JwtGenerador;
 import com.impulsart.ImpulsArtApp.service.imp.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,13 +30,34 @@ public class UserController {
 
 //INYECCION DE DEPENDECIAS
  @Autowired
-    private UsuarioImp usuarioImp;
+ private UsuarioImp usuarioImp;
+
+ @Autowired
+ private RolImp rolImp;
+
+ @Autowired
+ private AuthenticationManager authenticationManager;
+
+ @Autowired
+ private PasswordEncoder passwordEncoder;
+
+ @Autowired
+ private JwtGenerador jwtGenerador;
 
 //CONTROLLER CREATE
     @PostMapping("/create")
     public ResponseEntity<Map<String,Object>> create(@RequestBody Map<String, Object> request){
         Map<String, Object> response = new HashMap<>();
         try{
+
+            // Verifica si el usuario ya existe por el correo electrónico
+            String email = request.get("email").toString();
+            if (usuarioImp.existsByEmail(email)) {
+                response.put("status", "error");
+                response.put("message", "El usuario con el correo " + email + " ya está registrado.");
+                return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            }
+
             System.out.println("@@@@"+request);
             //INSTANCIA DEL OBJETO USUARIOS
             Usuario usuario = new Usuario();
@@ -39,9 +69,12 @@ public class UserController {
             usuario.setEmail(request.get("email").toString());
             usuario.setNumCelular(request.get("numCelular").toString());
             usuario.setDireccion(request.get("direccion").toString());
-            usuario.setContrasena(request.get("contrasena").toString());
+            usuario.setContrasena(passwordEncoder.encode(request.get("contrasena").toString()));
             usuario.setTipoUsuario(request.get("tipoUsuario").toString());
             usuario.setUserName(request.get("userName").toString());
+
+            Rol rol = rolImp.findById(Long.parseLong(request.get("fk_Rol").toString()));
+            usuario.setRol(rol);
 
             this.usuarioImp.create(usuario);
 
@@ -52,6 +85,41 @@ public class UserController {
             response.put("data",e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
         }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> request) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // Extraer email y contraseña del request
+            String email = (String) request.get("email");
+            String contrasena = (String) request.get("contrasena");
+
+            // Crear el objeto de autenticación con el email y la contraseña
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, contrasena)
+            );
+
+            // Establecer la autenticación en el contexto de seguridad
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Generar el token JWT
+            String token = jwtGenerador.generarToken(authentication);
+
+            // Incluir el token en la respuesta
+            response.put("status", "success");
+            response.put("message", "Login exitoso");
+            response.put("token", token);
+
+        } catch (Exception e) {
+            // Manejo de excepción, en caso de error en la autenticación
+            response.put("status", "error");
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        // Devolver la respuesta con el token incluido
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
