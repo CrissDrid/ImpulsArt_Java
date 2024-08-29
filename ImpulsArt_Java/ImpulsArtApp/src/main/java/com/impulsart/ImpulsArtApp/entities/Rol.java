@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name="Roles")
 @Data
@@ -18,14 +20,12 @@ public class Rol {
     private long pkCod_Rol;
 
     @Column(name = "Nombre", length = 60)
-    private String Nombre;
+    private String nombre;
 
     @Column(name = "Descripcion", length = 100)
-    private String Descripcion;
+    private String descripcion;
 
-    //FOREING KEYS
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "Fk_Identificacion", nullable = false)
-    private Usuario usuario;
+    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL)
+    private List<Usuario> usuarios;
 
 }

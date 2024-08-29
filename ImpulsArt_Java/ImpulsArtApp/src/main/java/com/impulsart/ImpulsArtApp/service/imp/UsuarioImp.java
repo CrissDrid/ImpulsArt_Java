@@ -4,6 +4,7 @@ import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.repositories.UsuarioRepositorio;
 import com.impulsart.ImpulsArtApp.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +26,17 @@ public class UsuarioImp implements UsuarioService {
     }
 
     @Override
-    public List<Usuario> findByEmail(String email) {
-        return usuarioRepositorio.findByEmail(email);
+    public Usuario findByEmail(String email) {
+        Usuario usuario = usuarioRepositorio.findByEmail(email);
+        if (usuario == null) {
+            throw new UsernameNotFoundException("Usuario no encontrado con nombre: " + email);
+        }
+        return usuario;
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        return usuarioRepositorio.existsByEmail(email);
     }
 
     @Override

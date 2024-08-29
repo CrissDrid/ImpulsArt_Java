@@ -46,11 +46,11 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Rol> rol;
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<Respuesta> respuesta;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Fk_Rol", nullable = false)
+    private Rol rol;
 
     @ManyToMany
     @JsonIgnore

@@ -10,7 +10,13 @@ import java.util.List;
 
 @Repository
 public interface UsuarioRepositorio extends JpaRepository<Usuario, Integer> {
-    @Query("SELECT u FROM Usuario u WHERE u.email = :email")
-    List<Usuario> findByEmail(@Param("email") String email);
+    // @Query("SELECT u FROM Usuario u WHERE u.email = :email")
+    // List<Usuario> findByEmail(@Param("email") String email);
+
+    //Metodo para buscar un usuario mediante su nombre
+    Usuario findByEmail(String email);
+
+    //Verificar si existe el usuario mediante el userName
+    Boolean existsByEmail(String email);
 
 }
