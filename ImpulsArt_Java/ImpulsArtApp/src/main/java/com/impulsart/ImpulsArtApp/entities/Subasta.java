@@ -30,7 +30,7 @@ public class Subasta {
     private String precioInicial;
 
     @Column(name = "FechaInicio", nullable = false)
-    private LocalDate fechaInicio;
+    private LocalDateTime fechaInicio;
 
     @Column(name = "FechaFinalizacion", nullable = false)
     private LocalDateTime fechaFinalizacion;

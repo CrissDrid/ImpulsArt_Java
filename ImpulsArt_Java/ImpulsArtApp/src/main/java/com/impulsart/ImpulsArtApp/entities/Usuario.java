@@ -35,7 +35,7 @@ public class Usuario {
     private String numCelular;
     @Column(name = "Direccion", length = 50, nullable = false)
     private String direccion;
-    @Column(name = "Contrasena", length = 155, nullable = false)
+    @Column(name = "Contrasena", columnDefinition = "TEXT", nullable = false)
     private String contrasena;
     @Column(name = "TipoUsuario", length = 50, nullable = false)
     private String tipoUsuario;

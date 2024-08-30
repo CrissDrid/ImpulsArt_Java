@@ -111,6 +111,7 @@ public class UserController {
             response.put("status", "success");
             response.put("message", "Login exitoso");
             response.put("token", token);
+            response.put("tokenType", "Bearer ");
 
         } catch (Exception e) {
             // Manejo de excepción, en caso de error en la autenticación

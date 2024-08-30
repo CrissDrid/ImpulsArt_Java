@@ -3,6 +3,7 @@ package com.impulsart.ImpulsArtApp.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -59,8 +60,10 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/auth/**").permitAll() // Permitir todas las solicitudes a /api/auth/**
-                                .requestMatchers("/api/usuario/**").permitAll()
+                                .requestMatchers("/api/usuario/login").permitAll()
+                                .requestMatchers("/api/usuario/create").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/usuario/all").hasAnyAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/obra/create").hasAnyAuthority("USER", "ADMIN")
                                 .anyRequest().authenticated() // Requerir autenticación para otras solicitudes
                 )
                 .httpBasic(withDefaults()); // Habilitar autenticación básica HTTP

@@ -115,7 +115,7 @@ public class SubastaController {
             Subasta subasta = new Subasta();
             subasta.setEstadoSubasta(estadoSubasta);
             subasta.setPrecioInicial(precioInicial);
-            subasta.setFechaInicio(LocalDate.parse(fechaInicio));
+            subasta.setFechaInicio(LocalDateTime.parse(fechaInicio));
             subasta.setFechaFinalizacion(LocalDateTime.parse(fechaFinalizacion));
             subasta.setObras(obra);
 
