@@ -6,18 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="tipoReclamos")
+@Table(name="tipoPQRS")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TipoReclamo {
+public class TipoPqrs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pkCod_TipoReclamo")
-    private long pkCod_TipoReclamo;
-    @Column(name = "NombreTipo",length = 50)
+    @Column(name = "pkCod_TipoPQRS", nullable = false)
+    private long pkCod_TipoPQRS;
+    @Column(name = "NombreTipo",length = 50, nullable = false)
     private String nombreTipo;
-    @Column(name = "Descripcion",length = 50)
+    @Column(name = "Descripcion",length = 50, nullable = false)
     private String descripcion;
 
 }

@@ -20,11 +20,11 @@ public class ReporteObra {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pkCod_Reporte")
+    @Column(name = "pkCod_Reporte", nullable = false)
     private long pkCod_Reporte;
-    @Column(name = "Comentario", length = 200)
+    @Column(name = "Comentario", length = 200, nullable = false)
     private String comentario;
-    @Column(name = "FechaReporte", length = 200)
+    @Column(name = "FechaReporte", length = 200, nullable = false)
     private LocalDate fechaReporte;
 
     @ManyToOne

@@ -10,16 +10,16 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name="Reclamos")
+@Table(name="Pqrs")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Reclamo {
+public class Pqrs {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pkCod_Reclamo")
-    private long pkCod_Reclamo;
+    @Column(name = "pkCod_Pqrs")
+    private long pkCod_Pqrs;
     @Column(name = "Descripcion", length = 200)
     private String descripcion;
     @Column(name = "Estado", length = 200)
@@ -29,18 +29,18 @@ public class Reclamo {
     @Column(name = "FechaCierre", length = 200)
     private LocalDate fechaCierre;
 
-    @ManyToMany(mappedBy = "reclamo")
+    @ManyToMany(mappedBy = "pqrs")
     private List<Usuario> usuarios;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "fkCod_TipoReclamo",nullable = false)
-    private TipoReclamo tipoReclamo;
+    @JoinColumn(name = "fkCod_TipoPqrs",nullable = false)
+    private TipoPqrs tipoPQRS;
 
-    @OneToMany(mappedBy = "reclamo")
+    @OneToMany(mappedBy = "pqrs")
     @JsonIgnore
     private List<Reembolso> reembolso;
 
-    @OneToMany(mappedBy = "reclamo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pqrs", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Respuesta> respuestas;
 

@@ -1,15 +1,12 @@
 package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.Categoria;
-import com.impulsart.ImpulsArtApp.entities.Reclamo;
-import com.impulsart.ImpulsArtApp.entities.TipoReclamo;
 import com.impulsart.ImpulsArtApp.service.imp.CategoriaImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

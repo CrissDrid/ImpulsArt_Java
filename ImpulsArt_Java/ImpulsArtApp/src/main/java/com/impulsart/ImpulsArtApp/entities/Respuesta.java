@@ -17,11 +17,11 @@ public class Respuesta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pkCod_Respuesta")
+    @Column(name = "pkCod_Respuesta", nullable = false)
     private long pkCod_Respuesta;
-    @Column(name = "Comentario", length = 200)
+    @Column(name = "Comentario", length = 200, nullable = false)
     private String comentario;
-    @Column(name = "FechaRespuesta", length = 200)
+    @Column(name = "FechaRespuesta", length = 200, nullable = false)
     private LocalDate fechaRespuesta;
 
     //FOREING KEYS
@@ -31,7 +31,7 @@ public class Respuesta {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "fk_Reclamo", nullable = false)
-    private Reclamo reclamo; // Relación con reclamo
+    @JoinColumn(name = "fk_Pqrs", nullable = false)
+    private Pqrs pqrs; // Relación con reclamo
 
 }

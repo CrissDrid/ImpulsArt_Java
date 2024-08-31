@@ -60,10 +60,31 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/usuario/login").permitAll()
-                                .requestMatchers("/api/usuario/create").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/usuario/all").hasAnyAuthority("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/api/obra/create").hasAnyAuthority("USER", "ADMIN")
+
+                                //PERMISOS TABLA USUARIO
+                                .requestMatchers("/api/usuario/**").permitAll()
+                                //PERMISOS TABLA USUARIO
+
+                                //PERMISOS TABLA CATEGORIA
+                                .requestMatchers("/api/categoria/**").permitAll()
+                                //PERMISOS TABLA CATEGORIA
+
+                                //PERMISOS TABLA OFERTA
+                                .requestMatchers("/api/oferta/**").permitAll()
+                                //PERMISOS TABLA OFERTA
+
+                                //PERMISOS TABLA SUBASTA
+                                .requestMatchers("/api/subasta/**").permitAll()
+                                //PERMISOS TABLA SUBASTA
+
+                                //PERMISOS TABLA OBRA
+                                .requestMatchers("/api/obra/**").permitAll()
+                                //PERMISOS TABLA OBRA
+
+                                //PERMISOS TABLA PQRS
+                                .requestMatchers("/api/pqrs/**").permitAll()
+                                //PERMISOS TABLA PQRS
+
                                 .anyRequest().authenticated() // Requerir autenticación para otras solicitudes
                 )
                 .httpBasic(withDefaults()); // Habilitar autenticación básica HTTP

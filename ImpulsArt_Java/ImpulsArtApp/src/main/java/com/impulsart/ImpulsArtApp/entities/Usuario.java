@@ -1,8 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -100,9 +98,9 @@ public class Usuario {
     @ManyToMany
     @JsonIgnore
     @JoinTable(
-            name = "Usuarios_reclamos",
+            name = "Usuarios_Pqrs",
             joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
-            inverseJoinColumns = @JoinColumn(name = "fkCod_reclamo", referencedColumnName = "pkCod_Reclamo")
+            inverseJoinColumns = @JoinColumn(name = "fkCod_Pqrs", referencedColumnName = "pkCod_Pqrs")
     )
-    private List<Reclamo> reclamo;
+    private List<Pqrs> pqrs;
 }

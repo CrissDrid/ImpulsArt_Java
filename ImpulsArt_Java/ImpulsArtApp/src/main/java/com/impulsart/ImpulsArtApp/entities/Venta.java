@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,5 +40,6 @@ public class Venta {
     private List<Usuario> usuarios;
 
     @OneToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Reembolso> reembolso;
 }

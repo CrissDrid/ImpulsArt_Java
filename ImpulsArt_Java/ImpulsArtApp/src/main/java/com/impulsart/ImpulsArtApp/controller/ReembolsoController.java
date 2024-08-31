@@ -1,10 +1,10 @@
 package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.Reembolso;
-import com.impulsart.ImpulsArtApp.entities.Reclamo;
+import com.impulsart.ImpulsArtApp.entities.Pqrs;
 import com.impulsart.ImpulsArtApp.entities.Venta;
 import com.impulsart.ImpulsArtApp.service.imp.ReembolsoImp;
-import com.impulsart.ImpulsArtApp.service.imp.ReclamoImp;
+import com.impulsart.ImpulsArtApp.service.imp.PqrsImp;
 import com.impulsart.ImpulsArtApp.service.imp.VentaImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class ReembolsoController {
     @Autowired
     VentaImp ventaImp;
     @Autowired
-    ReclamoImp reclamoImp;
+    PqrsImp reclamoImp;
 
     //CONTROLLER CREATE
     @PostMapping("/create")
@@ -45,8 +45,8 @@ public class ReembolsoController {
             Venta venta = ventaImp.findById(Integer.parseInt(request.get("FkCod_Venta").toString()));
             reembolso.setVentas(venta);
 
-            Reclamo reclamo = reclamoImp.findById(Long.valueOf(request.get("FkCod_Reclamo").toString()));
-            reembolso.setReclamo(reclamo);
+            Pqrs pqrs = reclamoImp.findById(Long.valueOf(request.get("FkCod_Reclamo").toString()));
+            reembolso.setPqrs(pqrs);
 
             this.devolucionImp.create(reembolso);
 

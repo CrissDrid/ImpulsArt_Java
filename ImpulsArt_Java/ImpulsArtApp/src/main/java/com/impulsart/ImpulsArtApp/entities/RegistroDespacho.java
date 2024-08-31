@@ -16,13 +16,13 @@ import java.time.LocalTime;
 public class RegistroDespacho {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pkCod_registro")
+    @Column(name = "pkCod_registro", nullable = false)
     private long pkCod_registro;
-    @Column(name = "FechaSalida",length = 50)
+    @Column(name = "FechaSalida",length = 50, nullable = false)
     private LocalDate fechaSalida;
-    @Column(name = "FechaEntrega",length = 50)
+    @Column(name = "FechaEntrega",length = 50, nullable = false)
     private LocalDate fechaEntrega;
-    @Column(name = "HoraEntrega",length = 10)
+    @Column(name = "HoraEntrega",length = 10, nullable = false)
     private LocalTime HoraEntrega;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

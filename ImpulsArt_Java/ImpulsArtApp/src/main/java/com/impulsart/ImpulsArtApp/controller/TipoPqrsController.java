@@ -1,7 +1,7 @@
 package com.impulsart.ImpulsArtApp.controller;
 
-import com.impulsart.ImpulsArtApp.entities.TipoReclamo;
-import com.impulsart.ImpulsArtApp.service.imp.TipoReclamoImp;
+import com.impulsart.ImpulsArtApp.entities.TipoPqrs;
+import com.impulsart.ImpulsArtApp.service.imp.TipoPqrsImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +14,10 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/api/tipoReclamo", method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
 @CrossOrigin("*")
-public class TipoReclamoController {
+public class TipoPqrsController {
 
     @Autowired
-    TipoReclamoImp tipoPQRSImp;
+    TipoPqrsImp tipoPQRSImp;
 
     //CONTROLLER CREATE
     @PostMapping("/create")
@@ -26,12 +26,12 @@ public class TipoReclamoController {
         try {
             System.out.println("@@@@" + request);
             //INSTANCIA DEL OBJETO ESPECIALIDAD
-            TipoReclamo tipoReclamo = new TipoReclamo();
+            TipoPqrs tipoPQRS = new TipoPqrs();
             //CAMPOS DE LA TABLA ESPECIALIDAD
-            tipoReclamo.setNombreTipo(request.get("nombreTipo").toString());
-            tipoReclamo.setDescripcion(request.get("descripcion").toString());
+            tipoPQRS.setNombreTipo(request.get("nombreTipo").toString());
+            tipoPQRS.setDescripcion(request.get("descripcion").toString());
 
-            this.tipoPQRSImp.create(tipoReclamo);
+            this.tipoPQRSImp.create(tipoPQRS);
 
             response.put("status", "succses");
             response.put("data", "Registro Exitoso");
@@ -50,9 +50,9 @@ public class TipoReclamoController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<TipoReclamo> tipoReclamoList = this.tipoPQRSImp.findAll();
+            List<TipoPqrs> tipoPqrsList = this.tipoPQRSImp.findAll();
             response.put("status", "success");
-            response.put("data", tipoReclamoList);
+            response.put("data", tipoPqrsList);
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());
@@ -67,9 +67,9 @@ public class TipoReclamoController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            TipoReclamo tipoReclamo = this.tipoPQRSImp.findById(pkCod_TipoPQRS);
+            TipoPqrs tipoPQRS = this.tipoPQRSImp.findById(pkCod_TipoPQRS);
             response.put("status", "success");
-            response.put("data", tipoReclamo);
+            response.put("data", tipoPQRS);
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());
@@ -84,13 +84,13 @@ public class TipoReclamoController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            TipoReclamo tipoReclamo = this.tipoPQRSImp.findById(pkCod_TipoPQRS);
+            TipoPqrs tipoPQRS = this.tipoPQRSImp.findById(pkCod_TipoPQRS);
 
             //CAMPOS DE LA TABLA ESPECIALIDAD
-            tipoReclamo.setNombreTipo(request.get("nombreTipo").toString());
-            tipoReclamo.setDescripcion(request.get("descripcion").toString());
+            tipoPQRS.setNombreTipo(request.get("nombreTipo").toString());
+            tipoPQRS.setDescripcion(request.get("descripcion").toString());
 
-            this.tipoPQRSImp.update(tipoReclamo);
+            this.tipoPQRSImp.update(tipoPQRS);
             response.put("status","success");
             response.put("data","Actualizacion Exitosa");
         } catch (Exception e) {
@@ -107,8 +107,8 @@ public class TipoReclamoController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            TipoReclamo tipoReclamo = this.tipoPQRSImp.findById(pkCod_TipoPQRS);
-            tipoPQRSImp.delete(tipoReclamo);
+            TipoPqrs tipoPQRS = this.tipoPQRSImp.findById(pkCod_TipoPQRS);
+            tipoPQRSImp.delete(tipoPQRS);
 
             response.put("status", "success");
             response.put("data", "Registro Eliminado Correctamente");

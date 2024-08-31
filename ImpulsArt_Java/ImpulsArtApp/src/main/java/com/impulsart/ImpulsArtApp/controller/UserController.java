@@ -1,6 +1,5 @@
 package com.impulsart.ImpulsArtApp.controller;
 
-import com.impulsart.ImpulsArtApp.entities.Obra;
 import com.impulsart.ImpulsArtApp.entities.Rol;
 import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.security.JwtGenerador;

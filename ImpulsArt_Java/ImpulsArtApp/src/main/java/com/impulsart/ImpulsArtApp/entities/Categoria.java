@@ -21,10 +21,10 @@ public class Categoria {
     @Column(name = "pkCod_Categoria")
     private long pkCod_Categoria;
 
-    @Column(name = "NombreCategoria",length = 45)
+    @Column(name = "NombreCategoria",length = 45, nullable = false)
     private String nombreCategoria;
 
-    @Column(name = "descripcionCategoria",length = 45)
+    @Column(name = "descripcionCategoria",length = 45, nullable = false)
     private String descripcionCategoria;
 
     @OneToMany(mappedBy = "categoria")

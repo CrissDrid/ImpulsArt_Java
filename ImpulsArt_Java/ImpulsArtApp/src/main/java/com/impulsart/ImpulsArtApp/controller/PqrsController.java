@@ -16,14 +16,14 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "/api/reclamo", method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
+@RequestMapping(path = "/api/pqrs", method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
 @CrossOrigin("*")
-public class ReclamoController {
+public class PqrsController {
 
     @Autowired
-    ReclamoImp reclamoImp;
+    PqrsImp pqrsImp;
     @Autowired
-    TipoReclamoImp tipoReclamoImp;
+    TipoPqrsImp tipoPqrsImp;
     @Autowired
     UsuarioImp usuarioImp;
     @Autowired
@@ -37,25 +37,25 @@ public class ReclamoController {
             @RequestParam("estado") String estado,
             @RequestParam("fechaPQRS") String fechaPQRS,
             @RequestParam(value = "fechaCierre", required = false) String fechaCierre,
-            @RequestParam("fkCod_TipoReclamo") Long fkCodTipoReclamo,
+            @RequestParam("fkCod_TipoReclamo") Long fkCod_TipoPqrs,
             @RequestParam("usuarioIds") List<Integer> usuarioIds) {
 
         Map<String, Object> response = new HashMap<>();
 
         try {
             // Instanciar el objeto Reclamo y establecer los campos
-            Reclamo reclamo = new Reclamo();
-            reclamo.setDescripcion(descripcion);
-            reclamo.setEstado(estado);
-            reclamo.setFechaPQRS(LocalDate.parse(fechaPQRS));
-            reclamo.setFechaCierre(fechaCierre != null ? LocalDate.parse(fechaCierre) : null);
+            Pqrs pqrs = new Pqrs();
+            pqrs.setDescripcion(descripcion);
+            pqrs.setEstado(estado);
+            pqrs.setFechaPQRS(LocalDate.parse(fechaPQRS));
+            pqrs.setFechaCierre(fechaCierre != null ? LocalDate.parse(fechaCierre) : null);
 
             // Obtener y establecer el tipo de reclamo
-            TipoReclamo tipoReclamo = tipoReclamoImp.findById(fkCodTipoReclamo);
-            if (tipoReclamo == null) {
-                throw new RuntimeException("Tipo de reclamo no encontrado");
+            TipoPqrs tipoPQRS = tipoPqrsImp.findById(fkCod_TipoPqrs);
+            if (tipoPQRS == null) {
+                throw new RuntimeException("Tipo de pqrs no encontrado");
             }
-            reclamo.setTipoReclamo(tipoReclamo);
+            pqrs.setTipoPQRS(tipoPQRS);
 
             // Obtener los usuarios por sus IDs
             List<Usuario> usuarios = usuarioIds.stream()
@@ -64,15 +64,15 @@ public class ReclamoController {
                     .collect(Collectors.toList());
 
             // Establecer la relación de usuarios en el reclamo
-            reclamo.setUsuarios(usuarios);
+            pqrs.setUsuarios(usuarios);
 
             // Sincronizar la relación en el lado de los usuarios
             for (Usuario usuario : usuarios) {
-                usuario.getReclamo().add(reclamo);
+                usuario.getPqrs().add(pqrs);
             }
 
             // Guardar el reclamo en la base de datos
-            this.reclamoImp.create(reclamo);
+            this.pqrsImp.create(pqrs);
 
             response.put("status", "success");
             response.put("data", "Registro Exitoso");
@@ -90,14 +90,14 @@ public class ReclamoController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //FIND HISTORIAL RECLAMOS
 
-    @GetMapping("/historialReclamos/{identificacion}")
-    public ResponseEntity<Map<String, Object>> findHistorialReclamos(@PathVariable Integer identificacion) {
+    @GetMapping("/historialPqrs/{identificacion}")
+    public ResponseEntity<Map<String, Object>> findHistorialPqrs(@PathVariable Integer identificacion) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<Reclamo> reclamos = this.reclamoImp.findHistorialReclamos(identificacion);
+            List<Pqrs> pqrs = this.pqrsImp.findHistorialPqrs(identificacion);
             response.put("status", "success");
-            response.put("data", reclamos);
+            response.put("data", pqrs);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             response.put("status", "error");
@@ -119,9 +119,9 @@ public class ReclamoController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<Reclamo> reclamoList = this.reclamoImp.findAll();
+            List<Pqrs> pqrsList = this.pqrsImp.findAll();
             response.put("status", "success");
-            response.put("data", reclamoList);
+            response.put("data", pqrsList);
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());
@@ -131,14 +131,14 @@ public class ReclamoController {
     }
 
     //READ ID
-    @GetMapping("/list/{pkCod_Reclamo}")
-    public ResponseEntity<Map<String, Object>> findById(@PathVariable Long pkCod_Reclamo) {
+    @GetMapping("/list/{pkCod_Pqrs}")
+    public ResponseEntity<Map<String, Object>> findById(@PathVariable Long pkCod_Pqrs) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Reclamo reclamo = this.reclamoImp.findById(pkCod_Reclamo);
+            Pqrs pqrs = this.pqrsImp.findById(pkCod_Pqrs);
             response.put("status", "success");
-            response.put("data", reclamo);
+            response.put("data", pqrs);
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());
@@ -148,20 +148,20 @@ public class ReclamoController {
     }
 
     //CONTROLLER UPDATE
-    @PutMapping("update/{pkCod_Reclamo}")
-    public ResponseEntity<Map<String,Object>> update(@PathVariable Long pkCod_Reclamo, @RequestBody Map<String, Object> request) {
+    @PutMapping("update/{pkCod_Pqrs}")
+    public ResponseEntity<Map<String,Object>> update(@PathVariable Long pkCod_Pqrs, @RequestBody Map<String, Object> request) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Reclamo reclamo = this.reclamoImp.findById(pkCod_Reclamo);
+            Pqrs pqrs = this.pqrsImp.findById(pkCod_Pqrs);
 
             //CAMPOS DE LA TABLA RECLAMO
-            reclamo.setDescripcion(request.get("descripcion").toString());
-            reclamo.setEstado(request.get("estado").toString());
-            reclamo.setFechaPQRS(LocalDate.parse(request.get("fechaPQRS").toString()));
-            reclamo.setFechaCierre(request.get("fechaCierre") != null ? LocalDate.parse(request.get("fechaCierre").toString()) : null);
+            pqrs.setDescripcion(request.get("descripcion").toString());
+            pqrs.setEstado(request.get("estado").toString());
+            pqrs.setFechaPQRS(LocalDate.parse(request.get("fechaPQRS").toString()));
+            pqrs.setFechaCierre(request.get("fechaCierre") != null ? LocalDate.parse(request.get("fechaCierre").toString()) : null);
 
-            this.reclamoImp.update(reclamo);
+            this.pqrsImp.update(pqrs);
             response.put("status","success");
             response.put("data","Actualizacion Exitosa");
         } catch (Exception e) {
@@ -173,13 +173,13 @@ public class ReclamoController {
     }
 
     //CONTROLLER DELETE
-    @DeleteMapping("/delete/{pkCod_Reclamo}")
-    public ResponseEntity<Map<String, Object>> delete(@PathVariable Long pkCod_Reclamo) {
+    @DeleteMapping("/delete/{pkCod_Pqrs}")
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable Long pkCod_Pqrs) {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Reclamo reclamo = this.reclamoImp.findById(pkCod_Reclamo);
-            reclamoImp.delete(reclamo);
+            Pqrs pqrs = this.pqrsImp.findById(pkCod_Pqrs);
+            pqrsImp.delete(pqrs);
 
             response.put("status", "success");
             response.put("data", "Registro Eliminado Correctamente");

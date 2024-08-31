@@ -18,11 +18,11 @@ public class TipoReporte {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pkCod_TipoReporte")
+    @Column(name = "pkCod_TipoReporte", nullable = false)
     private long pkCod_TipoReporte;
-    @Column(name = "Nombre", length = 60)
+    @Column(name = "Nombre", length = 60, nullable = false)
     private String Nombre;
-    @Column(name = "Descripcion", length = 100)
+    @Column(name = "Descripcion", length = 100, nullable = false)
     private String Descripcion;
 
     @OneToMany(mappedBy = "tipoReporte")

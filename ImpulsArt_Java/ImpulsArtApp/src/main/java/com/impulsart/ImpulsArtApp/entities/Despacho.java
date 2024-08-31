@@ -19,7 +19,7 @@ public class Despacho {
     @Column(name = "pkCod_Despacho")
     private Long pkCod_Despacho;
 
-    @Column(name = "estado",length = 100)
+    @Column(name = "estado",length = 100, nullable = false)
     private String estado;
     @Column(name = "comprobante",length = 100)
     private String comprobante;

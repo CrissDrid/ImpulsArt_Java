@@ -1,7 +1,7 @@
 package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.*;
-import com.impulsart.ImpulsArtApp.service.imp.ReclamoImp;
+import com.impulsart.ImpulsArtApp.service.imp.PqrsImp;
 import com.impulsart.ImpulsArtApp.service.imp.RespuestaImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class RespuestaController {
     private RespuestaImp respuestaImp;
 
     @Autowired
-    private ReclamoImp reclamoImp;
+    private PqrsImp reclamoImp;
 
     //CONTROLLER CREATE
     @PostMapping("/create")
@@ -36,8 +36,8 @@ public class RespuestaController {
             respuesta.setComentario(request.get("comentario").toString());
             respuesta.setFechaRespuesta(LocalDate.parse(request.get("fechaRespuesta").toString()));
 
-            Reclamo reclamo = reclamoImp.findById(Long.parseLong(request.get("fk_Reclamo").toString()));
-            respuesta.setReclamo(reclamo);
+            Pqrs pqrs = reclamoImp.findById(Long.parseLong(request.get("fk_Reclamo").toString()));
+            respuesta.setPqrs(pqrs);
 
             this.respuestaImp.create(respuesta);
 

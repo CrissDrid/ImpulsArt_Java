@@ -29,8 +29,8 @@ public class Reembolso {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    @JoinColumn(name = "fkCod_Reclamo",nullable = false)
-    private Reclamo reclamo;
+    @JoinColumn(name = "fkCod_Pqrs",nullable = false)
+    private Pqrs pqrs;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
