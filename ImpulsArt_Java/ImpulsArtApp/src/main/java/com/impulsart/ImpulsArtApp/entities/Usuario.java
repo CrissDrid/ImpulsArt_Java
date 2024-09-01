@@ -31,7 +31,8 @@ public class Usuario {
     private String email;
     @Column(name = "NumCelular", length = 15, nullable = false)
     private String numCelular;
-    @Column(name = "Direccion", length = 50, nullable = false)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Direccion> direcciones;
     private String direccion;
     @Column(name = "Contrasena", columnDefinition = "TEXT", nullable = false)
     private String contrasena;

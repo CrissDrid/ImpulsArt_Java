@@ -68,7 +68,6 @@ public class UserController {
             usuario.setFechaNacimiento(LocalDate.parse(request.get("fechaNacimiento").toString()));
             usuario.setEmail(request.get("email").toString());
             usuario.setNumCelular(request.get("numCelular").toString());
-            usuario.setDireccion(request.get("direccion").toString());
             usuario.setContrasena(passwordEncoder.encode(request.get("contrasena").toString()));
             usuario.setTipoUsuario(request.get("tipoUsuario").toString());
             usuario.setUserName(request.get("userName").toString());
@@ -238,7 +237,6 @@ public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object
             usuario.setEmail(request.get("email").toString());
             usuario.setFechaNacimiento(LocalDate.parse(request.get("fechaNacimiento").toString()));
             usuario.setNumCelular(request.get("numCelular").toString());
-            usuario.setDireccion(request.get("direccion").toString());
             usuario.setContrasena(request.get("contrasena").toString());
             usuario.setTipoUsuario(request.get("tipoUsuario").toString());
             usuario.setUserName(request.get("userName").toString());

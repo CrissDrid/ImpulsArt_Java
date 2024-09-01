@@ -69,6 +69,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/usuario/all").hasAnyAuthority("ADMIN")
                                 //PERMISOS TABLA USUARIO
 
+                                
                                 //PERMISOS TABLA CATEGORIA
                                 .requestMatchers("/api/categoria/**").hasAnyAuthority("ADMIN")
                                 //PERMISOS TABLA CATEGORIA
