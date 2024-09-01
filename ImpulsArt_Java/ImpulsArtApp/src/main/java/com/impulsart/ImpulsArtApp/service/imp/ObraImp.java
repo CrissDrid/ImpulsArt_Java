@@ -21,6 +21,7 @@ public class ObraImp implements ObraService {
         return this.obraRepositorio.findAll();
     }
 
+
     @Override
     public List<Obra> findHistorialObras(Integer identificacion) {
         List<Obra> obras = this.obraRepositorio.findHistorialObras(identificacion);
@@ -57,5 +58,10 @@ public class ObraImp implements ObraService {
     @Override
     public void delete(Obra obra) {
         this.obraRepositorio.delete(obra);
+    }
+
+    @Override
+    public List<Obra> findAllById(List<Long> obraIds) {
+        return obraRepositorio.findAllById(obraIds);
     }
 }
