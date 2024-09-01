@@ -87,6 +87,13 @@ public class SecurityConfig {
                                 .requestMatchers("/api/obra/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
                                 //PERMISOS TABLA OBRA
 
+                                //PERMISO TABLA RESENA
+                                .requestMatchers("/api/resena/**").permitAll()
+                                //PERMISO TABLA RESENA
+
+                                // PERMISOS PARA RECURSOS ESTÁTICOS
+                                .requestMatchers("/imagen/**").permitAll()
+
                                 .anyRequest().authenticated() // Requerir autenticación para otras solicitudes
                 )
                 .httpBasic(withDefaults()); // Habilitar autenticación básica HTTP

@@ -47,6 +47,10 @@ public class Usuario {
     @JsonIgnore
     private List<Respuesta> respuesta;
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Resena> resenas;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Fk_Rol", nullable = false)
     private Rol rol;

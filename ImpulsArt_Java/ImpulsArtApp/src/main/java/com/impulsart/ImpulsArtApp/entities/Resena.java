@@ -17,13 +17,23 @@ public class Resena {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pkCod_Resena")
+    @Column(name = "PkCod_Resena")
     private long pkCod_Resena;
 
     @Column(name = "Comentario", columnDefinition = "TEXT", nullable = false)
     private String comentario;
 
-    @Column(name = "Puntuacion", length = 100, nullable = false)
+    @Column(name = "Puntuacion", length = 6, nullable = false)
     private int puntuacion;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "Fk_Identificacion", nullable = false)
+    private Usuario usuario;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "FkCod_Producto", nullable = false)
+    private Obra obra;
 
 }

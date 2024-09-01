@@ -48,6 +48,10 @@ public class Obra {
     @JsonIgnore
     private List<Subasta> subastas;
 
+    @OneToMany(mappedBy = "obra", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Resena> resenas;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "FkCod_Categoria",nullable = false)
     private Categoria categoria;
