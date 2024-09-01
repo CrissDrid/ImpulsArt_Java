@@ -62,28 +62,29 @@ public class SecurityConfig {
                         authorizeRequests
 
                                 //PERMISOS TABLA USUARIO
-                                .requestMatchers("/api/usuario/**").permitAll()
+                                .requestMatchers("/api/usuario/login").permitAll()
+                                .requestMatchers("/api/usuario/create").permitAll()
+                                .requestMatchers("/api/usuario/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
+                                .requestMatchers("/api/usuario/delete/**").hasAnyAuthority("")
+                                .requestMatchers("/api/usuario/all").hasAnyAuthority("ADMIN")
                                 //PERMISOS TABLA USUARIO
 
                                 //PERMISOS TABLA CATEGORIA
-                                .requestMatchers("/api/categoria/**").permitAll()
+                                .requestMatchers("/api/categoria/**").hasAnyAuthority("ADMIN")
                                 //PERMISOS TABLA CATEGORIA
 
                                 //PERMISOS TABLA OFERTA
-                                .requestMatchers("/api/oferta/**").permitAll()
+                                .requestMatchers("/api/oferta/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
+                                .requestMatchers("/api/oferta/all").hasAnyAuthority("ADMIN")
                                 //PERMISOS TABLA OFERTA
 
                                 //PERMISOS TABLA SUBASTA
-                                .requestMatchers("/api/subasta/**").permitAll()
+                                .requestMatchers("/api/subasta/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
                                 //PERMISOS TABLA SUBASTA
 
                                 //PERMISOS TABLA OBRA
-                                .requestMatchers("/api/obra/**").permitAll()
+                                .requestMatchers("/api/obra/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
                                 //PERMISOS TABLA OBRA
-
-                                //PERMISOS TABLA PQRS
-                                .requestMatchers("/api/pqrs/**").permitAll()
-                                //PERMISOS TABLA PQRS
 
                                 .anyRequest().authenticated() // Requerir autenticación para otras solicitudes
                 )
