@@ -137,7 +137,7 @@ public class SubastaController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //FIND HISTORIAL OBRAS SUBASTAS
 
-    @GetMapping("/historialObraSubastas/{identificacion}")
+    @GetMapping("/historialSubastas/{identificacion}")
     public ResponseEntity<Map<String, Object>> findHistorialObrasSubasta(@PathVariable Integer identificacion) {
         Map<String, Object> response = new HashMap<>();
 

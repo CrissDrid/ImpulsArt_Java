@@ -13,6 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -50,6 +55,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // Desactivar CSRF
+                .cors(withDefaults()) //Mas tarde borrar
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling
                                 .authenticationEntryPoint(jwtAuthenticationEntryPoint) // Punto de entrada personalizado
@@ -61,6 +67,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
 
+                                // PERMISOS PARA RECURSOS ESTÁTICOS
+                                .requestMatchers("/imagen/**").permitAll()
+                                // PERMISOS PARA RECURSOS ESTÁTICOS
+
                                 //PERMISOS TABLA USUARIO
                                 .requestMatchers("/api/usuario/login").permitAll()
                                 .requestMatchers("/api/usuario/create").permitAll()
@@ -69,8 +79,8 @@ public class SecurityConfig {
                                 .requestMatchers("/api/usuario/all").hasAnyAuthority("ADMIN")
                                 //PERMISOS TABLA USUARIO
 
-                                
                                 //PERMISOS TABLA CATEGORIA
+                                .requestMatchers("/api/categoria/all").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
                                 .requestMatchers("/api/categoria/**").hasAnyAuthority("ADMIN")
                                 //PERMISOS TABLA CATEGORIA
 
@@ -87,13 +97,6 @@ public class SecurityConfig {
                                 .requestMatchers("/api/obra/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
                                 //PERMISOS TABLA OBRA
 
-                                //PERMISO TABLA RESENA
-                                .requestMatchers("/api/resena/**").permitAll()
-                                //PERMISO TABLA RESENA
-
-                                // PERMISOS PARA RECURSOS ESTÁTICOS
-                                .requestMatchers("/imagen/**").permitAll()
-
                                 .anyRequest().authenticated() // Requerir autenticación para otras solicitudes
                 )
                 .httpBasic(withDefaults()); // Habilitar autenticación básica HTTP
@@ -101,6 +104,20 @@ public class SecurityConfig {
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Origen permitido
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos permitidos
+        configuration.setAllowedHeaders(Arrays.asList("*")); // Encabezados permitidos
+        configuration.setAllowCredentials(true); // Permitir credenciales (como cookies o autenticación básica)
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Aplicar configuración a todas las rutas
+
+        return source;
     }
 
 }
