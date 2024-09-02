@@ -60,8 +60,4 @@ public class ObraImp implements ObraService {
         this.obraRepositorio.delete(obra);
     }
 
-    @Override
-    public List<Obra> findAllById(List<Long> obraIds) {
-        return obraRepositorio.findAllById(obraIds);
-    }
 }

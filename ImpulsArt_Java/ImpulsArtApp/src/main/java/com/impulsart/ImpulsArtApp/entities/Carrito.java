@@ -1,9 +1,17 @@
 package com.impulsart.ImpulsArtApp.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 @Entity
+@Table(name="Carritos")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Carrito {
 
     @Id
@@ -17,28 +25,5 @@ public class Carrito {
     @OneToMany(mappedBy = "carrito")
     private List<Obra> obras;
 
-    // Getters y Setters
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public List<Obra> getObras() {
-        return obras;
-    }
-
-    public void setObras(List<Obra> obras) {
-        this.obras = obras;
-    }
 }
