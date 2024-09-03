@@ -105,6 +105,22 @@ public class SecurityConfig {
                                 .requestMatchers("/api/venta/**").permitAll()
                                 //PERMISOS TABLA DIRECCION
 
+                                //PERMISOS TABLA PQRS
+                                .requestMatchers("/api/pqrs/**").permitAll()
+                                //PERMISOS TABLA PQRS
+
+                                //PERMISOS TABLA TIPOPQRS
+                                .requestMatchers("/api/tipoPQRS/**").permitAll()
+                                //PERMISOS TABLA TIPOPQRS
+
+                                //PERMISOS TABLA Respuesta
+                                .requestMatchers("/api/respuesta/**").permitAll()
+                                //PERMISOS TABLA Respuesta
+
+                                //PERMISOS API EMAIL
+                                .requestMatchers("/api/email/**").permitAll()
+                                //PERMISOS API EMAIL
+
                                 .anyRequest().authenticated() // Requerir autenticación para otras solicitudes
                 )
                 .httpBasic(withDefaults()); // Habilitar autenticación básica HTTP

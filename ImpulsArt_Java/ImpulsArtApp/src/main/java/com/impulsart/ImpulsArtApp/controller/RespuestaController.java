@@ -1,8 +1,10 @@
 package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.*;
+import com.impulsart.ImpulsArtApp.service.imp.EmailImp;
 import com.impulsart.ImpulsArtApp.service.imp.PqrsImp;
 import com.impulsart.ImpulsArtApp.service.imp.RespuestaImp;
+import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,22 +26,40 @@ public class RespuestaController {
     @Autowired
     private PqrsImp reclamoImp;
 
-    //CONTROLLER CREATE
+    @Autowired
+    private UsuarioImp usuarioImp;
+
+    @Autowired
+    EmailImp emailImp;
+
     @PostMapping("/create")
-    public ResponseEntity<Map<String,Object>> create(@RequestBody Map<String,Object> request) {
+    public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Object> request) {
         Map<String, Object> response = new HashMap<>();
         try {
             System.out.println("@@@@" + request);
-            //INSTANCIA DEL OBJETO REPORTE OBRA
+
+            // Instancia del objeto Respuesta
             Respuesta respuesta = new Respuesta();
-            //CAMPOS DE LA TABLA PEDIDO PERSONALIZADO
+            // Campos de la tabla Pedido Personalizado
             respuesta.setComentario(request.get("comentario").toString());
             respuesta.setFechaRespuesta(LocalDate.parse(request.get("fechaRespuesta").toString()));
 
-            Pqrs pqrs = reclamoImp.findById(Long.parseLong(request.get("fk_Reclamo").toString()));
+            Pqrs pqrs = reclamoImp.findById(Long.parseLong(request.get("fk_Pqrs").toString()));
             respuesta.setPqrs(pqrs);
 
+            Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("fk_Identificacion").toString()));
+            respuesta.setUsuario(usuario);
+
+            // Guardar la respuesta
             this.respuestaImp.create(respuesta);
+
+            // Enviar correo
+            String destinatario = request.get("destinatario").toString(); // Usa el valor del request
+            String asunto = request.get("asunto").toString(); // Usa el valor del request
+            String mensaje = request.get("mensaje").toString(); // Usa el valor del request
+            String nombre = request.get("nombre").toString(); // Usa el valor del request
+
+            emailImp.enviarCorreo(destinatario, asunto, mensaje, nombre);
 
             response.put("status", "success");
             response.put("data", "Registro Exitoso");
