@@ -1,10 +1,12 @@
 package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.Direccion;
+import com.impulsart.ImpulsArtApp.entities.Obra;
 import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.service.imp.DireccionImp;
 import com.impulsart.ImpulsArtApp.service.imp.PqrsImp;
 import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -116,6 +118,32 @@ public class DireccionController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //FIND HISTORIAL DIRECCIONES
+
+    @GetMapping("/historialDirecciones/{identificacion}")
+    public ResponseEntity<Map<String, Object>> findHistorialDireccion(@PathVariable Integer identificacion) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Direccion> direcciones = this.direccionImp.findHistorialDireccion(identificacion);
+            response.put("status", "success");
+            response.put("data", direcciones);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //FIND HISTORIAL DIRECCIONES
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // CONTROLLER UPDATE
     @PutMapping("/update/{pkCod_Direccion}")

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "Direcciones")
 @Data
@@ -31,5 +33,10 @@ public class Direccion {
     @JoinColumn(name = "Fk_Identificacion", nullable = false)
     @JsonIgnore
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "direccion", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Despacho> despacho;
+
 }
 

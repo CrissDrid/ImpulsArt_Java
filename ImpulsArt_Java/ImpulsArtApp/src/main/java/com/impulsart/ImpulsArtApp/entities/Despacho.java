@@ -32,4 +32,13 @@ public class Despacho {
     @ManyToMany(mappedBy = "despacho")
     private List<Usuario> usuario;
 
+    // Relación uno a muchos con Ventas
+    @OneToMany(mappedBy = "despacho")
+    private List<Venta> ventas;
+
+    //FOREING KEYS
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "FkCod_Direccion",nullable = false)
+    private Direccion direccion;
+
 }

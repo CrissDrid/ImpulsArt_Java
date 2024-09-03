@@ -97,6 +97,14 @@ public class SecurityConfig {
                                 .requestMatchers("/api/obra/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
                                 //PERMISOS TABLA OBRA
 
+                                //PERMISOS TABLA DIRECCION
+                                .requestMatchers("/api/direccion/**").permitAll()
+                                //PERMISOS TABLA DIRECCION
+
+                                //PERMISOS TABLA DIRECCION
+                                .requestMatchers("/api/venta/**").permitAll()
+                                //PERMISOS TABLA DIRECCION
+
                                 .anyRequest().authenticated() // Requerir autenticación para otras solicitudes
                 )
                 .httpBasic(withDefaults()); // Habilitar autenticación básica HTTP

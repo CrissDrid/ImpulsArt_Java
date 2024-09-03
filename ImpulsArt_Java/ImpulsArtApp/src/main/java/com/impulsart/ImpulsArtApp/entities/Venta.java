@@ -18,7 +18,7 @@ public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PkCod_Venta")
-    private int PkCod_Venta;
+    private int pkCod_Venta;
     @Column(name = "FechaVenta",nullable = false)
     private LocalDate fechaVenta;
     @Column(name = "TotalPago",nullable = false)
@@ -34,6 +34,11 @@ public class Venta {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "FkCod_Producto",nullable = false)
     private Obra obras;
+
+    // Relación muchos a uno con Despacho
+    @ManyToOne
+    @JoinColumn(name = "fkCod_Despacho") // La clave foránea en la tabla de ventas
+    private Despacho despacho;
 
     //FOREING KEY
     @ManyToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
