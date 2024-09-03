@@ -31,9 +31,6 @@ public class Usuario {
     private String email;
     @Column(name = "NumCelular", length = 15, nullable = false)
     private String numCelular;
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Direccion> direcciones;
-    private String direccion;
     @Column(name = "Contrasena", columnDefinition = "TEXT", nullable = false)
     private String contrasena;
     @Column(name = "TipoUsuario", length = 50, nullable = false)
@@ -54,6 +51,9 @@ public class Usuario {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Fk_Rol", nullable = false)
     private Rol rol;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Direccion> direcciones;
 
     @ManyToMany
     @JsonIgnore

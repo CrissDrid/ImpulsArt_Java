@@ -8,7 +8,7 @@ public interface CarritoService {
 
     List<Carrito> findAll() throws Exception;
 
-    Carrito findById(Long id) throws Exception;
+    Carrito findById(Long PkCod_Carrito) throws Exception;
 
     void create(Carrito carrito) throws Exception;
 

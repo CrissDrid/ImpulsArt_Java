@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,14 +17,21 @@ public class Carrito {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "PkCod_Carrito")
+    private Long pkCod_Carrito;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "carrito")
-    private List<Obra> obras;
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(
+            name = "Obras_Carrito",
+            joinColumns = @JoinColumn(name = "FkCod_Carrito", referencedColumnName = "PkCod_Carrito"),
+            inverseJoinColumns = @JoinColumn(name = "FkCod_Producto", referencedColumnName = "pkCod_Producto")
+    )
+    private List<Obra> obra;
 
 
 }

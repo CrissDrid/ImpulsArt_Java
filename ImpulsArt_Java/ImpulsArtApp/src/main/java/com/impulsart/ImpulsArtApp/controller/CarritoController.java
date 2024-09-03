@@ -41,9 +41,6 @@ public class CarritoController {
             Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("fk_Usuario").toString()));
             carrito.setUsuario(usuario);
 
-            Obra obra = obraImp.findById((int) Long.parseLong(request.get("fk_Obra").toString()));
-            carrito.getObras().add(obra); // Asumiendo que es una lista de obras
-
             this.carritoImp.create(carrito);
 
             response.put("status", "success");
@@ -73,11 +70,11 @@ public class CarritoController {
     }
 
     // READ BY ID
-    @GetMapping("/list/{id}")
-    public ResponseEntity<Map<String, Object>> findById(@PathVariable Long id) {
+    @GetMapping("/list/{PkCod_Carrito}")
+    public ResponseEntity<Map<String, Object>> findById(@PathVariable Long PkCod_Carrito) {
         Map<String, Object> response = new HashMap<>();
         try {
-            Carrito carrito = this.carritoImp.findById(id);
+            Carrito carrito = this.carritoImp.findById(PkCod_Carrito);
             if (carrito != null) {
                 response.put("status", "success");
                 response.put("data", carrito);
@@ -94,19 +91,17 @@ public class CarritoController {
     }
 
     // UPDATE
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Map<String, Object>> update(@PathVariable Long id, @RequestBody Map<String, Object> request) {
+    @PutMapping("/update/{PkCod_Carrito}")
+    public ResponseEntity<Map<String, Object>> update(@PathVariable Long PkCod_Carrito, @RequestBody Map<String, Object> request) {
         Map<String, Object> response = new HashMap<>();
         try {
-            Carrito carrito = this.carritoImp.findById(id);
+            Carrito carrito = this.carritoImp.findById(PkCod_Carrito);
 
             if (carrito != null) {
+
                 // Actualizar los campos del carrito
                 Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("fk_Usuario").toString()));
                 carrito.setUsuario(usuario);
-
-                Obra obra = obraImp.findById((int) Long.parseLong(request.get("fk_Obra").toString()));
-                carrito.getObras().add(obra); // Asumiendo que es una lista de obras
 
                 this.carritoImp.update(carrito);
 
@@ -125,11 +120,11 @@ public class CarritoController {
     }
 
     // DELETE
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Map<String, Object>> delete(@PathVariable Long id) {
+    @DeleteMapping("/delete/{PkCod_Carrito}")
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable Long PkCod_Carrito) {
         Map<String, Object> response = new HashMap<>();
         try {
-            Carrito carrito = this.carritoImp.findById(id);
+            Carrito carrito = this.carritoImp.findById(PkCod_Carrito);
             if (carrito != null) {
                 carritoImp.delete(carrito);
                 response.put("status", "success");

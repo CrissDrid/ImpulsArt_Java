@@ -21,8 +21,8 @@ public class CarritoImp implements CarritoService {
     }
 
     @Override
-    public Carrito findById(Long id) throws Exception {
-        return carritoRepository.findById(id)
+    public Carrito findById(Long PkCod_Carrito) throws Exception {
+        return carritoRepository.findById(PkCod_Carrito)
                 .orElseThrow(() -> new EntityNotFoundException("Carrito no encontrado"));
     }
 
@@ -33,9 +33,6 @@ public class CarritoImp implements CarritoService {
 
     @Override
     public void update(Carrito carrito) throws Exception {
-        if (!carritoRepository.existsById(carrito.getId())) {
-            throw new EntityNotFoundException("Carrito no encontrado");
-        }
         carritoRepository.save(carrito);
     }
 

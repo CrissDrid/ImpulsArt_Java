@@ -27,7 +27,6 @@ public class Direccion {
     @Column(name = "CodigoPostal", length = 10, nullable = false)
     private String codigoPostal;
 
-
     @ManyToOne
     @JoinColumn(name = "Fk_Identificacion", nullable = false)
     @JsonIgnore

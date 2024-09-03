@@ -56,13 +56,14 @@ public class Obra {
     @JoinColumn(name = "FkCod_Categoria",nullable = false)
     private Categoria categoria;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Fk_carrito")
-    private Carrito carrito;
-
     @ManyToMany(mappedBy = "obras")
     @JsonIgnore
     private List<Usuario> usuarios;
+
+    //FOREING KEY
+    @ManyToMany(mappedBy = "obra")
+    @JsonIgnore
+    private List<Carrito> carrito;
 
     @OneToMany(mappedBy = "obra")
     @JsonIgnore
