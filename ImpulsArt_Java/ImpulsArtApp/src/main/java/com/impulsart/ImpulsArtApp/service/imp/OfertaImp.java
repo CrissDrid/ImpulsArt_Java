@@ -19,19 +19,12 @@ public class OfertaImp implements OfertaService {
     @Override
     public List<Oferta> findOfertasBySubasta(Long pkCodSubasta) {
         List<Oferta> ofertas = this.ofertaRepository.findOfertasBySubasta(pkCodSubasta);
-        if (ofertas.isEmpty()) {
-            throw new EntityNotFoundException("Oferta no encontrada");
-        }
-        return ofertas;
+        return ofertas;  // Devuelve la lista vacía en lugar de lanzar una excepción
     }
 
     @Override
     public Oferta findOfertaMasAlta(Long pkCodSubasta) {
-        Oferta oferta = this.ofertaRepository.findOfertaMasAlta(pkCodSubasta);
-        if (oferta == null) {
-            throw new EntityNotFoundException("La oferta más alta no fue encontrada");
-        }
-        return oferta;
+        return this.ofertaRepository.findOfertaMasAlta(pkCodSubasta);  // Devuelve null si no se encuentra
     }
 
     @Override

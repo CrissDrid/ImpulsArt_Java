@@ -1,23 +1,92 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
-import com.impulsart.ImpulsArtApp.entities.Obra;
+import com.impulsart.ImpulsArtApp.entities.Oferta;
 import com.impulsart.ImpulsArtApp.entities.Subasta;
+import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.repositories.SubastaRepository;
 import com.impulsart.ImpulsArtApp.service.SubastaService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
+@EnableScheduling
 @Service
-
 public class SubastaImp implements SubastaService {
 
     @Autowired
     private SubastaRepository subastaRepository;
 
+    @Autowired
+    private OfertaImp ofertaImp;
+
+    @Autowired
+    private UsuarioImp usuarioImp;
+
+    @Autowired
+    private ObraImp obraImp;
+
+    @Autowired
+    private EmailImp emailImp;
+
+    @Transactional
+    @Scheduled(fixedRate = 3600000) // Cada hora
+    @Override
+    public String finalizarSubastas() {
+        LocalDateTime ahora = LocalDateTime.now();
+
+        // Obtener solo las subastas activas que deben ser procesadas
+        List<Subasta> subastas = subastaRepository.findSubastasActivasParaFinalizar(ahora);
+
+        for (Subasta subasta : subastas) {
+            // Verificar si el estado ya está en "Finalizado"
+            if (!"Finalizado".equals(subasta.getEstadoSubasta())) {
+                // Cambiar el estado de la subasta a "Finalizado"
+                subasta.setEstadoSubasta("Finalizado");
+                subastaRepository.save(subasta);
+
+                List<Oferta> ofertas = ofertaImp.findOfertasBySubasta(subasta.getPkCodSubasta());
+
+                if (ofertas.isEmpty()) {
+                    // Caso 1: No hay ofertas
+                    Usuario creador = subastaRepository.findUsuarioBySubastaId(subasta.getPkCodSubasta());
+                    emailImp.enviarCorreo(creador.getEmail(), "Finalización de Subasta", creador.getNombre(),
+                            "La subasta para la obra '" + subasta.getObras().getNombreProducto() + "' ha finalizado sin ofertas.");
+                } else {
+                    // Caso 2: Hay ofertas
+                    Oferta mejorOferta = ofertaImp.findOfertaMasAlta(subasta.getPkCodSubasta());
+                    Usuario creador = subastaRepository.findUsuarioBySubastaId(subasta.getPkCodSubasta());
+                    Usuario ganador = mejorOferta.getUsuarios();
+
+                    // Informar al creador de la subasta
+                    emailImp.enviarCorreo(creador.getEmail(), "Finalización de Subasta",
+                            creador.getNombre(), "La subasta para la obra '" + subasta.getObras().getNombreProducto() + "' ha finalizado. Ganador: " + ganador.getNombre() +
+                                    ". Número de ofertas: " + ofertas.size() + ".");
+
+                    // Informar al ganador
+                    emailImp.enviarCorreo(ganador.getEmail(), "Ganador de Subasta",
+                            ganador.getNombre(), "Felicidades, has ganado la subasta para la obra '" + subasta.getObras().getNombreProducto() + "' con una puja de: " + mejorOferta.getMonto() + ".");
+
+                    // Informar a los demás participantes
+                    for (Oferta oferta : ofertas) {
+                        // Enviar correos solo a los participantes que no sean el ganador
+                        if (!oferta.equals(mejorOferta)) {
+                            emailImp.enviarCorreo(oferta.getUsuarios().getEmail(), "Resultado de Subasta",
+                                    oferta.getUsuarios().getNombre(), "Lamentablemente, tu oferta para la obra '" + subasta.getObras().getNombreProducto() + "' no fue la ganadora.");
+                        }
+                    }
+                }
+            }
+        }
+
+        return "Subastas finalizadas y correos enviados";
+    }
     @Override
     public List<Subasta> findHistorialObrasSubasta(Integer identificacion) {
         List<Subasta> subastas = this.subastaRepository.findHistorialObrasSubasta(identificacion);
@@ -34,6 +103,21 @@ public class SubastaImp implements SubastaService {
             throw new EntityNotFoundException("Subasta no encontrada");
         }
         return subastas;
+    }
+
+    @Override
+    public Usuario findUsuarioBySubastaId(Long pkCodSubasta) {
+        Usuario usuario = subastaRepository.findUsuarioBySubastaId(pkCodSubasta);
+        if (usuario == null) {
+            throw new UsernameNotFoundException("Usuario no encontrado");
+        }
+        return usuario;
+    }
+
+    @Override
+    public List<Subasta> findSubastasActivasParaFinalizar(LocalDateTime ahora) {
+        List<Subasta> subastas = this.subastaRepository.findSubastasActivasParaFinalizar(ahora);
+        return subastas;  // Devuelve la lista vacía en lugar de lanzar una excepción
     }
 
     @Override
