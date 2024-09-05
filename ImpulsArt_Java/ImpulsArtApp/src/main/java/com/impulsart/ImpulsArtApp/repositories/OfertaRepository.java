@@ -15,7 +15,12 @@ public interface OfertaRepository extends JpaRepository<Oferta, Long> {
     @Query("SELECT o FROM Oferta o WHERE o.monto = (SELECT MAX(o2.monto) FROM Oferta o2 WHERE o2.Subastas.pkCodSubasta = :pkCodSubasta) AND o.Subastas.pkCodSubasta = :pkCodSubasta")
     Oferta findOfertaMasAlta(@Param("pkCodSubasta") Long pkCodSubasta);
 
-    @Query(value = "SELECT o FROM Oferta o INNER JOIN o.Subastas s WHERE s.pkCodSubasta = :pkCodSubasta")
+    @Query("SELECT o FROM Oferta o INNER JOIN o.Subastas s WHERE s.pkCodSubasta = :pkCodSubasta ORDER BY o.monto DESC")
     List<Oferta> findOfertasBySubasta(@Param("pkCodSubasta") Long pkCodSubasta);
+
+    // Nuevo método para encontrar oferta por subasta y usuario
+    @Query("SELECT o FROM Oferta o WHERE o.Subastas.pkCodSubasta = :subastaId AND o.Usuarios.identificacion = :usuarioId")
+    Oferta findBySubastaIdAndUsuarioId(@Param("subastaId") Long subastaId, @Param("usuarioId") int usuarioId);
+    // Nuevo método para encontrar oferta por subasta y usuario
 
 }

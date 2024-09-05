@@ -9,6 +9,7 @@ public interface OfertaService {
 
     List<Oferta> findOfertasBySubasta(@Param("pkCodSubasta") Long pkCodSubasta);
     Oferta findOfertaMasAlta(@Param("pkCodSubasta") Long pkCodSubasta);
+    Oferta findBySubastaIdAndUsuarioId(Long subastaId, int usuarioId);
     public List<Oferta> findAll() throws Exception;
     Oferta findById(Long PkCod_oferta);
     public void create(Oferta oferta);

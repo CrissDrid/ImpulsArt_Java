@@ -32,40 +32,85 @@ public class OfertaController {
     @Autowired
     UsuarioImp usuarioImp;
 
+    @PostMapping("/actualizarOferta")
+    public ResponseEntity<String> findBySubastaIdAndUsuarioId(
+            @RequestParam Long subastaId,
+            @RequestParam int usuarioId,
+            @RequestBody Oferta nuevaOferta) {
+
+        Oferta ofertaExistente = ofertaImp.findBySubastaIdAndUsuarioId(subastaId, usuarioId);
+
+        if (ofertaExistente != null) {
+            // Actualizar oferta existente
+            ofertaExistente.setMonto(nuevaOferta.getMonto());
+            ofertaExistente.setFechaOferta(nuevaOferta.getFechaOferta());
+            ofertaImp.create(ofertaExistente);
+            return ResponseEntity.ok("Oferta actualizada");
+        } else {
+            // Crear nueva oferta
+            Subasta subasta = subastaImp.findById(subastaId);
+            Usuario usuario = usuarioImp.findById(usuarioId);
+
+            nuevaOferta.setSubastas(subasta);
+            nuevaOferta.setUsuarios(usuario);
+            ofertaImp.create(nuevaOferta);
+            return ResponseEntity.ok("Nueva oferta creada");
+        }
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //CREATE
 
     @PostMapping("create")
-    public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String,Object> request){
+    public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Object> request) {
 
-        Map<String,Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
 
         try {
+            System.out.println("@@@@" + request);
+            int monto = Integer.parseInt(request.get("monto").toString());
+            LocalDateTime fechaOferta = LocalDateTime.parse(request.get("fechaOferta").toString());
+            int usuarioId = Integer.parseInt(request.get("fk_Identificacion").toString());
+            long subastaId = Long.parseLong(request.get("fk_subasta").toString());
 
-            System.out.println("@@@@"+request);
-            Oferta oferta = new Oferta();
-            oferta.setMonto(Integer.parseInt(request.get("monto").toString()));
-            oferta.setFechaOferta(LocalDateTime.parse(request.get("fechaOferta").toString()));
+            // Buscar usuario y subasta
+            Usuario usuario = usuarioImp.findById(usuarioId);
+            Subasta subasta = subastaImp.findById(subastaId);
 
-            Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("fk_Identificacion").toString()));
-            oferta.setUsuarios(usuario);
+            if (usuario == null || subasta == null) {
+                response.put("status", HttpStatus.BAD_REQUEST);
+                response.put("data", "Usuario o subasta no encontrados");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
 
-            Subasta subasta = subastaImp.findById(Long.parseLong(request.get("fk_subasta").toString()));
-            oferta.setSubastas(subasta);
+            // Verificar si la oferta ya existe
+            Oferta existingOferta = ofertaImp.findBySubastaIdAndUsuarioId(subastaId, usuarioId);
 
-            this.ofertaImp.create(oferta);
-
-            response.put("status","success");
-            response.put("data","Registro Exitoso");
-
-        } catch (Exception e){
-            response.put("status",HttpStatus.BAD_GATEWAY);
-            response.put("data",e.getMessage());
+            if (existingOferta != null) {
+                // Actualizar oferta existente
+                existingOferta.setMonto(monto);
+                existingOferta.setFechaOferta(fechaOferta);
+                ofertaImp.update(existingOferta); // Asegúrate de tener un método update en ofertaImp
+                response.put("status", "success");
+                response.put("data", "Oferta actualizada exitosamente");
+            } else {
+                // Crear nueva oferta
+                Oferta oferta = new Oferta();
+                oferta.setMonto(monto);
+                oferta.setFechaOferta(fechaOferta);
+                oferta.setUsuarios(usuario);
+                oferta.setSubastas(subasta);
+                ofertaImp.create(oferta);
+                response.put("status", "success");
+                response.put("data", "Oferta registrada exitosamente");
+            }
+        } catch (Exception e) {
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
-
     }
 
     //CREATE

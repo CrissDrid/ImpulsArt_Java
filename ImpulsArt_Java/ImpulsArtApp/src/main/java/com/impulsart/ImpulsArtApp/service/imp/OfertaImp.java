@@ -2,6 +2,7 @@ package com.impulsart.ImpulsArtApp.service.imp;
 
 import com.impulsart.ImpulsArtApp.entities.Oferta;
 import com.impulsart.ImpulsArtApp.entities.Subasta;
+import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.repositories.OfertaRepository;
 import com.impulsart.ImpulsArtApp.service.OfertaService;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,6 +17,9 @@ public class OfertaImp implements OfertaService {
     @Autowired
     private OfertaRepository ofertaRepository;
 
+    @Autowired
+    private UsuarioImp usuarioImp;
+
     @Override
     public List<Oferta> findOfertasBySubasta(Long pkCodSubasta) {
         List<Oferta> ofertas = this.ofertaRepository.findOfertasBySubasta(pkCodSubasta);
@@ -25,6 +29,14 @@ public class OfertaImp implements OfertaService {
     @Override
     public Oferta findOfertaMasAlta(Long pkCodSubasta) {
         return this.ofertaRepository.findOfertaMasAlta(pkCodSubasta);  // Devuelve null si no se encuentra
+    }
+
+    @Override
+    public Oferta findBySubastaIdAndUsuarioId(Long subastaId, int usuarioId) {
+
+        // Buscar oferta existente
+        return ofertaRepository.findBySubastaIdAndUsuarioId(subastaId, usuarioId);
+
     }
 
     @Override

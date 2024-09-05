@@ -161,6 +161,37 @@ public class SubastaController {
     //FIND HISTORIAL OBRAS SUBASTAS
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    @PutMapping("/updatePrice/{pkCodSubasta}")
+    public ResponseEntity<Map<String, Object>> updatePrice(
+            @PathVariable Long pkCodSubasta,
+            @RequestParam("precioInicial") String precioInicial) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            // Buscar la subasta existente
+            Subasta subasta = subastaImp.findById(pkCodSubasta);
+            if (subasta == null) {
+                throw new RuntimeException("Subasta no encontrada");
+            }
+
+            // Actualizar solo el precio de la subasta
+            subasta.setPrecioInicial(precioInicial);
+
+            // Guardar la subasta actualizada
+            subastaImp.update(subasta);
+
+            response.put("status", "success");
+            response.put("data", "Precio actualizado con éxito");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //ENCONTRAR CREADOR DE LA SUBASTA
 

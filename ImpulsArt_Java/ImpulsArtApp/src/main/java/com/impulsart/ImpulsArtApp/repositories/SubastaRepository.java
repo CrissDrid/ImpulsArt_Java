@@ -1,6 +1,7 @@
 package com.impulsart.ImpulsArtApp.repositories;
 
 import com.impulsart.ImpulsArtApp.entities.Obra;
+import com.impulsart.ImpulsArtApp.entities.Oferta;
 import com.impulsart.ImpulsArtApp.entities.Subasta;
 import com.impulsart.ImpulsArtApp.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
