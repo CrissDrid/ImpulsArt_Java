@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/ImpulsArt_Java/ImpulsArtApp/ImpulsArtApp.iml" filepath="$PROJECT_DIR$/ImpulsArt_Java/ImpulsArtApp/ImpulsArtApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/ImpulsArt_Java.iml" filepath="$PROJECT_DIR$/.idea/ImpulsArt_Java.iml" />
     </modules>
   </component>
