@@ -42,6 +42,10 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     @JsonIgnore
+    private List<Pqrs> pqrs;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Respuesta> respuesta;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
@@ -52,7 +56,7 @@ public class Usuario {
     @JoinColumn(name = "Fk_Rol", nullable = false)
     private Rol rol;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Direccion> direcciones;
 
     @ManyToMany
@@ -100,12 +104,13 @@ public class Usuario {
     )
     private List<Venta> ventas;
 
+    // Relación ManyToMany con PQRs
     @ManyToMany
     @JsonIgnore
     @JoinTable(
-            name = "Usuarios_Pqrs",
+            name = "Asesor_Pqrs",
             joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
-            inverseJoinColumns = @JoinColumn(name = "fkCod_Pqrs", referencedColumnName = "pkCod_Pqrs")
+            inverseJoinColumns = @JoinColumn(name = "fkCod_Pqrs_asignado", referencedColumnName = "pkCod_Pqrs")
     )
-    private List<Pqrs> pqrs;
+    private List<Pqrs> pqrs_asignados;
 }

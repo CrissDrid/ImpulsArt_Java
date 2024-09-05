@@ -30,6 +30,15 @@ public class PqrsImp implements PqrsService {
     }
 
     @Override
+    public List<Pqrs> findPqrsAsignadoAsesores(Integer identificacion) {
+        List<Pqrs> pqrs = this.pqrsRepository.findPqrsAsignadoAsesores(identificacion);
+        if (pqrs.isEmpty()) {
+            throw new EntityNotFoundException("Pqrs asignado a asesores no encontradas");
+        }
+        return pqrs;
+    }
+
+    @Override
     public Pqrs findById(Long pkCod_Pqrs) {
         return this.pqrsRepository.findById(pkCod_Pqrs).orElse(null);
     }

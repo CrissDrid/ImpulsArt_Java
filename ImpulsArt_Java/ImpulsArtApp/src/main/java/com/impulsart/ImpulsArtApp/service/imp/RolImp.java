@@ -1,8 +1,10 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
+import com.impulsart.ImpulsArtApp.entities.Pqrs;
 import com.impulsart.ImpulsArtApp.entities.Rol;
 import com.impulsart.ImpulsArtApp.repositories.RolRepository;
 import com.impulsart.ImpulsArtApp.service.RolService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,11 @@ public class RolImp implements RolService {
 
     @Override
     public List<Rol> findAll() throws Exception {
-        return this.rolRepository.findAll();
+        List<Rol> roles = this.rolRepository.findAll();
+        if (roles.isEmpty()) {
+            throw new EntityNotFoundException("Pqrs asignado a asesores no encontradas");
+        }
+        return roles;
     }
 
     @Override

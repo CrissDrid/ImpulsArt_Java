@@ -7,6 +7,7 @@ import com.impulsart.ImpulsArtApp.service.imp.SubastaImp;
 import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -158,6 +159,33 @@ public class SubastaController {
     }
 
     //FIND HISTORIAL OBRAS SUBASTAS
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //ENCONTRAR CREADOR DE LA SUBASTA
+
+
+    @GetMapping("/creadorSubasta/{pkCodSubasta}")
+    public ResponseEntity<Map<String, Object>> findUsuarioBySubastaId(@PathVariable Long pkCodSubasta) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            Usuario usuario = this.subastaImp.findUsuarioBySubastaId(pkCodSubasta);
+            response.put("status", "success");
+            response.put("data", usuario);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //ENCONTRAR CREADOR DE LA SUBASTA
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

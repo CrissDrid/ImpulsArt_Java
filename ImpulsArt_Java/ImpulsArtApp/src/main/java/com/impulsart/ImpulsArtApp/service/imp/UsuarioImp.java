@@ -26,6 +26,18 @@ public class UsuarioImp implements UsuarioService {
     }
 
     @Override
+    public Usuario findRandomAsesor() {
+        Usuario usuario = usuarioRepositorio.findRandomAsesor();
+
+        // Verificar si no hay asesores disponibles
+        if (usuario == null) {
+            throw new RuntimeException("No hay asesores disponibles para asignar.");
+        }
+
+        return usuario;
+    }
+
+    @Override
     public Usuario findByEmail(String email) {
         Usuario usuario = usuarioRepositorio.findByEmail(email);
         if (usuario == null) {

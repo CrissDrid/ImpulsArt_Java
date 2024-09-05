@@ -5,12 +5,17 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class EmailImp implements EmailService {
@@ -27,36 +32,14 @@ public class EmailImp implements EmailService {
             helper.setTo(destinatario);
             helper.setSubject(asunto);
 
-            // Crear el contenido HTML del correo
-            String html = "<!DOCTYPE html>" +
-                    "<html>" +
-                    "<head>" +
-                    "<style>" +
-                    ".email-container { font-family: Arial, sans-serif; color: #333; }" +
-                    ".email-header { background-color: #f4f4f4; padding: 10px; text-align: center; }" +
-                    ".email-body { padding: 20px; }" +
-                    ".email-footer { background-color: #f4f4f4; padding: 10px; text-align: center; }" +
-                    "</style>" +
-                    "</head>" +
-                    "<body>" +
-                    "<div class=\"email-container\">" +
-                    "<div class=\"email-header\">" +
-                    "<h1>Bienvenido a ImpulsArt</h1>" +
-                    "</div>" +
-                    "<div class=\"email-body\">" +
-                    "<p>Estimado " + nombre + ",</p>" +
-                    "<p>" + mensaje + "</p>" +
-                    "<img src=\"cid:imagen\" alt=\"Imagen de prueba\" />" +
-                    "</div>" +
-                    "<div class=\"email-footer\">" +
-                    "<p>&copy; 2024 ImpulsArt</p>" +
-                    "</div>" +
-                    "</div>" +
-                    "</body>" +
-                    "</html>";
+            // Leer el archivo de plantilla y reemplazar los marcadores de posición
+            String htmlTemplate = readTemplate("EmailPrueba.html");
+            String htmlContent = htmlTemplate
+                    .replace("[[nombre]]", nombre)
+                    .replace("[[mensaje]]", mensaje);
 
             // Configura el contenido HTML del correo
-            helper.setText(html, true); // true indica que el contenido es HTML
+            helper.setText(htmlContent, true); // true indica que el contenido es HTML
 
             // Adjuntar una imagen desde el directorio de recursos
             ClassPathResource imageFile = new ClassPathResource("imagen/logo_impulsart.jpg");
@@ -65,8 +48,51 @@ public class EmailImp implements EmailService {
             }
 
             mailSender.send(mimeMessage);
-        } catch (MessagingException e) {
+        } catch (MessagingException | IOException e) {
             throw new RuntimeException("Error al enviar correo", e);
+        }
+    }
+
+    @Override
+    public void enviarCorreoSubasta(String destinatario, String asunto, String nombre, String mensaje) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+            // Configura el destinatario y el asunto
+            helper.setTo(destinatario);
+            helper.setSubject(asunto);
+
+            // Leer el archivo de plantilla y reemplazar los marcadores de posición
+            String htmlTemplate = readTemplate("EmailSubasta.html");
+            String htmlContent = htmlTemplate
+                    .replace("[[nombre]]", nombre)
+                    .replace("[[mensaje]]", mensaje);
+
+            // Configura el contenido HTML del correo
+            helper.setText(htmlContent, true); // true indica que el contenido es HTML
+
+            // Adjuntar una imagen desde el directorio de recursos
+            ClassPathResource imageFile = new ClassPathResource("imagen/logo_impulsart.jpg");
+            if (imageFile.exists()) {
+                helper.addInline("imagen", imageFile);
+            }
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException | IOException e) {
+            throw new RuntimeException("Error al enviar correo", e);
+        }
+    }
+
+    private String readTemplate(String templatePath) throws IOException {
+        try {
+            Resource resource = new ClassPathResource("templates/" + templatePath);
+            if (!resource.exists()) {
+                throw new FileNotFoundException("No se encontró el archivo de plantilla en la ruta: " + resource.getFilename());
+            }
+            return StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new IOException("Error al leer la plantilla desde: " + templatePath, e);
         }
     }
 }

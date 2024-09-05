@@ -29,8 +29,14 @@ public class Pqrs {
     @Column(name = "FechaCierre", length = 200)
     private LocalDate fechaCierre;
 
-    @ManyToMany(mappedBy = "pqrs")
+    //Asesor asignado a un pqrs
+    @ManyToMany(mappedBy = "pqrs_asignados")
     private List<Usuario> usuarios;
+
+    //El usuario que crea la pqrs
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fkCod_identificacion",nullable = false)
+    private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fkCod_TipoPqrs",nullable = false)

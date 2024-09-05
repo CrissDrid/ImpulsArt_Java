@@ -76,7 +76,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/usuario/create").permitAll()
                                 .requestMatchers("/api/usuario/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
                                 .requestMatchers("/api/usuario/delete/**").hasAnyAuthority("")
-                                .requestMatchers("/api/usuario/all").hasAnyAuthority("ADMIN")
+                                .requestMatchers("/api/usuario/all").hasAnyAuthority("ADMIN", "ASESOR")
                                 //PERMISOS TABLA USUARIO
 
                                 //PERMISOS TABLA CATEGORIA
@@ -90,11 +90,11 @@ public class SecurityConfig {
                                 //PERMISOS TABLA OFERTA
 
                                 //PERMISOS TABLA SUBASTA
-                                .requestMatchers("/api/subasta/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
+                                .requestMatchers("/api/subasta/**").permitAll()
                                 //PERMISOS TABLA SUBASTA
 
                                 //PERMISOS TABLA OBRA
-                                .requestMatchers("/api/obra/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
+                                .requestMatchers("/api/obra/**").permitAll()
                                 //PERMISOS TABLA OBRA
 
                                 //PERMISOS TABLA DIRECCION
@@ -105,16 +105,20 @@ public class SecurityConfig {
                                 .requestMatchers("/api/venta/**").permitAll()
                                 //PERMISOS TABLA DIRECCION
 
+                                //PERMISOS TABLA REPORTE
+                                .requestMatchers("/api/reporte/**").permitAll()
+                                //PERMISOS TABLA REPORTE
+
                                 //PERMISOS TABLA PQRS
                                 .requestMatchers("/api/pqrs/**").permitAll()
                                 //PERMISOS TABLA PQRS
 
                                 //PERMISOS TABLA TIPOPQRS
-                                .requestMatchers("/api/tipoPQRS/**").permitAll()
+                                .requestMatchers("/api/tipoPQRS/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
                                 //PERMISOS TABLA TIPOPQRS
 
                                 //PERMISOS TABLA Respuesta
-                                .requestMatchers("/api/respuesta/**").permitAll()
+                                .requestMatchers("/api/respuesta/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
                                 //PERMISOS TABLA Respuesta
 
                                 //PERMISOS API EMAIL

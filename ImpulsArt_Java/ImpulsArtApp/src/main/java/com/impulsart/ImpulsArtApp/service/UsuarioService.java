@@ -7,6 +7,7 @@ import java.util.List;
 public interface UsuarioService {
     public List<Usuario> findAll() throws Exception;
     public Usuario findById(Integer identificacion);
+    public Usuario findRandomAsesor();
 
     //public List<Usuario> findByEmail(String email);
     public Usuario findByEmail(String email);

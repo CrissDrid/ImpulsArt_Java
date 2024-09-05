@@ -9,10 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,40 +35,48 @@ public class PqrsController {
             @RequestParam("fechaPQRS") String fechaPQRS,
             @RequestParam(value = "fechaCierre", required = false) String fechaCierre,
             @RequestParam("fkCod_TipoReclamo") Long fkCod_TipoPqrs,
-            @RequestParam("usuarioIds") List<Integer> usuarioIds) {
+            @RequestParam("usuarioId") Integer usuarioId) {
 
         Map<String, Object> response = new HashMap<>();
 
         try {
-            // Instanciar el objeto Reclamo y establecer los campos
+            // Instanciar el objeto PQRS y establecer los campos
             Pqrs pqrs = new Pqrs();
             pqrs.setDescripcion(descripcion);
             pqrs.setEstado(estado);
             pqrs.setFechaPQRS(LocalDate.parse(fechaPQRS));
             pqrs.setFechaCierre(fechaCierre != null ? LocalDate.parse(fechaCierre) : null);
 
-            // Obtener y establecer el tipo de reclamo
+            // Obtener y establecer el tipo de PQRS
             TipoPqrs tipoPQRS = tipoPqrsImp.findById(fkCod_TipoPqrs);
             if (tipoPQRS == null) {
                 throw new RuntimeException("Tipo de pqrs no encontrado");
             }
             pqrs.setTipoPQRS(tipoPQRS);
 
-            // Obtener los usuarios por sus IDs
-            List<Usuario> usuarios = usuarioIds.stream()
-                    .map(id -> usuarioImp.findById(id))
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
+            // Obtener el usuario creador
+            Usuario usuarioCreador = usuarioImp.findById(usuarioId);
+            if (usuarioCreador == null) {
+                throw new RuntimeException("Usuario creador no encontrado");
+            }
+            pqrs.setUsuario(usuarioCreador);
 
-            // Establecer la relación de usuarios en el reclamo
-            pqrs.setUsuarios(usuarios);
+            // Obtener los usuarios por sus IDs (si se proporcionaron) o asignar un asesor aleatorio
+            List<Usuario> usuarios = new ArrayList<>();
+            Usuario asesor = usuarioImp.findRandomAsesor();
+            if (asesor != null) {
+                usuarios.add(asesor); // Añadir el asesor a la lista de usuarios relacionados
+            }
 
             // Sincronizar la relación en el lado de los usuarios
             for (Usuario usuario : usuarios) {
-                usuario.getPqrs().add(pqrs);
+                usuario.getPqrs_asignados().add(pqrs);
             }
 
-            // Guardar el reclamo en la base de datos
+            // Establecer la relación de usuarios en el PQRS
+            pqrs.setUsuarios(usuarios);
+
+            // Guardar el PQRS en la base de datos
             this.pqrsImp.create(pqrs);
 
             response.put("status", "success");
@@ -84,11 +89,10 @@ public class PqrsController {
         }
     }
 
-
     //CONTROLLER READ
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //FIND HISTORIAL RECLAMOS
+    //FIND HISTORIAL PQRS
 
     @GetMapping("/historialPqrs/{identificacion}")
     public ResponseEntity<Map<String, Object>> findHistorialPqrs(@PathVariable Integer identificacion) {
@@ -110,7 +114,33 @@ public class PqrsController {
         }
     }
 
-    //FIND HISTORIAL RECLAMOS
+    //FIND HISTORIAL PQRS
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //FIND PQRS ASIGNADOS A ASESORES
+
+    @GetMapping("/PqrsAsignados/{identificacion}")
+    public ResponseEntity<Map<String, Object>> findPqrsAsignadoAsesores(@PathVariable Integer identificacion) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Pqrs> pqrs = this.pqrsImp.findPqrsAsignadoAsesores(identificacion);
+            response.put("status", "success");
+            response.put("data", pqrs);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //FIND PQRS ASIGNADOS A ASESORES
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //READ ALL

@@ -56,7 +56,7 @@ public class SubastaImp implements SubastaService {
                 if (ofertas.isEmpty()) {
                     // Caso 1: No hay ofertas
                     Usuario creador = subastaRepository.findUsuarioBySubastaId(subasta.getPkCodSubasta());
-                    emailImp.enviarCorreo(creador.getEmail(), "Finalización de Subasta", creador.getNombre(),
+                    emailImp.enviarCorreoSubasta(creador.getEmail(), "Finalización de Subasta", creador.getNombre(),
                             "La subasta para la obra '" + subasta.getObras().getNombreProducto() + "' ha finalizado sin ofertas.");
                 } else {
                     // Caso 2: Hay ofertas
@@ -65,19 +65,19 @@ public class SubastaImp implements SubastaService {
                     Usuario ganador = mejorOferta.getUsuarios();
 
                     // Informar al creador de la subasta
-                    emailImp.enviarCorreo(creador.getEmail(), "Finalización de Subasta",
+                    emailImp.enviarCorreoSubasta(creador.getEmail(), "Finalización de Subasta",
                             creador.getNombre(), "La subasta para la obra '" + subasta.getObras().getNombreProducto() + "' ha finalizado. Ganador: " + ganador.getNombre() +
                                     ". Número de ofertas: " + ofertas.size() + ".");
 
                     // Informar al ganador
-                    emailImp.enviarCorreo(ganador.getEmail(), "Ganador de Subasta",
+                    emailImp.enviarCorreoSubasta(ganador.getEmail(), "Ganador de Subasta",
                             ganador.getNombre(), "Felicidades, has ganado la subasta para la obra '" + subasta.getObras().getNombreProducto() + "' con una puja de: " + mejorOferta.getMonto() + ".");
 
                     // Informar a los demás participantes
                     for (Oferta oferta : ofertas) {
                         // Enviar correos solo a los participantes que no sean el ganador
                         if (!oferta.equals(mejorOferta)) {
-                            emailImp.enviarCorreo(oferta.getUsuarios().getEmail(), "Resultado de Subasta",
+                            emailImp.enviarCorreoSubasta(oferta.getUsuarios().getEmail(), "Resultado de Subasta",
                                     oferta.getUsuarios().getNombre(), "Lamentablemente, tu oferta para la obra '" + subasta.getObras().getNombreProducto() + "' no fue la ganadora.");
                         }
                     }
