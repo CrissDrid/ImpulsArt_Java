@@ -174,8 +174,30 @@ public class CarritoController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/remove-obra")
+    public ResponseEntity<Map<String, Object>> removeObraFromCarrito(
+            @RequestParam Integer identificacion, @RequestParam Integer obraId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // Buscar el carrito del usuario por su identificación
+            Carrito carrito = carritoImp.findByUsuarioId(identificacion);
+            if (carrito == null) {
+                response.put("status", "error");
+                response.put("message", "Carrito no encontrado para el usuario.");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+
+            // Eliminar la obra del carrito
+            carritoImp.removeObraFromCarrito(carrito.getPkCod_Carrito(), obraId);
+
+            response.put("status", "success");
+            response.put("message", "Obra removida del carrito exitosamente");
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
-
-
-
-
