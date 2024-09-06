@@ -20,6 +20,8 @@ public class PqrsController {
     @Autowired
     PqrsImp pqrsImp;
     @Autowired
+    EmailImp emailImp;
+    @Autowired
     TipoPqrsImp tipoPqrsImp;
     @Autowired
     UsuarioImp usuarioImp;
@@ -28,13 +30,11 @@ public class PqrsController {
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> create(
-            @RequestParam("descripcion") String descripcion,
             @RequestParam("motivo") String motivo,
-            @RequestParam("respuesta") String respuesta,
             @RequestParam("estado") String estado,
             @RequestParam("fechaPQRS") String fechaPQRS,
             @RequestParam(value = "fechaCierre", required = false) String fechaCierre,
-            @RequestParam("fkCod_TipoReclamo") Long fkCod_TipoPqrs,
+            @RequestParam("fkCod_TipoPqrs") Long fkCod_TipoPqrs,
             @RequestParam("usuarioId") Integer usuarioId) {
 
         Map<String, Object> response = new HashMap<>();
@@ -42,7 +42,7 @@ public class PqrsController {
         try {
             // Instanciar el objeto PQRS y establecer los campos
             Pqrs pqrs = new Pqrs();
-            pqrs.setDescripcion(descripcion);
+            pqrs.setMotivo(motivo);
             pqrs.setEstado(estado);
             pqrs.setFechaPQRS(LocalDate.parse(fechaPQRS));
             pqrs.setFechaCierre(fechaCierre != null ? LocalDate.parse(fechaCierre) : null);
@@ -66,6 +66,16 @@ public class PqrsController {
             Usuario asesor = usuarioImp.findRandomAsesor();
             if (asesor != null) {
                 usuarios.add(asesor); // Añadir el asesor a la lista de usuarios relacionados
+
+                // Enviar un correo al asesor
+                String subject = "Nueva PQRS Asignada";
+                String message = "Se ha asignado un pqrs a usted. Detalles:\n\n" +
+                        "Descripción: " + motivo + "\n" +
+                        "Motivo: " + motivo + "\n" +
+                        "Estado: " + estado + "\n" +
+                        "Fecha PQRS: " + fechaPQRS + "\n" +
+                        "Fecha Cierre: " + fechaCierre + "\n";
+                emailImp.enviarCorreoPqrs(asesor.getEmail(), subject, asesor.getNombre(), message);
             }
 
             // Sincronizar la relación en el lado de los usuarios
@@ -186,7 +196,7 @@ public class PqrsController {
             Pqrs pqrs = this.pqrsImp.findById(pkCod_Pqrs);
 
             //CAMPOS DE LA TABLA RECLAMO
-            pqrs.setDescripcion(request.get("descripcion").toString());
+            pqrs.setMotivo(request.get("motivo").toString());
             pqrs.setEstado(request.get("estado").toString());
             pqrs.setFechaPQRS(LocalDate.parse(request.get("fechaPQRS").toString()));
             pqrs.setFechaCierre(request.get("fechaCierre") != null ? LocalDate.parse(request.get("fechaCierre").toString()) : null);

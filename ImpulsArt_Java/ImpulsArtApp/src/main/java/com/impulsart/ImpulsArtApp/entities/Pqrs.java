@@ -20,8 +20,8 @@ public class Pqrs {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pkCod_Pqrs")
     private long pkCod_Pqrs;
-    @Column(name = "Descripcion", length = 200)
-    private String descripcion;
+    @Column(name = "Motivo", length = 200)
+    private String motivo;
     @Column(name = "Estado", length = 200)
     private String estado;
     @Column(name = "FechaPQRS", length = 200)
