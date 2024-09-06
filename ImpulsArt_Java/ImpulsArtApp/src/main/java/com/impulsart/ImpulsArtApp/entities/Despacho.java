@@ -28,7 +28,7 @@ public class Despacho {
     @Column(name = "Fecha_Venta",length = 100)
     private LocalDate Fecha_Venta;
 
-    //FOREING KEY
+    //FOREING KEY (asignacion de envios)
     @ManyToMany(mappedBy = "despacho")
     private List<Usuario> usuario;
 

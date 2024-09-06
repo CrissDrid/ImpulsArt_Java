@@ -12,7 +12,7 @@ public interface UsuarioService {
     //public List<Usuario> findByEmail(String email);
     public Usuario findByEmail(String email);
     Boolean existsByEmail(String email);
-    public void create(Usuario usuario);
+    public Usuario create(Usuario usuario);
     public void update(Usuario usuario);
     public void delete(Usuario usuario);
 }

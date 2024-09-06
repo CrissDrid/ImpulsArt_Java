@@ -37,14 +37,48 @@ public class CarritoController {
             // Instanciar el objeto Carrito
             Carrito carrito = new Carrito();
 
-            // Configurar los campos del Carrito
-            Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("fk_Usuario").toString()));
-            carrito.setUsuario(usuario);
-
             this.carritoImp.create(carrito);
 
             response.put("status", "success");
             response.put("data", "Carrito creado exitosamente");
+        } catch (Exception e) {
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/add-obra")
+    public ResponseEntity<Map<String, Object>> addObraToCarrito(
+            @RequestParam Long carritoId, @RequestParam Integer obraId) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            carritoImp.addObraToCarrito(carritoId, obraId);
+            response.put("status", "success");
+            response.put("message", "Obra añadida al carrito exitosamente");
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/usuarioPorCarrito/{identificacion}")
+    public ResponseEntity<Map<String, Object>> findByUsuarioId(@PathVariable int identificacion) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+
+            Carrito carrito = this.carritoImp.findByUsuarioId(identificacion);
+
+            if (carrito != null) {
+                response.put("status", "success");
+                response.put("data", carrito);
+            } else {
+                response.put("status", "not_found");
+                response.put("data", null);
+            }
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());

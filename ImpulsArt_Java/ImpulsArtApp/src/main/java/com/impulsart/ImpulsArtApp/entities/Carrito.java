@@ -25,7 +25,6 @@ public class Carrito {
     private Usuario usuario;
 
     @ManyToMany
-    @JsonIgnore
     @JoinTable(
             name = "Obras_Carrito",
             joinColumns = @JoinColumn(name = "FkCod_Carrito", referencedColumnName = "PkCod_Carrito"),

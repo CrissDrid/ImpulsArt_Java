@@ -52,8 +52,9 @@ public class UsuarioImp implements UsuarioService {
     }
 
     @Override
-    public void create(Usuario usuario) {
+    public Usuario create(Usuario usuario) {
         this.usuarioRepositorio.save(usuario);
+        return usuario;
     }
 
     @Override

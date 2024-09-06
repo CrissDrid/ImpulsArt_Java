@@ -89,6 +89,10 @@ public class SecurityConfig {
                                 .requestMatchers("/api/oferta/all").hasAnyAuthority("ADMIN")
                                 //PERMISOS TABLA OFERTA
 
+                                //PERMISOS TABLA CARRITO
+                                .requestMatchers("/api/carrito/**").permitAll()
+                                //PERMISOS TABLA CARRITO
+
                                 //PERMISOS TABLA SUBASTA
                                 .requestMatchers("/api/subasta/**").permitAll()
                                 //PERMISOS TABLA SUBASTA

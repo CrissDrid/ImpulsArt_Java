@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.controller;
 
+import com.impulsart.ImpulsArtApp.entities.Carrito;
 import com.impulsart.ImpulsArtApp.entities.Obra;
 import com.impulsart.ImpulsArtApp.entities.Rol;
 import com.impulsart.ImpulsArtApp.entities.Usuario;
@@ -44,48 +45,58 @@ public class UserController {
  @Autowired
  private JwtGenerador jwtGenerador;
 
+ @Autowired
+ private CarritoImp carritoImp;
+
 //CONTROLLER CREATE
-    @PostMapping("/create")
-    public ResponseEntity<Map<String,Object>> create(@RequestBody Map<String, Object> request){
-        Map<String, Object> response = new HashMap<>();
-        try{
-
-            // Verifica si el usuario ya existe por el correo electrónico
-            String email = request.get("email").toString();
-            if (usuarioImp.existsByEmail(email)) {
-                response.put("status", "error");
-                response.put("message", "El usuario con el correo " + email + " ya está registrado.");
-                return new ResponseEntity<>(response, HttpStatus.CONFLICT);
-            }
-
-            System.out.println("@@@@"+request);
-            //INSTANCIA DEL OBJETO USUARIOS
-            Usuario usuario = new Usuario();
-            //CAMPOS DE LA TABLA USUARIOS
-            usuario.setIdentificacion(Integer.parseInt(request.get("identificacion").toString()));
-            usuario.setNombre(request.get("nombre").toString());
-            usuario.setApellido(request.get("apellido").toString());
-            usuario.setFechaNacimiento(LocalDate.parse(request.get("fechaNacimiento").toString()));
-            usuario.setEmail(request.get("email").toString());
-            usuario.setNumCelular(request.get("numCelular").toString());
-            usuario.setContrasena(passwordEncoder.encode(request.get("contrasena").toString()));
-            usuario.setTipoUsuario(request.get("tipoUsuario").toString());
-            usuario.setUserName(request.get("userName").toString());
-
-            Rol rol = rolImp.findById(Long.parseLong(request.get("fk_Rol").toString()));
-            usuario.setRol(rol);
-
-            this.usuarioImp.create(usuario);
-
-            response.put("status","succses");
-            response.put("data","Registro Exitoso");
-        }catch (Exception e){
-            response.put("status",HttpStatus.BAD_GATEWAY);
-            response.put("data",e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+@PostMapping("/create")
+public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Object> request) {
+    Map<String, Object> response = new HashMap<>();
+    try {
+        // Verifica si el usuario ya existe por el correo electrónico
+        String email = request.get("email").toString();
+        if (usuarioImp.existsByEmail(email)) {
+            response.put("status", "error");
+            response.put("message", "El usuario con el correo " + email + " ya está registrado.");
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        // Instancia del objeto Usuario
+        Usuario usuario = new Usuario();
+        // Campos de la tabla Usuarios
+        usuario.setIdentificacion(Integer.parseInt(request.get("identificacion").toString()));
+        usuario.setNombre(request.get("nombre").toString());
+        usuario.setApellido(request.get("apellido").toString());
+        usuario.setFechaNacimiento(LocalDate.parse(request.get("fechaNacimiento").toString()));
+        usuario.setEmail(request.get("email").toString());
+        usuario.setNumCelular(request.get("numCelular").toString());
+        usuario.setContrasena(passwordEncoder.encode(request.get("contrasena").toString()));
+        usuario.setTipoUsuario(request.get("tipoUsuario").toString());
+        usuario.setUserName(request.get("userName").toString());
+
+        Rol rol = rolImp.findById(Long.parseLong(request.get("fk_Rol").toString()));
+        usuario.setRol(rol);
+
+        // Guarda el usuario
+        Usuario nuevoUsuario = this.usuarioImp.create(usuario);
+
+        // Instancia y configura el objeto Carrito
+        Carrito carrito = new Carrito();
+        carrito.setUsuario(nuevoUsuario);  // Asocia el carrito con el usuario
+
+        // Guarda el carrito
+        this.carritoImp.create(carrito);
+
+        response.put("status", "success");
+        response.put("data", "Registro Exitoso");
+    } catch (Exception e) {
+        response.put("status", "error");
+        response.put("message", "Error al crear el usuario: " + e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    return new ResponseEntity<>(response, HttpStatus.OK);
+}
+
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> request) {
