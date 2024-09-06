@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class ObraController {
 
     //Directorio para guardar imagenes
-    private static String imageDirectory = System.getProperty("user.dir") + "/ImpulsArt_Java/ImpulsArtApp/src/main/java/com/impulsart/ImpulsArtApp/imagen/";
+    private static String imageDirectory = System.getProperty("user.dir") + "/src/main/java/com/impulsart/ImpulsArtApp/imagen/";
 
 
     //INYECCION DE DEPENDECIAS
