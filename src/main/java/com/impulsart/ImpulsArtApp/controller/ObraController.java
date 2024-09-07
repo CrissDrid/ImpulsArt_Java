@@ -65,7 +65,7 @@ public ResponseEntity<Map<String, Object>> create(
             Files.copy(imagen.getInputStream(), imagePath);
 
             // Construir la URL completa de la imagen
-            imageUrl = "http://athletic-wholeness-production.up.railway.app/imagen/" + uniqueFileName;
+            imageUrl = "https://athletic-wholeness-production.up.railway.app/imagen/" + uniqueFileName;
         }
 
         // Instanciar el objeto Obra y establecer los campos

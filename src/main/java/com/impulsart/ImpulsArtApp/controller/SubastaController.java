@@ -73,7 +73,7 @@ public class SubastaController {
                 Files.copy(imagen.getInputStream(), imagePath);
 
                 // Construir la URL completa de la imagen
-                imageUrl = "http://athletic-wholeness-production.up.railway.app/imagen/" + uniqueFileName;
+                imageUrl = "https://athletic-wholeness-production.up.railway.app/imagen/" + uniqueFileName;
             }
 
             // Crear la obra
