@@ -73,7 +73,7 @@ public class SubastaController {
                 Files.copy(imagen.getInputStream(), imagePath);
 
                 // Construir la URL completa de la imagen
-                imageUrl = "http://localhost:8086/imagen/" + uniqueFileName;
+                imageUrl = "/imagen/" + uniqueFileName;
             }
 
             // Crear la obra
