@@ -10,11 +10,8 @@ public class StaticResourceConfig implements WebMvcConfigurer {
     // Define the directory for static images
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Usa la ruta completa al directorio de imágenes
-        String imageDirectory = System.getProperty("user.dir") + "/src/main/java/com/impulsart/ImpulsArtApp/imagen/";
-
         registry.addResourceHandler("/imagen/**")
-                .addResourceLocations("file:" + imageDirectory)
+                .addResourceLocations("file:/src/main/java/com/impulsart/ImpulsArtApp/imagen/")
                 .setCachePeriod(0); // Deshabilitar la caché para desarrollo
     }
 }
