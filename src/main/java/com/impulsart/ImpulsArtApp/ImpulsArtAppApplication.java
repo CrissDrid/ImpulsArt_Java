@@ -22,10 +22,9 @@ public class ImpulsArtAppApplication {
 				@Override
 				public void addCorsMappings(CorsRegistry registry) {
 					registry.addMapping("/**")
-							.allowedOrigins("*") // Permitir todos los orígenes
-							.allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
-							.allowedHeaders("*") // Permitir todos los encabezados
-							.allowCredentials(false); // Desactivar credenciales si permites todos los orígenes
+							.allowedOrigins("*")  // Permitir todos los orígenes
+							.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+							.allowedHeaders("*"); // Permitir todos los encabezados
 				}
 			};
 		}
