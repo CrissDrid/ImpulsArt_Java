@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,8 +66,11 @@ public ResponseEntity<Map<String, Object>> create(
             Path imagePath = Paths.get(imageDirectory, uniqueFileName);
             Files.copy(imagen.getInputStream(), imagePath);
 
+            // Codificar el nombre del archivo para la URL
+            String encodedFileName = URLEncoder.encode(uniqueFileName, StandardCharsets.UTF_8.toString());
+
             // Construir la URL completa de la imagen
-            imageUrl = "https://athletic-wholeness-production.up.railway.app/imagen/" + uniqueFileName;
+            imageUrl = "https://athletic-wholeness-production.up.railway.app/imagen/" + encodedFileName;
         }
 
         // Instanciar el objeto Obra y establecer los campos
