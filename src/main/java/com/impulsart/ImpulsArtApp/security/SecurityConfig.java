@@ -68,7 +68,7 @@ public class SecurityConfig {
                         authorizeRequests
 
                                 // PERMISOS PARA RECURSOS ESTÁTICOS
-                                .requestMatchers("https://athletic-wholeness-production.up.railway.app/imagen/**").permitAll()
+                                .requestMatchers("/imagen/**").permitAll()
                                 // PERMISOS PARA RECURSOS ESTÁTICOS
 
                                 // PERMISOS PARA RECURSOS ESTÁTICOS
