@@ -9,9 +9,10 @@ public class imgConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // Ajusta la ruta según la ubicación real en el entorno de producción
         registry.addResourceHandler("/imagenes/**")
-                .addResourceLocations("file:" + System.getProperty("user.dir") + "/src/main/resources/static/imagenes/")
-                .setCachePeriod(0); // Deshabilitar la caché para desarrollo
+                .addResourceLocations("file:/app/static/imagenes/")
+                .setCachePeriod(3600); // Puedes ajustar el período de caché según sea necesario
     }
 }
 
