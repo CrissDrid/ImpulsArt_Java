@@ -22,7 +22,10 @@ public class ImpulsArtAppApplication {
 				@Override
 				public void addCorsMappings(CorsRegistry registry) {
 					registry.addMapping("/**")
-							.allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
+							.allowedOrigins("*") // Permitir solicitudes desde React en localhost
+							.allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
+							.allowedHeaders("*") // Permitir todos los encabezados
+							.allowCredentials(true); // Permitir cookies o credenciales si es necesario
 				}
 			};
 		}
