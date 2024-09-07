@@ -82,12 +82,11 @@ public class SecurityConfig {
                                 //PERMISOS TABLA USUARIO
 
                                 //PERMISOS TABLA CATEGORIA
-                                .requestMatchers("/api/categoria/all").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
-                                .requestMatchers("/api/categoria/**").hasAnyAuthority("ADMIN")
+                                .requestMatchers("/api/categoria/**").permitAll()
                                 //PERMISOS TABLA CATEGORIA
 
                                 //PERMISOS TABLA OFERTA
-                                .requestMatchers("/api/oferta/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
+                                .requestMatchers("/api/oferta/**").permitAll()
                                 .requestMatchers("/api/oferta/all").hasAnyAuthority("ADMIN")
                                 //PERMISOS TABLA OFERTA
 
