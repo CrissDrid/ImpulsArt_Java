@@ -26,11 +26,10 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(path = "/api/subasta/",method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.HEAD})
 @CrossOrigin("*")
-
 public class SubastaController {
 
     //Directorio para guardar imagenes
-    private static String imageDirectory = System.getProperty("user.dir") + "/ImpulsArt_Java/ImpulsArtApp/src/main/java/com/impulsart/ImpulsArtApp/imagen/";
+    private static String imageDirectory = System.getProperty("user.dir") + "/src/main/java/com/impulsart/ImpulsArtApp/imagen/";
 
     @Autowired
     private SubastaImp subastaImp;
