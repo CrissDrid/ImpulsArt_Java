@@ -71,6 +71,10 @@ public class SecurityConfig {
                                 .requestMatchers("/imagen/**").permitAll()
                                 // PERMISOS PARA RECURSOS ESTÁTICOS
 
+                                // PERMISOS PARA RECURSOS ESTÁTICOS
+                                .requestMatchers("/api/auth/**").permitAll()
+                                // PERMISOS PARA RECURSOS ESTÁTICOS
+
                                 //PERMISOS TABLA USUARIO
                                 .requestMatchers("/api/usuario/login").permitAll()
                                 .requestMatchers("/api/usuario/create").permitAll()
