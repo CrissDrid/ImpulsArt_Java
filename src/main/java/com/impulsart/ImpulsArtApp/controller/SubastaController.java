@@ -78,6 +78,13 @@ public class SubastaController {
             obra.setCantidad(cantidad);
             obra.setDescripcion(descripcion);
 
+            if (imagen != null && !imagen.isEmpty()) {
+                String mimeType = imagen.getContentType();
+                String imagenBase64 = Base64.getEncoder().encodeToString(imagen.getBytes());
+                obra.setImagen(imagenBase64);
+                obra.setTipoImagen(mimeType); // Update MIME type
+            }
+
             Categoria categoria = categoriaImp.findById(categoriaId);
             if (categoria == null) {
                 throw new RuntimeException("Categoría no encontrada");
@@ -376,6 +383,13 @@ public class SubastaController {
             obra.setAncho(ancho);
             obra.setCantidad(cantidad);
             obra.setDescripcion(descripcion);
+
+            if (imagen != null && !imagen.isEmpty()) {
+                String mimeType = imagen.getContentType();
+                String imagenBase64 = Base64.getEncoder().encodeToString(imagen.getBytes());
+                obra.setImagen(imagenBase64);
+                obra.setTipoImagen(mimeType); // Update MIME type
+            }
 
             // Actualizar la categoría
             Categoria categoria = categoriaImp.findById(categoriaId);

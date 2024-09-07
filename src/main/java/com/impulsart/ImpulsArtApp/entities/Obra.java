@@ -35,8 +35,11 @@ public class Obra {
     private int cantidad;
     @Column(name = "Descripcion",length = 155,nullable = false)
     private String descripcion;
+    @Column(name = "TipoImagen",length = 155,nullable = false)
+    private String TipoImagen;
     @Lob
-    private byte[] imagen; // Almacena la imagen como un array de bytes
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private String imagen;
 
     //FOREING KEY
     @OneToMany(mappedBy = "obras",cascade = CascadeType.ALL)

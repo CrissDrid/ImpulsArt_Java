@@ -67,8 +67,6 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                // PERMISOS PARA RECURSOS ESTÁTICOS
-                                .requestMatchers("/imagenes/**").permitAll()
 
                                 // PERMISOS PARA RECURSOS API
                                 .requestMatchers("/api/usuario/**").permitAll()

@@ -6,13 +6,20 @@ import com.impulsart.ImpulsArtApp.service.imp.CategoriaImp;
 import com.impulsart.ImpulsArtApp.service.imp.ObraImp;
 import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
 import jakarta.persistence.EntityNotFoundException;
+import net.coobird.thumbnailator.Thumbnails;
+import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -36,73 +43,61 @@ private CategoriaImp categoriaImp;
 @Autowired
 private UsuarioImp usuarioImp;
 
-//CONTROLLER CREATE
-@PostMapping("/create")
-public ResponseEntity<Map<String, Object>> create(
-        @RequestParam(value = "imagen", required = false) MultipartFile imagen,
-        @RequestParam("nombreProducto") String nombreProducto,
-        @RequestParam("costo") String costo,
-        @RequestParam("peso") String peso,
-        @RequestParam("ancho") String ancho,
-        @RequestParam("alto") String alto,
-        @RequestParam(value = "tamano", required = false) String tamano,
-        @RequestParam("cantidad") int cantidad,
-        @RequestParam("categoriaId") Long categoriaId,
-        @RequestParam("descripcion") String descripcion,
-        @RequestParam("usuarioIds") List<Integer> usuarioIds) { // Lista de IDs de usuarios
+    @PostMapping("/create")
+    public ResponseEntity<Map<String, Object>> createObra(
+            @RequestParam("nombreProducto") String nombreProducto,
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("costo") String costo,
+            @RequestParam("peso") String peso,
+            @RequestParam("ancho") String ancho,
+            @RequestParam("alto") String alto,
+            @RequestParam("tamano") String tamano,
+            @RequestParam("cantidad") int cantidad,
+            @RequestParam("categoriaId") Long categoriaId,
+            @RequestParam(value = "imagen", required = false) MultipartFile imagen) {
 
-    Map<String, Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
 
-    try {
+        try {
+            Obra obra = new Obra();
+            obra.setNombreProducto(nombreProducto);
+            obra.setDescripcion(descripcion);
+            obra.setCosto(costo);
+            obra.setPeso(peso);
+            obra.setTamano(tamano);
+            obra.setAncho(ancho);
+            obra.setAlto(alto);
+            obra.setCantidad(cantidad);
 
-        // Instanciar el objeto Obra y establecer los campos
-        Obra obra = new Obra();
-        obra.setNombreProducto(nombreProducto);
-        obra.setCosto(costo);
-        obra.setPeso(peso);
-        obra.setTamano(tamano);
-        obra.setCantidad(cantidad);
-        obra.setDescripcion(descripcion);
-        obra.setAncho(ancho);
-        obra.setAlto(alto);
+            // Set the category
+            Categoria categoria = categoriaImp.findById(categoriaId);
+            if (categoria == null) {
+                throw new RuntimeException("Categoría no encontrada");
+            }
+            obra.setCategoria(categoria);
 
-        if (imagen != null && !imagen.isEmpty()) {
-            obra.setImagen(imagen.getBytes()); // Guarda la imagen como un array de bytes
+            if (imagen != null && !imagen.isEmpty()) {
+                // Store image as Base64 and get MIME type
+                String fileName = StringUtils.cleanPath(imagen.getOriginalFilename());
+                String mimeType = imagen.getContentType();
+                String imagenBase64 = Base64.getEncoder().encodeToString(imagen.getBytes());
+                obra.setImagen(imagenBase64);
+                obra.setTipoImagen(mimeType); // Store MIME type
+            }
+
+            obraImp.create(obra);
+
+            response.put("status", "success");
+            response.put("data", "Creación Exitosa");
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-
-        // Buscar y establecer la categoría
-        Categoria categoria = categoriaImp.findById(categoriaId);
-        if (categoria == null) {
-            throw new RuntimeException("Categoría no encontrada");
-        }
-        obra.setCategoria(categoria);
-
-        // Obtener los usuarios por sus IDs
-        List<Usuario> usuarios = usuarioIds.stream()
-                .map(id -> usuarioImp.findById(id))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-
-        // Establecer la relación de usuarios en la obra
-        obra.setUsuarios(usuarios);
-
-        // Sincronizar la relación en el lado de los usuarios
-        for (Usuario usuario : usuarios) {
-            usuario.getObras().add(obra);
-        }
-
-        // Guardar la obra en la base de datos
-        this.obraImp.create(obra);
-
-        response.put("status", "success");
-        response.put("data", "Registro Exitoso");
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    } catch (Exception e) {
-        response.put("status", "error");
-        response.put("data", e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
-}
+
 //CONTROLLER READ
     //READ ALL
     @GetMapping("/all")
@@ -159,7 +154,7 @@ public ResponseEntity<Map<String, Object>> create(
     //UPDATE
 
     @PutMapping("/update/{PkCod_Producto}")
-    public ResponseEntity<Map<String, Object>> update(
+    public ResponseEntity<Map<String, Object>> updateObra(
             @PathVariable Integer PkCod_Producto,
             @RequestParam(value = "imagen", required = false) MultipartFile imagen,
             @RequestParam("nombreProducto") String nombreProducto,
@@ -175,13 +170,11 @@ public ResponseEntity<Map<String, Object>> create(
         Map<String, Object> response = new HashMap<>();
 
         try {
-            // Buscar la subasta existente
             Obra obra = this.obraImp.findById(PkCod_Producto);
             if (obra == null) {
-                throw new RuntimeException("Subasta no encontrada");
+                throw new RuntimeException("Obra no encontrada");
             }
 
-            // Actualizar los campos de la obra
             obra.setNombreProducto(nombreProducto);
             obra.setCosto(costo);
             obra.setPeso(peso);
@@ -191,15 +184,20 @@ public ResponseEntity<Map<String, Object>> create(
             obra.setCantidad(cantidad);
             obra.setDescripcion(descripcion);
 
-            // Actualizar la categoría
+            if (imagen != null && !imagen.isEmpty()) {
+                String mimeType = imagen.getContentType();
+                String imagenBase64 = Base64.getEncoder().encodeToString(imagen.getBytes());
+                obra.setImagen(imagenBase64);
+                obra.setTipoImagen(mimeType); // Update MIME type
+            }
+
             Categoria categoria = categoriaImp.findById(categoriaId);
             if (categoria == null) {
                 throw new RuntimeException("Categoría no encontrada");
             }
             obra.setCategoria(categoria);
 
-            // Guardar la obra actualizada
-            obraImp.update(obra);
+            obraImp.create(obra);
 
             response.put("status", "success");
             response.put("data", "Actualización Exitosa");

@@ -1,7 +1,6 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
 import com.impulsart.ImpulsArtApp.entities.Obra;
-import com.impulsart.ImpulsArtApp.entities.Oferta;
 import com.impulsart.ImpulsArtApp.repositories.ObraRepositorio;
 import com.impulsart.ImpulsArtApp.service.ObraService;
 import jakarta.persistence.EntityNotFoundException;

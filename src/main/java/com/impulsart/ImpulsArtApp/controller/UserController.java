@@ -92,7 +92,7 @@ public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Objec
     } catch (Exception e) {
         response.put("status", "error");
         response.put("message", "Error al crear el usuario: " + e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
     }
     return new ResponseEntity<>(response, HttpStatus.OK);
 }
