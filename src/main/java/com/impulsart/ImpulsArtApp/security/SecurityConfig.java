@@ -55,6 +55,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // Desactivar CSRF
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .cors(withDefaults()) //Mas tarde borrar
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling
