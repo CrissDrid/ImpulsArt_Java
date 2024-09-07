@@ -16,8 +16,7 @@ public class CorsConfig implements WebMvcConfigurer {
                 registry.addMapping("/**")
                         .allowedOrigins("*") // Permitir todos los orígenes
                         .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
-                        .allowedHeaders("*") // Permitir todos los encabezados
-                        .allowCredentials(true); // Permitir cookies si es necesario
+                        .allowedHeaders("*"); // Permitir todos los encabezados
             }
         };
     }
