@@ -8,12 +8,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class StaticResourceConfig implements WebMvcConfigurer {
 
     // Define the directory for static images
-    private static final String IMAGE_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static/imagen/";
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Configure resource handler for static images
+        // Usa la ruta completa al directorio de imágenes
+        String imageDirectory = System.getProperty("user.dir") + "/src/main/java/com/impulsart/ImpulsArtApp/imagen/";
+
         registry.addResourceHandler("/imagen/**")
-                .addResourceLocations("file:" + IMAGE_DIRECTORY);
+                .addResourceLocations("file:" + imageDirectory)
+                .setCachePeriod(0); // Deshabilitar la caché para desarrollo
     }
 }
