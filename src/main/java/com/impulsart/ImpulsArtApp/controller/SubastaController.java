@@ -66,21 +66,6 @@ public class SubastaController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            // Guardar la imagen y obtener su URL
-            String imageUrl = null;
-            if (imagen != null && !imagen.isEmpty()) {
-                String originalFileName = imagen.getOriginalFilename();
-                String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
-                Path imagePath = Paths.get(imageDirectory, uniqueFileName);
-                Files.copy(imagen.getInputStream(), imagePath);
-
-                // Codificar el nombre del archivo para la URL
-                String encodedFileName = URLEncoder.encode(uniqueFileName, StandardCharsets.UTF_8.toString())
-                        .replace("+", "%20"); // Reemplazar '+' con '%20'
-
-                // Construir la URL completa de la imagen
-                imageUrl = "https://athletic-wholeness-production.up.railway.app/imagenes/" + encodedFileName;
-            }
 
             // Crear la obra
             Obra obra = new Obra();
@@ -92,7 +77,6 @@ public class SubastaController {
             obra.setTamano(tamano);
             obra.setCantidad(cantidad);
             obra.setDescripcion(descripcion);
-            obra.setImagen(imageUrl);
 
             Categoria categoria = categoriaImp.findById(categoriaId);
             if (categoria == null) {
@@ -392,18 +376,6 @@ public class SubastaController {
             obra.setAncho(ancho);
             obra.setCantidad(cantidad);
             obra.setDescripcion(descripcion);
-
-            // Actualizar la imagen si se proporciona una nueva
-            if (imagen != null && !imagen.isEmpty()) {
-                String originalFileName = imagen.getOriginalFilename();
-                String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
-                Path imagePath = Paths.get(imageDirectory, uniqueFileName);
-                Files.copy(imagen.getInputStream(), imagePath);
-
-                // Actualizar la URL de la imagen
-                String imageUrl = "http://localhost:8086/imagen/" + uniqueFileName;
-                obra.setImagen(imageUrl);  // Asegúrate de actualizar la URL en la base de datos
-            }
 
             // Actualizar la categoría
             Categoria categoria = categoriaImp.findById(categoriaId);

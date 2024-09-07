@@ -28,10 +28,6 @@ import java.util.stream.Collectors;
 @CrossOrigin("*")
 public class ObraController {
 
-    // Directorio para guardar imágenes en la carpeta static
-    private static String imageDirectory = System.getProperty("user.dir") + "/src/main/resources/static/imagenes/";
-
-
     //INYECCION DE DEPENDECIAS
 @Autowired
 private ObraImp obraImp;
@@ -58,21 +54,6 @@ public ResponseEntity<Map<String, Object>> create(
     Map<String, Object> response = new HashMap<>();
 
     try {
-        // Guardar la imagen y obtener su URL
-        String imageUrl = null;
-        if (imagen != null && !imagen.isEmpty()) {
-            String originalFileName = imagen.getOriginalFilename();
-            String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
-            Path imagePath = Paths.get(imageDirectory, uniqueFileName);
-            Files.copy(imagen.getInputStream(), imagePath);
-
-            // Codificar el nombre del archivo para la URL
-            String encodedFileName = URLEncoder.encode(uniqueFileName, StandardCharsets.UTF_8.toString())
-                    .replace("+", "%20"); // Reemplazar '+' con '%20'
-
-            // Construir la URL completa de la imagen
-            imageUrl = "https://athletic-wholeness-production.up.railway.app/imagenes/" + encodedFileName;
-        }
 
         // Instanciar el objeto Obra y establecer los campos
         Obra obra = new Obra();
@@ -84,7 +65,10 @@ public ResponseEntity<Map<String, Object>> create(
         obra.setDescripcion(descripcion);
         obra.setAncho(ancho);
         obra.setAlto(alto);
-        obra.setImagen(imageUrl);
+
+        if (imagen != null && !imagen.isEmpty()) {
+            obra.setImagen(imagen.getBytes()); // Guarda la imagen como un array de bytes
+        }
 
         // Buscar y establecer la categoría
         Categoria categoria = categoriaImp.findById(categoriaId);
@@ -206,18 +190,6 @@ public ResponseEntity<Map<String, Object>> create(
             obra.setAlto(alto);
             obra.setCantidad(cantidad);
             obra.setDescripcion(descripcion);
-
-            // Actualizar la imagen si se proporciona una nueva
-            if (imagen != null && !imagen.isEmpty()) {
-                String originalFileName = imagen.getOriginalFilename();
-                String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
-                Path imagePath = Paths.get(imageDirectory, uniqueFileName);
-                Files.copy(imagen.getInputStream(), imagePath);
-
-                // Actualizar la URL de la imagen
-                String imageUrl = "http://localhost:8086/imagen/" + uniqueFileName;
-                obra.setImagen(imageUrl);  // Asegúrate de actualizar la URL en la base de datos
-            }
 
             // Actualizar la categoría
             Categoria categoria = categoriaImp.findById(categoriaId);
