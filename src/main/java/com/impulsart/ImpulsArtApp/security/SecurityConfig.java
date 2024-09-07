@@ -56,6 +56,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // Desactivar CSRF
+                .cors(withDefaults()) // Habilitar CORS
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling
                                 .authenticationEntryPoint(jwtAuthenticationEntryPoint) // Punto de entrada personalizado
@@ -66,70 +67,25 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
+                                // PERMISOS PARA RECURSOS ESTÁTICOS
+                                .requestMatchers("/imagenes/**").permitAll()
 
-                                // PERMISOS PARA RECURSOS ESTÁTICOS
-                                .requestMatchers("/imagen/**").permitAll()
-                                // PERMISOS PARA RECURSOS ESTÁTICOS
-
-                                // PERMISOS PARA RECURSOS ESTÁTICOS
-                                .requestMatchers("/api/auth/**").permitAll()
-                                // PERMISOS PARA RECURSOS ESTÁTICOS
-
-                                //PERMISOS TABLA USUARIO
+                                // PERMISOS PARA RECURSOS API
                                 .requestMatchers("/api/usuario/**").permitAll()
-                                .requestMatchers("/api/usuario/all").hasAnyAuthority("ADMIN")
-                                .requestMatchers("/api/usuario/delete/**").hasAnyAuthority("")
-                                //PERMISOS TABLA USUARIO
-
-                                //PERMISOS TABLA CATEGORIA
                                 .requestMatchers("/api/categoria/**").permitAll()
-                                //PERMISOS TABLA CATEGORIA
-
-                                //PERMISOS TABLA OFERTA
                                 .requestMatchers("/api/oferta/**").permitAll()
-                                .requestMatchers("/api/oferta/all").hasAnyAuthority("ADMIN")
-                                //PERMISOS TABLA OFERTA
-
-                                //PERMISOS TABLA CARRITO
                                 .requestMatchers("/api/carrito/**").permitAll()
-                                //PERMISOS TABLA CARRITO
-
-                                //PERMISOS TABLA SUBASTA
                                 .requestMatchers("/api/subasta/**").permitAll()
-                                //PERMISOS TABLA SUBASTA
-
-                                //PERMISOS TABLA OBRA
                                 .requestMatchers("/api/obra/**").permitAll()
-                                //PERMISOS TABLA OBRA
-
-                                //PERMISOS TABLA DIRECCION
                                 .requestMatchers("/api/direccion/**").permitAll()
-                                //PERMISOS TABLA DIRECCION
-
-                                //PERMISOS TABLA DIRECCION
                                 .requestMatchers("/api/venta/**").permitAll()
-                                //PERMISOS TABLA DIRECCION
-
-                                //PERMISOS TABLA REPORTE
                                 .requestMatchers("/api/reporte/**").permitAll()
-                                //PERMISOS TABLA REPORTE
-
-                                //PERMISOS TABLA PQRS
                                 .requestMatchers("/api/pqrs/**").permitAll()
-                                //PERMISOS TABLA PQRS
-
-                                //PERMISOS TABLA TIPOPQRS
                                 .requestMatchers("/api/tipoPQRS/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
-                                //PERMISOS TABLA TIPOPQRS
-
-                                //PERMISOS TABLA Respuesta
                                 .requestMatchers("/api/respuesta/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
-                                //PERMISOS TABLA Respuesta
-
-                                //PERMISOS API EMAIL
                                 .requestMatchers("/api/email/**").permitAll()
-                                //PERMISOS API EMAIL
 
+                                // Permitir todas las solicitudes a recursos estáticos y ciertos endpoints sin autenticación
                                 .anyRequest().authenticated() // Requerir autenticación para otras solicitudes
                 )
                 .httpBasic(withDefaults()); // Habilitar autenticación básica HTTP

@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 @CrossOrigin("*")
 public class ObraController {
 
-    //Directorio para guardar imagenes
-    private static String imageDirectory = System.getProperty("user.dir") + "/src/main/java/com/impulsart/ImpulsArtApp/imagen/";
+    // Directorio para guardar imágenes en la carpeta static
+    private static String imageDirectory = System.getProperty("user.dir") + "/src/main/resources/static/imagenes/";
 
 
     //INYECCION DE DEPENDECIAS
@@ -67,10 +67,11 @@ public ResponseEntity<Map<String, Object>> create(
             Files.copy(imagen.getInputStream(), imagePath);
 
             // Codificar el nombre del archivo para la URL
-            String encodedFileName = URLEncoder.encode(uniqueFileName, StandardCharsets.UTF_8.toString());
+            String encodedFileName = URLEncoder.encode(uniqueFileName, StandardCharsets.UTF_8.toString())
+                    .replace("+", "%20"); // Reemplazar '+' con '%20'
 
             // Construir la URL completa de la imagen
-            imageUrl = "https://athletic-wholeness-production.up.railway.app/imagen/" + encodedFileName;
+            imageUrl = "https://athletic-wholeness-production.up.railway.app/imagenes/" + encodedFileName;
         }
 
         // Instanciar el objeto Obra y establecer los campos

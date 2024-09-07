@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -66,14 +68,18 @@ public class SubastaController {
         try {
             // Guardar la imagen y obtener su URL
             String imageUrl = null;
-            if (imagen != null) {
+            if (imagen != null && !imagen.isEmpty()) {
                 String originalFileName = imagen.getOriginalFilename();
                 String uniqueFileName = UUID.randomUUID().toString() + "_" + originalFileName;
                 Path imagePath = Paths.get(imageDirectory, uniqueFileName);
                 Files.copy(imagen.getInputStream(), imagePath);
 
+                // Codificar el nombre del archivo para la URL
+                String encodedFileName = URLEncoder.encode(uniqueFileName, StandardCharsets.UTF_8.toString())
+                        .replace("+", "%20"); // Reemplazar '+' con '%20'
+
                 // Construir la URL completa de la imagen
-                imageUrl = "https://athletic-wholeness-production.up.railway.app/imagen/" + uniqueFileName;
+                imageUrl = "https://athletic-wholeness-production.up.railway.app/imagenes/" + encodedFileName;
             }
 
             // Crear la obra

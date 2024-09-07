@@ -9,8 +9,8 @@ public class imgConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/imagen/**")
-                .addResourceLocations("file:" + System.getProperty("user.dir") + "/src/main/java/com/impulsart/ImpulsArtApp/imagen/")
+        registry.addResourceHandler("/imagenes/**")
+                .addResourceLocations("file:" + System.getProperty("user.dir") + "/src/main/resources/static/imagenes/")
                 .setCachePeriod(0); // Deshabilitar la caché para desarrollo
     }
 }
