@@ -74,9 +74,9 @@ public class SecurityConfig {
                                 //PERMISOS TABLA USUARIO
                                 .requestMatchers("/api/usuario/login").permitAll()
                                 .requestMatchers("/api/usuario/create").permitAll()
+                                .requestMatchers("/api/usuario/all").permitAll()
                                 .requestMatchers("/api/usuario/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
                                 .requestMatchers("/api/usuario/delete/**").hasAnyAuthority("")
-                                .requestMatchers("/api/usuario/all").hasAnyAuthority("ADMIN", "ASESOR")
                                 //PERMISOS TABLA USUARIO
 
                                 //PERMISOS TABLA CATEGORIA
@@ -141,7 +141,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*")); // Permitir todos los orígenes // Cambia esto a tus orígenes permitidos
+        configuration.setAllowedOrigins(Arrays.asList("*")); // Permitir todos los orígenes
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
         configuration.setAllowCredentials(true);
