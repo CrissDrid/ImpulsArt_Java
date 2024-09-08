@@ -54,7 +54,8 @@ private UsuarioImp usuarioImp;
             @RequestParam("tamano") String tamano,
             @RequestParam("cantidad") int cantidad,
             @RequestParam("categoriaId") Long categoriaId,
-            @RequestParam(value = "imagen", required = false) MultipartFile imagen) {
+            @RequestParam(value = "imagen", required = false) MultipartFile imagen,
+            @RequestParam("usuarioIds") List<Integer> usuarioIds) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -83,6 +84,20 @@ private UsuarioImp usuarioImp;
                 String imagenBase64 = Base64.getEncoder().encodeToString(imagen.getBytes());
                 obra.setImagen(imagenBase64);
                 obra.setTipoImagen(mimeType); // Store MIME type
+            }
+
+            // Obtener los usuarios por sus IDs
+            List<Usuario> usuarios = usuarioIds.stream()
+                    .map(id -> usuarioImp.findById(id))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+
+            // Establecer la relación de usuarios en la obra
+            obra.setUsuarios(usuarios);
+
+            // Sincronizar la relación en el lado de los usuarios
+            for (Usuario usuario : usuarios) {
+                usuario.getObras().add(obra);
             }
 
             obraImp.create(obra);
@@ -256,5 +271,5 @@ private UsuarioImp usuarioImp;
             return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
-}
+   }
 }
