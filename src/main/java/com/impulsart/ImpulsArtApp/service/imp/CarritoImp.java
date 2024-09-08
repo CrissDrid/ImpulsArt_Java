@@ -49,6 +49,21 @@ public class CarritoImp implements CarritoService {
     }
 
     @Override
+    public void removeObraFromCarrito(Long carritoId, Integer obraId) throws Exception {
+        Carrito carrito = carritoRepository.findById(carritoId)
+                .orElseThrow(() -> new EntityNotFoundException("Carrito no encontrado"));
+
+        Obra obra = obraRepositorio.findById(obraId)
+                .orElseThrow(() -> new EntityNotFoundException("Obra no encontrada"));
+
+        if (carrito.getObra().remove(obra)) {
+            carritoRepository.save(carrito);
+        } else {
+            throw new Exception("La obra no estaba en el carrito");
+        }
+    }
+
+    @Override
     public void create(Carrito carrito) throws Exception {
         carritoRepository.save(carrito);
     }
