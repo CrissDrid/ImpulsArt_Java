@@ -56,6 +56,35 @@ public class CarritoImp implements CarritoService {
     }
 
     @Override
+    public void updateCantidadCarrito(Long carritoId, Long elementoId, Integer nuevaCantidad) {
+        // Buscar el carrito por ID
+        Carrito carrito = carritoRepository.findById(carritoId)
+                .orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
+
+        // Buscar el elemento del carrito por ID
+        ElementoCarrito elementoCarrito = elementoCarritoImp.findById(elementoId);
+
+        // Buscar la obra asociada al elemento del carrito
+        Obra obra = obraImp.findById(elementoCarrito.getObra().getPkCod_Producto());
+
+        // Verificar si la nueva cantidad es válida
+        if (nuevaCantidad < 1) {
+            throw new IllegalArgumentException("La cantidad debe ser al menos 1");
+        }
+
+        // Verificar si hay suficiente stock disponible para la nueva cantidad
+        if (obra.getCantidad() < nuevaCantidad) {
+            throw new IllegalArgumentException("No hay suficiente stock disponible para la nueva cantidad");
+        }
+
+        // Actualizar la cantidad en el elemento del carrito
+        elementoCarrito.setCantidad(nuevaCantidad);
+
+        // Guardar el elemento actualizado
+        elementoCarritoImp.create(elementoCarrito);
+    }
+
+    @Override
     public void addObraToCarrito(Long carritoId, Integer obraId, Integer cantidad) throws Exception {
         // Buscar el carrito por ID
         Carrito carrito = carritoRepository.findById(carritoId)

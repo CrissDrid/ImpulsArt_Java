@@ -75,6 +75,21 @@ public class CarritoController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    // Método para actualizar la cantidad de un producto en el carrito
+    @PutMapping("/updateCantidad")
+    public ResponseEntity<String> updateCantidad(
+            @RequestParam Long carritoId,
+            @RequestParam Long elementoId,
+            @RequestParam Integer nuevaCantidad) {
+
+        try {
+            carritoImp.updateCantidadCarrito(carritoId, elementoId, nuevaCantidad);
+            return ResponseEntity.ok("Cantidad actualizada exitosamente");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     // READ ALL
     @GetMapping("/all")
     public ResponseEntity<Map<String, Object>> findAll() {
@@ -182,7 +197,8 @@ public class CarritoController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @DeleteMapping("/{carritoId}/obras/{obraId}")
+
+    @DeleteMapping("/removeObras/{obraId}/{carritoId}")
     public ResponseEntity<String> removeObraFromCarrito(
             @PathVariable Long carritoId,
             @PathVariable Integer obraId) {

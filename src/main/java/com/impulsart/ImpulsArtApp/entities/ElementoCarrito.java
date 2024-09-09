@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class ElementoCarrito {
     private int cantidad;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "fk_carrito", nullable = false)
     private Carrito carrito;
 
