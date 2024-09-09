@@ -9,4 +9,5 @@ public interface ElementoCarritoRepository extends JpaRepository<ElementoCarrito
 
     ElementoCarrito findByCarritoAndObra(Carrito carrito, Obra obra);
 
+
 }

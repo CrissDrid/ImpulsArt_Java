@@ -70,6 +70,7 @@ public class SecurityConfig {
 
                                 // PERMISOS PARA RECURSOS API
                                 .requestMatchers("/api/usuario/**").permitAll()
+                                .requestMatchers("/api/elemento/**").permitAll()
                                 .requestMatchers("/api/categoria/**").permitAll()
                                 .requestMatchers("/api/oferta/**").permitAll()
                                 .requestMatchers("/api/carrito/**").permitAll()

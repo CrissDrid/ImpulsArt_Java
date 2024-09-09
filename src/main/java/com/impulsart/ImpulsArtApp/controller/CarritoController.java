@@ -198,19 +198,6 @@ public class CarritoController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/removeObras/{obraId}/{carritoId}")
-    public ResponseEntity<String> removeObraFromCarrito(
-            @PathVariable Long carritoId,
-            @PathVariable Integer obraId) {
-        try {
-            carritoImp.removeObraFromCarrito(carritoId, obraId);
-            return ResponseEntity.ok("Obra eliminada del carrito exitosamente");
-        } catch (Exception e) {
-            // Puedes personalizar el mensaje de error y el código de estado HTTP según el tipo de excepción
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
-        }
-    }
-
 }
 
 

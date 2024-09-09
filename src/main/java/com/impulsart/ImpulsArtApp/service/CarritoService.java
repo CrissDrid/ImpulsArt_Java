@@ -21,8 +21,6 @@ public interface CarritoService {
 
     void addObraToCarrito(Long carritoId, Integer obraId, Integer cantidad) throws Exception;
 
-    void removeObraFromCarrito(Long carritoId, Integer obraId);
-
     void updateCantidadCarrito(Long carritoId, Long elementoId, Integer nuevaCantidad);
 }
 

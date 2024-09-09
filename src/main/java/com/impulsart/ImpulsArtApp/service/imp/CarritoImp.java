@@ -132,26 +132,6 @@ public class CarritoImp implements CarritoService {
         elementoCarritoImp.create(elementoCarrito);
     }
 
-    @Override
-    public void removeObraFromCarrito(Long carritoId, Integer obraId) {
-        // Buscar el carrito por ID
-        Carrito carrito = carritoRepository.findById(carritoId)
-                .orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
-
-        // Buscar la obra por ID
-        Obra obra = obraImp.findById(obraId);
-
-        // Buscar el elemento del carrito que corresponde a la obra
-        ElementoCarrito elementoCarrito = elementoCarritoImp.findByCarritoAndObra(carrito, obra);
-
-        if (elementoCarrito != null) {
-            // Si el elemento existe en el carrito, eliminarlo
-            elementoCarritoImp.delete(elementoCarrito);
-        } else {
-            throw new RuntimeException("El elemento no se encuentra en el carrito");
-        }
-    }
-
 }
 
 
