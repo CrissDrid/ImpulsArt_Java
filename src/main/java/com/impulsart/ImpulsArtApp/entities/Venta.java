@@ -21,19 +21,6 @@ public class Venta {
     private int pkCod_Venta;
     @Column(name = "FechaVenta",nullable = false)
     private LocalDate fechaVenta;
-    @Column(name = "TotalPago",nullable = false)
-    private int totalPago;
-    @Column(name = "ReciboVenta",length = 150,nullable = false)
-    private String reciboVenta;
-    @Column(name = "Cantidad",nullable = false)
-    private int cantidad;
-    @Column(name = "MetodoPago",length = 50,nullable = false)
-    private String metodoPago;
-
-    //FOREING KEYS
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "FkCod_Producto",nullable = false)
-    private Obra obras;
 
     // Relación muchos a uno con Despacho
     @ManyToOne

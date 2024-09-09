@@ -4,6 +4,7 @@ import com.impulsart.ImpulsArtApp.entities.Carrito;
 import com.impulsart.ImpulsArtApp.entities.Obra;
 import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.service.imp.CarritoImp;
+import com.impulsart.ImpulsArtApp.service.imp.ElementoCarritoImp;
 import com.impulsart.ImpulsArtApp.service.imp.ObraImp;
 import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class CarritoController {
     private UsuarioImp usuarioImp;
 
     @Autowired
+    private ElementoCarritoImp elementoCarritoImp;
+
+    @Autowired
     private ObraImp obraImp;
 
     // CREATE
@@ -45,48 +49,6 @@ public class CarritoController {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
-        }
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @PostMapping("/add-obra")
-    public ResponseEntity<Map<String, Object>> addObraToCarrito(
-            @RequestParam Long carritoId, @RequestParam Integer obraId) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            carritoImp.addObraToCarrito(carritoId, obraId);
-            response.put("status", "success");
-            response.put("message", "Obra añadida al carrito exitosamente");
-        } catch (Exception e) {
-            response.put("status", "error");
-            response.put("message", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/remove-obra")
-    public ResponseEntity<Map<String, Object>> removeObraFromCarrito(
-            @RequestParam Integer identificacion, @RequestParam Integer obraId) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            // Buscar el carrito del usuario por su identificación
-            Carrito carrito = carritoImp.findByUsuarioId(identificacion);
-            if (carrito == null) {
-                response.put("status", "error");
-                response.put("message", "Carrito no encontrado para el usuario.");
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-
-            // Eliminar la obra del carrito
-            carritoImp.removeObraFromCarrito(carrito.getPkCod_Carrito(), obraId);
-
-            response.put("status", "success");
-            response.put("message", "Obra removida del carrito exitosamente");
-        } catch (Exception e) {
-            response.put("status", "error");
-            response.put("message", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -200,6 +162,39 @@ public class CarritoController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PostMapping("/addObra")
+    public ResponseEntity<Map<String, Object>> addObraToCarrito(
+            @RequestParam Long carritoId,
+            @RequestParam Integer obraId,
+            @RequestParam Integer cantidad) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // Llamar al servicio para agregar la obra al carrito
+            carritoImp.addObraToCarrito(carritoId, obraId, cantidad);
+
+            response.put("status", "success");
+            response.put("data", "Obra agregada al carrito exitosamente");
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @DeleteMapping("/{carritoId}/obras/{obraId}")
+    public ResponseEntity<String> removeObraFromCarrito(
+            @PathVariable Long carritoId,
+            @PathVariable Integer obraId) {
+        try {
+            carritoImp.removeObraFromCarrito(carritoId, obraId);
+            return ResponseEntity.ok("Obra eliminada del carrito exitosamente");
+        } catch (Exception e) {
+            // Puedes personalizar el mensaje de error y el código de estado HTTP según el tipo de excepción
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+        }
+    }
+
 }
 
 

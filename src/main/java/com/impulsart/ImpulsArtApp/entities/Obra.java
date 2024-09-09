@@ -41,11 +41,6 @@ public class Obra {
     @Column(columnDefinition = "MEDIUMBLOB")
     private String imagen;
 
-    //FOREING KEY
-    @OneToMany(mappedBy = "obras",cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Venta> ventas;
-
     @OneToMany(mappedBy = "obras",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Subasta> subastas;
@@ -63,9 +58,9 @@ public class Obra {
     private List<Usuario> usuarios;
 
     //FOREING KEY
-    @ManyToMany(mappedBy = "obra")
+    @OneToMany(mappedBy = "obra", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Carrito> carrito;
+    private List<ElementoCarrito> elementoCarrito;
 
     @OneToMany(mappedBy = "obra")
     @JsonIgnore

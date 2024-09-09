@@ -9,16 +9,18 @@ public interface CarritoService {
 
     Carrito findByUsuarioId(@Param("identificacion") Integer identificacion);
 
+    void removeObraFromCarrito(Long carritoId, Integer obraId);
+
     List<Carrito> findAll() throws Exception;
 
     Carrito findById(Long PkCod_Carrito) throws Exception;
-    void addObraToCarrito(Long carritoId, Integer obraId) throws Exception;
-    void removeObraFromCarrito(Long carritoId, Integer obraId) throws Exception;
 
     void create(Carrito carrito) throws Exception;
 
     void update(Carrito carrito) throws Exception;
 
     void delete(Carrito carrito) throws Exception;
+
+    void addObraToCarrito(Long carritoId, Integer obraId, Integer cantidad) throws Exception;
 }
 

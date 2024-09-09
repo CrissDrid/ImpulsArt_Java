@@ -24,13 +24,8 @@ public class Carrito {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @ManyToMany
-    @JoinTable(
-            name = "Obras_Carrito",
-            joinColumns = @JoinColumn(name = "FkCod_Carrito", referencedColumnName = "PkCod_Carrito"),
-            inverseJoinColumns = @JoinColumn(name = "FkCod_Producto", referencedColumnName = "pkCod_Producto")
-    )
-    private List<Obra> obra;
+    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL)
+    private List<ElementoCarrito> elementoCarrito;
 
 
 }

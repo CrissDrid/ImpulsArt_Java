@@ -40,15 +40,7 @@ public class VentaController {
 
             // INSTANCIA DEL OBJETO VENTA
             Venta venta = new Venta();
-            venta.setTotalPago(Integer.parseInt(request.get("totalPago").toString()));
-            venta.setReciboVenta(request.get("reciboVenta").toString());
-            venta.setCantidad(Integer.parseInt(request.get("cantidad").toString()));
-            venta.setMetodoPago(request.get("metodoPago").toString());
             venta.setFechaVenta(LocalDate.parse(request.get("fechaVenta").toString()));
-
-            // Obtener la Obra asociada
-            Obra obra = obraImp.findById(Integer.parseInt(request.get("FkCod_Producto").toString()));
-            venta.setObras(obra);
 
             // Obtener los Usuarios por ID
             List<Integer> usuarioIds = (List<Integer>) request.get("FkCod_Usuarios"); // Asumiendo que envías una lista de IDs
@@ -114,16 +106,8 @@ public class VentaController {
         Map<String,Object> response = new HashMap<>();
         try{
             Venta venta = this.ventaImp.findById(PkCod_Venta);
-
             //CAMPOS DE LA TABLA USUARIOS
             venta.setFechaVenta(LocalDate.parse(request.get("fechaVenta").toString()));
-            venta.setTotalPago(Integer.parseInt(request.get("totalPago").toString()));
-            venta.setReciboVenta(request.get("reciboVenta").toString());
-            venta.setCantidad(Integer.parseInt(request.get("cantidad").toString()));
-            venta.setMetodoPago(request.get("metodoPago").toString());
-
-            Obra obra = obraImp.findById(Integer.parseInt(request.get("FkCod_Producto").toString()));
-            venta.setObras(obra);
 
             this.ventaImp.update(venta);
 
