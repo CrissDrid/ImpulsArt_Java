@@ -27,7 +27,6 @@ public class DireccionController {
     @Autowired
     private UsuarioImp usuarioImp;
 
-    // CONTROLLER CREATE
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Object> request) {
         Map<String, Object> response = new HashMap<>();
@@ -68,21 +67,29 @@ public class DireccionController {
                 throw new IllegalArgumentException("El campo 'fkUsuario' no puede ser nulo");
             }
 
+            boolean exists = direccionImp.existsByCiudadAndDireccionAndUsuario(direccion.getCiudad(), direccion.getDireccion(), direccion.getUsuario());
+
+            if (exists) {
+                response.put("status", "error");
+                response.put("data", "La dirección ya existe para este usuario en la ciudad proporcionada.");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+
             // Guardar la nueva dirección
             this.direccionImp.create(direccion);
 
             response.put("status", "success");
             response.put("data", "Registro Exitoso");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            response.put("status", HttpStatus.BAD_REQUEST);
+            response.put("status", "error");
             response.put("data", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            response.put("status", HttpStatus.BAD_GATEWAY);
-            response.put("data", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+            response.put("status", "error");
+            response.put("data", "Hubo un error en el servidor.");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

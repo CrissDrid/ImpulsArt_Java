@@ -2,6 +2,7 @@ package com.impulsart.ImpulsArtApp.service.imp;
 
 import com.impulsart.ImpulsArtApp.entities.Direccion;
 import com.impulsart.ImpulsArtApp.entities.Obra;
+import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.repositories.DireccionRepository;
 import com.impulsart.ImpulsArtApp.service.DireccionService;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +29,11 @@ public class DireccionImp implements DireccionService {
             throw new EntityNotFoundException("Direcciones no encontradas");
         }
         return direcciones;
+    }
+
+    @Override
+    public boolean existsByCiudadAndDireccionAndUsuario(String ciudad, String direccion, Usuario usuario) {
+        return direccionRepositorio.existsByCiudadAndDireccionAndUsuario(ciudad, direccion, usuario);
     }
 
     @Override
