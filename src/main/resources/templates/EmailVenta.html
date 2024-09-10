@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .body-wrap {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            box-sizing: border-box;
+            font-size: 14px;
+            width: 100%;
+            background-color: #f6f6f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            display: block !important;
+            max-width: 600px !important;
+            clear: both !important;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid #e9e9e9;
+        }
+        .content {
+            padding: 20px;
+        }
+        .main {
+            background-color: #fff;
+            border-radius: 3px;
+            margin: 0;
+        }
+        .content-block {
+            padding: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            padding: 20px;
+        }
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .product-table th, .product-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .product-table th {
+            background-color: #f2f2f2;
+        }
+        .header {
+            background-color: #8D33FF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 3px 3px 0 0;
+        }
+    </style>
+</head>
+<body>
+<table class="body-wrap" bgcolor="#f6f6f6">
+    <tr>
+        <td></td>
+        <td class="container" width="600">
+            <div class="content">
+                <table class="main" width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td class="header">
+                            <img src="https://i.ibb.co/wR5cG2d/Impuls-1.png" alt="Impuls" style="width:50%; height: 8rem; margin: -2.3rem" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="content-block">
+                            Estimado <strong>[[nombre]]</strong>,
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="content-block">
+                            Gracias por su compra. A continuación, encontrará los detalles de su pedido:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table class="product-table">
+                                <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                [[productos]]
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2" style="text-align: right;"><strong>Total a pagar:</strong></td>
+                                    <td><strong>[[total]]</strong></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="content-block">
+                            Saludos,<br>
+                            ImpulsArt :))
+                        </td>
+                    </tr>
+                </table>
+                <div class="footer">
+                    &copy; 2024 ImpulsArt
+                </div>
+            </div>
+        </td>
+        <td></td>
+    </tr>
+</table>
+</body>
+</html>

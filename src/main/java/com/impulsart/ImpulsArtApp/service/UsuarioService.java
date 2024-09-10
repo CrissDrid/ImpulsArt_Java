@@ -8,6 +8,7 @@ public interface UsuarioService {
     public List<Usuario> findAll() throws Exception;
     public Usuario findById(Integer identificacion);
     public Usuario findRandomAsesor();
+    List<Usuario> findByRolNombre(String nombreRol);
 
     //public List<Usuario> findByEmail(String email);
     public Usuario findByEmail(String email);

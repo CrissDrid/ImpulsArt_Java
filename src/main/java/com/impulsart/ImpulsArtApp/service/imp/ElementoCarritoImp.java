@@ -48,4 +48,13 @@ public class ElementoCarritoImp implements ElementoCarritoService {
     public void delete(ElementoCarrito elementoCarrito) {
         this.elementoCarritoRepository.delete(elementoCarrito);
     }
+
+    @Override
+    public List<ElementoCarrito> findByCarrito(Carrito carrito) {
+        List<ElementoCarrito> elementoCarritos = this.elementoCarritoRepository.findByCarrito(carrito);
+        if (elementoCarritos.isEmpty()) {
+            throw new EntityNotFoundException("Obras no encontradas");
+        }
+        return elementoCarritos;
+    }
 }

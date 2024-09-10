@@ -20,6 +20,10 @@ public class Carrito {
     @Column(name = "PkCod_Carrito")
     private Long pkCod_Carrito;
 
+    @OneToMany(mappedBy = "carrito")
+    @JsonIgnore
+    private List<Venta> venta; // Relación con ReporteObra
+
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     @JsonIgnore

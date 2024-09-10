@@ -42,7 +42,7 @@ public class RespuestaController {
             Respuesta respuesta = new Respuesta();
             // Campos de la tabla Pedido Personalizado
             respuesta.setComentario(request.get("comentario").toString());
-            respuesta.setFechaRespuesta(LocalDate.parse(request.get("fechaRespuesta").toString()));
+            respuesta.setFechaRespuesta(LocalDate.now());
 
             Pqrs pqrs = reclamoImp.findById(Long.parseLong(request.get("fk_Pqrs").toString()));
             respuesta.setPqrs(pqrs);
@@ -55,11 +55,11 @@ public class RespuestaController {
 
             // Enviar correo
             String destinatario = request.get("destinatario").toString(); // Usa el valor del request
-            String asunto = request.get("asunto").toString(); // Usa el valor del request
+            // Establece el asunto a un valor fijo
+            String asunto = "Respuesta de su PQRS";
             String mensaje = request.get("mensaje").toString(); // Usa el valor del request
-            String nombre = request.get("nombre").toString(); // Usa el valor del request
 
-            emailImp.enviarCorreo(destinatario, asunto, mensaje, nombre);
+            emailImp.enviarCorreoRespuesta(asunto, destinatario, mensaje);
 
             response.put("status", "success");
             response.put("data", "Registro Exitoso");

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,11 +22,18 @@ public class Venta {
     private int pkCod_Venta;
     @Column(name = "FechaVenta",nullable = false)
     private LocalDate fechaVenta;
+    @Column(name = "costoTotal")
+    private String costoTotal;
 
     // Relación muchos a uno con Despacho
     @ManyToOne
-    @JoinColumn(name = "fkCod_Despacho") // La clave foránea en la tabla de ventas
-    private Despacho despacho;
+    @JoinColumn(name = "fk_carrito") // La clave foránea en la tabla de ventas
+    private Carrito carrito;
+
+    // Relación muchos a uno con Despacho
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Despacho> despacho;
 
     //FOREING KEY
     @ManyToMany(mappedBy = "ventas", cascade = CascadeType.ALL)

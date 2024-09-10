@@ -25,16 +25,15 @@ public class PqrsController {
     UsuarioImp usuarioImp;
     @Autowired
     VentaImp ventaImp;
+    @Autowired
+    EmailImp emailImp;
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> create(
             @RequestParam("descripcion") String descripcion,
-            @RequestParam("motivo") String motivo,
-            @RequestParam("respuesta") String respuesta,
             @RequestParam("estado") String estado,
-            @RequestParam("fechaPQRS") String fechaPQRS,
             @RequestParam(value = "fechaCierre", required = false) String fechaCierre,
-            @RequestParam("fkCod_TipoReclamo") Long fkCod_TipoPqrs,
+            @RequestParam("fkCod_TipoPQRS") Long fkCod_TipoPqrs,
             @RequestParam("usuarioId") Integer usuarioId) {
 
         Map<String, Object> response = new HashMap<>();
@@ -44,7 +43,6 @@ public class PqrsController {
             Pqrs pqrs = new Pqrs();
             pqrs.setDescripcion(descripcion);
             pqrs.setEstado(estado);
-            pqrs.setFechaPQRS(LocalDate.parse(fechaPQRS));
             pqrs.setFechaCierre(fechaCierre != null ? LocalDate.parse(fechaCierre) : null);
 
             // Obtener y establecer el tipo de PQRS
@@ -78,6 +76,17 @@ public class PqrsController {
 
             // Guardar el PQRS en la base de datos
             this.pqrsImp.create(pqrs);
+
+            // Enviar el correo al usuario asignado
+            if (!usuarios.isEmpty()) {
+                Usuario usuarioAsignado = usuarios.get(0); // Asumiendo que hay al menos un usuario asignado
+                emailImp.enviarCorreoPqrsAsignado(
+                        usuarioAsignado.getEmail(),
+                        "Nuevo PQRS Asignado",
+                        usuarioAsignado.getNombre(),
+                        "Se le ha asignado un nuevo PQRS. Descripción de la pqrs: " + descripcion
+                );
+            }
 
             response.put("status", "success");
             response.put("data", "Registro Exitoso");

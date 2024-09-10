@@ -72,11 +72,29 @@ public class EmailImp implements EmailService {
             // Configura el contenido HTML del correo
             helper.setText(htmlContent, true); // true indica que el contenido es HTML
 
-            // Adjuntar una imagen desde el directorio de recursos
-            ClassPathResource imageFile = new ClassPathResource("imagen/logo_impulsart.jpg");
-            if (imageFile.exists()) {
-                helper.addInline("imagen", imageFile);
-            }
+            mailSender.send(mimeMessage);
+        } catch (MessagingException | IOException e) {
+            throw new RuntimeException("Error al enviar correo", e);
+        }
+    }
+
+    @Override
+    public void enviarCorreoRespuesta(String asunto, String destinatario, String mensaje) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+            // Configura el destinatario y el asunto
+            helper.setTo(destinatario);
+            helper.setSubject(asunto);
+
+            // Leer el archivo de plantilla y reemplazar los marcadores de posición
+            String htmlTemplate = readTemplate("EmailSubasta.html");
+            String htmlContent = htmlTemplate
+                    .replace("[[mensaje]]", mensaje);
+
+            // Configura el contenido HTML del correo
+            helper.setText(htmlContent, true); // true indica que el contenido es HTML
 
             mailSender.send(mimeMessage);
         } catch (MessagingException | IOException e) {
@@ -84,7 +102,107 @@ public class EmailImp implements EmailService {
         }
     }
 
-    private String readTemplate(String templatePath) throws IOException {
+    @Override
+    public void enviarCorreoPqrsAsignado(String destinatario, String asunto, String nombre, String mensaje) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+            // Configura el destinatario y el asunto
+            helper.setTo(destinatario);
+            helper.setSubject(asunto);
+
+            // Leer el archivo de plantilla y reemplazar los marcadores de posición
+            String htmlTemplate = readTemplate("EmailPqrsAsignado.html");
+            String htmlContent = htmlTemplate
+                    .replace("[[nombre]]", nombre)
+                    .replace("[[mensaje]]", mensaje);
+
+            // Configura el contenido HTML del correo
+            helper.setText(htmlContent, true); // true indica que el contenido es HTML
+
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException | IOException e) {
+            throw new RuntimeException("Error al enviar correo", e);
+        }
+    }
+
+    public void enviarCorreoRespuesta(String destinatario, String mensaje) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+            // Configura el destinatario y el asunto
+            helper.setTo(destinatario);
+
+            // Leer el archivo de plantilla y reemplazar los marcadores de posición
+            String htmlTemplate = readTemplate("EmailVenta.html");
+            String htmlContent = htmlTemplate
+                    .replace("[[mensaje]]", mensaje);
+
+            // Configura el contenido HTML del correo
+            helper.setText(htmlContent, true); // true indica que el contenido es HTML
+
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException | IOException e) {
+            throw new RuntimeException("Error al enviar correo", e);
+        }
+    }
+
+    @Override
+    public void enviarCorreoVenta(String destinatario, String asunto, String nombre, String detalleCompra, String costoTotal) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+            // Configura el destinatario y el asunto
+            helper.setTo(destinatario);
+            helper.setSubject(asunto);
+
+            // Leer el archivo de plantilla y reemplazar los marcadores de posición
+            String htmlTemplate = readTemplate("EmailVenta.html");
+            String htmlContent = htmlTemplate
+                    .replace("[[nombre]]", nombre)
+                    .replace("[[productos]]", detalleCompra)
+                    .replace("[[total]]", costoTotal);
+
+            // Configura el contenido HTML del correo
+            helper.setText(htmlContent, true); // true indica que el contenido es HTML
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException | IOException e) {
+            throw new RuntimeException("Error al enviar correo", e);
+        }
+    }
+
+    @Override
+    public void enviarCorreoDespachoAsignado(String destinatario, String asunto, String nombre, String mensaje) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+            // Configura el destinatario y el asunto
+            helper.setTo(destinatario);
+            helper.setSubject(asunto);
+
+            // Leer el archivo de plantilla y reemplazar los marcadores de posición
+            String htmlTemplate = readTemplate("EmailDespachoAsignado.html");
+            String htmlContent = htmlTemplate
+                    .replace("[[nombre]]", nombre)
+                    .replace("[[mensaje]]", mensaje);
+
+            // Configura el contenido HTML del correo
+            helper.setText(htmlContent, true); // true indica que el contenido es HTML
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException | IOException e) {
+            throw new RuntimeException("Error al enviar correo", e);
+        }
+    }
+
+    public String readTemplate(String templatePath) throws IOException {
         try {
             Resource resource = new ClassPathResource("templates/" + templatePath);
             if (!resource.exists()) {

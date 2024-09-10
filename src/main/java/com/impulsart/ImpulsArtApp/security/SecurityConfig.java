@@ -70,7 +70,6 @@ public class SecurityConfig {
 
                                 // PERMISOS PARA RECURSOS API
                                 .requestMatchers("/api/usuario/**").permitAll()
-                                .requestMatchers("/api/elemento/**").permitAll()
                                 .requestMatchers("/api/categoria/**").permitAll()
                                 .requestMatchers("/api/oferta/**").permitAll()
                                 .requestMatchers("/api/carrito/**").permitAll()
@@ -78,9 +77,10 @@ public class SecurityConfig {
                                 .requestMatchers("/api/obra/**").permitAll()
                                 .requestMatchers("/api/direccion/**").permitAll()
                                 .requestMatchers("/api/venta/**").permitAll()
-                                .requestMatchers("/api/reporte/**").permitAll()
+                                .requestMatchers("/api/reporteObra/**").permitAll()
+                                .requestMatchers("/api/tipoReporte/**").permitAll()
                                 .requestMatchers("/api/pqrs/**").permitAll()
-                                .requestMatchers("/api/tipoPQRS/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
+                                .requestMatchers("/api/tipoPQRS/**").permitAll()
                                 .requestMatchers("/api/respuesta/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
                                 .requestMatchers("/api/email/**").permitAll()
 

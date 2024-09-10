@@ -20,14 +20,17 @@ public class Direccion {
     @Column(name = "Pk_DireccionId")
     private Long id;
 
-    @Column(name = "Calle", length = 100, nullable = false)
-    private String calle;
+    @Column(name = "Departamento", length = 100, nullable = false)
+    private String departamento;
 
     @Column(name = "Ciudad", length = 50, nullable = false)
     private String ciudad;
 
-    @Column(name = "CodigoPostal", length = 10, nullable = false)
-    private String codigoPostal;
+    @Column(name = "Direccion", length = 100, nullable = false)
+    private String direccion;
+
+    @Column(name = "Observaciones", length = 155)
+    private String observaciones;
 
     @ManyToOne
     @JoinColumn(name = "Fk_Identificacion", nullable = false)

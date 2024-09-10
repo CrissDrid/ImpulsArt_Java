@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,11 +35,17 @@ public class DireccionController {
             // Crear una instancia de Direccion
             Direccion direccion = new Direccion();
 
-            // Verificar y establecer los campos de la dirección desde el request
-            if (request.get("calle") != null) {
-                direccion.setCalle(request.get("calle").toString());
+            if (request.get("departamento") != null) {
+                direccion.setDepartamento(request.get("departamento").toString());
             } else {
-                throw new IllegalArgumentException("El campo 'calle' no puede ser nulo");
+                throw new IllegalArgumentException("El campo 'departamento' no puede ser nulo");
+            }
+
+            // Verificar y establecer los campos de la dirección desde el request
+            if (request.get("direccion") != null) {
+                direccion.setDireccion(request.get("direccion").toString());
+            } else {
+                throw new IllegalArgumentException("El campo 'direccion' no puede ser nulo");
             }
 
             if (request.get("ciudad") != null) {
@@ -47,11 +54,7 @@ public class DireccionController {
                 throw new IllegalArgumentException("El campo 'ciudad' no puede ser nulo");
             }
 
-            if (request.get("codigoPostal") != null) {
-                direccion.setCodigoPostal(request.get("codigoPostal").toString());
-            } else {
-                throw new IllegalArgumentException("El campo 'codigoPostal' no puede ser nulo");
-            }
+            direccion.setObservaciones(request.get("observaciones").toString());
 
             // Manejo de la llave foránea (Usuario)
             if (request.get("fkUsuario") != null) {
@@ -150,11 +153,30 @@ public class DireccionController {
     public ResponseEntity<Map<String, Object>> update(@PathVariable Long pkCod_Direccion, @RequestBody Map<String, Object> request) {
         Map<String, Object> response = new HashMap<>();
         try {
+
             Direccion direccion = this.direccionImp.findById(pkCod_Direccion);
 
-            direccion.setCalle(request.get("calle").toString());
-            direccion.setCiudad(request.get("ciudad").toString());
-            direccion.setCodigoPostal(request.get("codigoPostal").toString());
+            // Verificar y establecer los campos de la dirección desde el request
+            if (request.get("departamento") != null) {
+                direccion.setDepartamento(request.get("departamento").toString());
+            } else {
+                throw new IllegalArgumentException("El campo 'departamento' no puede ser nulo");
+            }
+
+            // Verificar y establecer los campos de la dirección desde el request
+            if (request.get("direccion") != null) {
+                direccion.setDireccion(request.get("direccion").toString());
+            } else {
+                throw new IllegalArgumentException("El campo 'direccion' no puede ser nulo");
+            }
+
+            if (request.get("ciudad") != null) {
+                direccion.setCiudad(request.get("ciudad").toString());
+            } else {
+                throw new IllegalArgumentException("El campo 'ciudad' no puede ser nulo");
+            }
+
+            direccion.setObservaciones(request.get("observaciones").toString());
 
             this.direccionImp.update(direccion);
 

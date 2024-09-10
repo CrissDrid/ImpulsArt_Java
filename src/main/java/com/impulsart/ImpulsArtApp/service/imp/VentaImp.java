@@ -1,11 +1,15 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
+import com.impulsart.ImpulsArtApp.entities.Carrito;
+import com.impulsart.ImpulsArtApp.entities.ElementoCarrito;
+import com.impulsart.ImpulsArtApp.entities.Obra;
 import com.impulsart.ImpulsArtApp.entities.Venta;
 import com.impulsart.ImpulsArtApp.repositories.VentaRepositorio;
 import com.impulsart.ImpulsArtApp.service.VentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -13,6 +17,13 @@ public class VentaImp implements VentaService {
 
     @Autowired
     private VentaRepositorio ventaRepositorio;
+
+    @Autowired
+    private ElementoCarritoImp elementoCarritoImp;
+
+    @Autowired
+    private ObraImp obraImp;
+
     @Override
     public List<Venta> findAll() throws Exception {
         return this.ventaRepositorio.findAll();
@@ -25,7 +36,7 @@ public class VentaImp implements VentaService {
 
     @Override
     public void create(Venta venta) {
-        this.ventaRepositorio.save(venta);
+        ventaRepositorio.save(venta);
     }
 
     @Override
@@ -37,4 +48,7 @@ public class VentaImp implements VentaService {
     public void delete(Venta venta) {
         this.ventaRepositorio.delete(venta);
     }
+
+
+
 }

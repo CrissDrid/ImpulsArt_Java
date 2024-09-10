@@ -75,10 +75,13 @@ public class SubastaImp implements SubastaService {
 
                     // Informar a los demás participantes
                     for (Oferta oferta : ofertas) {
-                        // Enviar correos solo a los participantes que no sean el ganador
-                        if (!oferta.equals(mejorOferta)) {
-                            emailImp.enviarCorreoSubasta(oferta.getUsuarios().getEmail(), "Resultado de Subasta",
-                                    oferta.getUsuarios().getNombre(), "Lamentablemente, tu oferta para la obra '" + subasta.getObras().getNombreProducto() + "' no fue la ganadora.");
+                        Usuario participante = oferta.getUsuarios();
+                        if (!participante.equals(ganador)) {
+                            emailImp.enviarCorreoSubasta(participante.getEmail(), "Resultado de Subasta",
+                                    participante.getNombre(), "Lamentablemente, tu oferta para la obra '" + subasta.getObras().getNombreProducto() + "' no fue la ganadora.");
+                        } else {
+                            // Mensaje de depuración para verificar el ganador
+                            System.out.println("Ganador notificado: " + participante.getNombre());
                         }
                     }
                 }

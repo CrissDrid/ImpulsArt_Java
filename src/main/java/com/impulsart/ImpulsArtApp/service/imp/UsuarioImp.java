@@ -38,6 +38,15 @@ public class UsuarioImp implements UsuarioService {
     }
 
     @Override
+    public List<Usuario> findByRolNombre(String nombreRol) {
+        List<Usuario> usuarios = usuarioRepositorio.findByRolNombre(nombreRol);
+        if (usuarios.isEmpty()) {
+            throw new UsernameNotFoundException("No se encontraron usuarios con el rol: " + nombreRol);
+        }
+        return usuarios;
+    }
+
+    @Override
     public Usuario findByEmail(String email) {
         Usuario usuario = usuarioRepositorio.findByEmail(email);
         if (usuario == null) {

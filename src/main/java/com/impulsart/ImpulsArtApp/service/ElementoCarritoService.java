@@ -16,6 +16,6 @@ public interface ElementoCarritoService {
     public void create(ElementoCarrito elementoCarrito);
     public void update(ElementoCarrito elementoCarrito);
     public void delete(ElementoCarrito elementoCarrito);
-
+    public List<ElementoCarrito> findByCarrito(Carrito carrito);
 
 }
