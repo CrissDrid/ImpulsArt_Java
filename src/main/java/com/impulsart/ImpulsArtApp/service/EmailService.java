@@ -8,5 +8,6 @@ public interface EmailService {
     void enviarCorreo(String destinatario, String asunto, String nombre, String mensaje);
     void enviarCorreoSubasta(String destinatario, String asunto, String nombre, String mensaje);
     void enviarCorreoRespuesta(String asunto, String destinatario, String mensaje);
+    void enviarCorreoCompraCreador(String destinatario, String asunto, String nombre, String mensaje);
 
 }

@@ -81,7 +81,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/tipoReporte/**").permitAll()
                                 .requestMatchers("/api/pqrs/**").permitAll()
                                 .requestMatchers("/api/tipoPQRS/**").permitAll()
-                                .requestMatchers("/api/respuesta/**").hasAnyAuthority("USER", "ADMIN", "ASESOR", "DOMICILIARIO")
+                                .requestMatchers("/api/respuesta/**").permitAll()
                                 .requestMatchers("/api/email/**").permitAll()
 
                                 // Permitir todas las solicitudes a recursos estáticos y ciertos endpoints sin autenticación
