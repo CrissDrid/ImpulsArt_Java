@@ -40,48 +40,45 @@ public class SubastaImp implements SubastaService {
     @Override
     public String finalizarSubastas() {
         LocalDateTime ahora = LocalDateTime.now();
-
-        // Obtener solo las subastas activas que deben ser procesadas
         List<Subasta> subastas = subastaRepository.findSubastasActivasParaFinalizar(ahora);
 
         for (Subasta subasta : subastas) {
-            // Verificar si el estado ya está en "Finalizado"
             if (!"Finalizado".equals(subasta.getEstadoSubasta())) {
-                // Cambiar el estado de la subasta a "Finalizado"
                 subasta.setEstadoSubasta("Finalizado");
                 subastaRepository.save(subasta);
 
                 List<Oferta> ofertas = ofertaImp.findOfertasBySubasta(subasta.getPkCodSubasta());
+                Usuario creador = subastaRepository.findUsuarioBySubastaId(subasta.getPkCodSubasta());
+                String obraNombre = subasta.getObras().getNombreProducto();
 
                 if (ofertas.isEmpty()) {
                     // Caso 1: No hay ofertas
-                    Usuario creador = subastaRepository.findUsuarioBySubastaId(subasta.getPkCodSubasta());
                     emailImp.enviarCorreoSubasta(creador.getEmail(), "Finalización de Subasta", creador.getNombre(),
-                            "La subasta para la obra '" + subasta.getObras().getNombreProducto() + "' ha finalizado sin ofertas.");
+                            "La subasta para la obra '" + obraNombre + "' ha finalizado sin ofertas.");
+                    System.out.println("Correo de no ofertas enviado a: " + creador.getEmail());
                 } else {
                     // Caso 2: Hay ofertas
                     Oferta mejorOferta = ofertaImp.findOfertaMasAlta(subasta.getPkCodSubasta());
-                    Usuario creador = subastaRepository.findUsuarioBySubastaId(subasta.getPkCodSubasta());
                     Usuario ganador = mejorOferta.getUsuarios();
 
                     // Informar al creador de la subasta
                     emailImp.enviarCorreoSubasta(creador.getEmail(), "Finalización de Subasta",
-                            creador.getNombre(), "La subasta para la obra '" + subasta.getObras().getNombreProducto() + "' ha finalizado. Ganador: " + ganador.getNombre() +
+                            creador.getNombre(), "La subasta para la obra '" + obraNombre + "' ha finalizado. Ganador: " + ganador.getNombre() +
                                     ". Número de ofertas: " + ofertas.size() + ".");
+                    System.out.println("Correo de finalización enviado al creador: " + creador.getEmail());
 
                     // Informar al ganador
                     emailImp.enviarCorreoSubasta(ganador.getEmail(), "Ganador de Subasta",
-                            ganador.getNombre(), "Felicidades, has ganado la subasta para la obra '" + subasta.getObras().getNombreProducto() + "' con una puja de: " + mejorOferta.getMonto() + ".");
+                            ganador.getNombre(), "Felicidades, has ganado la subasta para la obra '" + obraNombre + "' con una puja de: " + mejorOferta.getMonto() + ".");
+                    System.out.println("Correo de ganador enviado a: " + ganador.getEmail());
 
                     // Informar a los demás participantes
                     for (Oferta oferta : ofertas) {
                         Usuario participante = oferta.getUsuarios();
                         if (!participante.equals(ganador)) {
                             emailImp.enviarCorreoSubasta(participante.getEmail(), "Resultado de Subasta",
-                                    participante.getNombre(), "Lamentablemente, tu oferta para la obra '" + subasta.getObras().getNombreProducto() + "' no fue la ganadora.");
-                        } else {
-                            // Mensaje de depuración para verificar el ganador
-                            System.out.println("Ganador notificado: " + participante.getNombre());
+                                    participante.getNombre(), "Lamentablemente, tu oferta para la obra '" + obraNombre + "' no fue la ganadora.");
+                            System.out.println("Correo de no ganador enviado a: " + participante.getEmail());
                         }
                     }
                 }
@@ -90,6 +87,7 @@ public class SubastaImp implements SubastaService {
 
         return "Subastas finalizadas y correos enviados";
     }
+
     @Override
     public List<Subasta> findHistorialObrasSubasta(Integer identificacion) {
         List<Subasta> subastas = this.subastaRepository.findHistorialObrasSubasta(identificacion);

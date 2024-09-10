@@ -54,6 +54,31 @@ public class EmailImp implements EmailService {
     }
 
     @Override
+    public void enviarCorreoCompraCreador(String destinatario, String asunto, String nombre, String mensaje) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+            // Configura el destinatario y el asunto
+            helper.setTo(destinatario);
+            helper.setSubject(asunto);
+
+            // Leer el archivo de plantilla y reemplazar los marcadores de posición
+            String htmlTemplate = readTemplate("EmailNotificacionCompraCreador.html");
+            String htmlContent = htmlTemplate
+                    .replace("[[nombre]]", nombre)
+                    .replace("[[mensaje]]", mensaje);
+
+            // Configura el contenido HTML del correo
+            helper.setText(htmlContent, true); // true indica que el contenido es HTML
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException | IOException e) {
+            throw new RuntimeException("Error al enviar correo", e);
+        }
+    }
+
+    @Override
     public void enviarCorreoSubasta(String destinatario, String asunto, String nombre, String mensaje) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
@@ -89,7 +114,7 @@ public class EmailImp implements EmailService {
             helper.setSubject(asunto);
 
             // Leer el archivo de plantilla y reemplazar los marcadores de posición
-            String htmlTemplate = readTemplate("EmailSubasta.html");
+            String htmlTemplate = readTemplate("EmailRespuesta.html");
             String htmlContent = htmlTemplate
                     .replace("[[mensaje]]", mensaje);
 

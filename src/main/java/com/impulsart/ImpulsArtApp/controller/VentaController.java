@@ -77,6 +77,9 @@ public class VentaController {
             BigDecimal costoTotal = BigDecimal.ZERO;
             StringBuilder detalleCompra = new StringBuilder(); // Para almacenar el detalle de la compra
 
+            // Mapa para almacenar la información de ventas por creador
+            Map<Usuario, Map<String, Integer>> ventasPorCreador = new HashMap<>();
+
             // Recorrer los elementos del carrito y calcular el costo total
             for (ElementoCarrito elemento : elementos) {
                 Obra obra = obraImp.findById(elemento.getObra().getPkCod_Producto());
@@ -91,6 +94,16 @@ public class VentaController {
                             .append("<td>").append(elemento.getCantidad()).append("</td>")
                             .append("<td>$").append(subtotal).append("</td>")
                             .append("</tr>");
+
+                    // Actualizar el mapa de ventas por creador
+                    List<Usuario> usuarios = obra.getUsuarios();
+                    if (usuarios != null) {
+                        for (Usuario usuario : usuarios) {
+                            ventasPorCreador.putIfAbsent(usuario, new HashMap<>());
+                            Map<String, Integer> infoVenta = ventasPorCreador.get(usuario);
+                            infoVenta.merge(obra.getNombreProducto(), elemento.getCantidad(), Integer::sum);
+                        }
+                    }
                 }
             }
 
@@ -131,7 +144,7 @@ public class VentaController {
 
             // Seleccionar un domiciliario aleatoriamente
             Collections.shuffle(domiciliarios);
-            Usuario domiciliario = domiciliarios.get(0); // Selecciona el primer domiciliario después de mezclar
+            Usuario domiciliario = domiciliarios.get(0);
 
             // Asignar el domiciliario al despacho
             despacho.setUsuario(Collections.singletonList(domiciliario));
@@ -166,51 +179,57 @@ public class VentaController {
                 );
             }
 
+            // Notificar a los creadores de las obras
+            for (Map.Entry<Usuario, Map<String, Integer>> entry : ventasPorCreador.entrySet()) {
+                Usuario creador = entry.getKey();
+                Map<String, Integer> obrasVendidas = entry.getValue();
+                StringBuilder mensajeCreador = new StringBuilder();
+                for (Map.Entry<String, Integer> obraEntry : obrasVendidas.entrySet()) {
+                    String nombreObra = obraEntry.getKey();
+                    Integer cantidad = obraEntry.getValue();
+                    BigDecimal subtotalObra = BigDecimal.ZERO;
+                    for (ElementoCarrito elemento : elementos) {
+                        Obra obra = elemento.getObra();
+                        if (obra.getNombreProducto().equals(nombreObra)) {
+                            subtotalObra = subtotalObra.add(new BigDecimal(obra.getCosto()).multiply(BigDecimal.valueOf(elemento.getCantidad())));
+                        }
+                    }
+                    mensajeCreador.append("Le han comprado su obra '")
+                            .append(nombreObra)
+                            .append("' (x")
+                            .append(cantidad)
+                            .append(") por un total de $")
+                            .append(subtotalObra.toString())
+                            .append("\n");
+                }
+
+                // Enviar el correo al creador
+                emailImp.enviarCorreoCompraCreador(
+                        creador.getEmail(),
+                        "Compra de Su Obra",
+                        creador.getNombre(),
+                        mensajeCreador.toString()
+                );
+            }
+
             response.put("status", "success");
             response.put("data", "Registro Exitoso");
+        } catch (IllegalArgumentException e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } catch (RuntimeException e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
             e.printStackTrace();
             response.put("status", "error");
-            response.put("data", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+            response.put("data", "Error inesperado");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    //CONTROLLER READ
-    //READ ALL
-    @GetMapping("/all")
-    public ResponseEntity<Map<String, Object>> findAll() {
-        Map<String, Object> response = new HashMap<>();
-
-        try {
-            List<Venta> ventaList = this.ventaImp.findAll();
-            response.put("status", "success");
-            response.put("data", ventaList);
-        } catch (Exception e) {
-            response.put("status", HttpStatus.BAD_GATEWAY);
-            response.put("data", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
-        }
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    //READ ID
-    @GetMapping("/list/{PkCod_Venta}")
-    public ResponseEntity<Map<String, Object>> findById(@PathVariable Integer PkCod_Venta) {
-        Map<String, Object> response = new HashMap<>();
-
-        try {
-            Venta venta = this.ventaImp.findById(PkCod_Venta);
-            response.put("status","success");
-            response.put("data",venta);
-        } catch (Exception e) {
-            response.put("status", HttpStatus.BAD_GATEWAY);
-            response.put("data", e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
-        }
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
 //CONTROLLER UPDATE
     @PutMapping("/update/{PkCod_Venta}")
     public ResponseEntity<Map<String,Object>> update(@PathVariable Integer PkCod_Venta, @RequestBody Map<String,Object> request){
