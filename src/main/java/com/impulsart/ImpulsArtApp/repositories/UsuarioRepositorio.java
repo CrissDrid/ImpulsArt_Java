@@ -30,9 +30,6 @@ public interface UsuarioRepositorio extends JpaRepository<Usuario, Integer> {
     //Verificar si existe el usuario mediante el email
     Boolean existsByEmail(String email);
 
-    //Verificar si existe el usuario mediante el userName
-    Boolean existsByUsername(String userName);
-
     List<Usuario> findByRolNombre(String nombreRol);
 
 }

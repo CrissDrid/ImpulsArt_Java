@@ -54,10 +54,10 @@ public class RespuestaController {
             this.respuestaImp.create(respuesta);
 
             // Enviar correo
-            String destinatario = request.get("destinatario").toString(); // Usa el valor del request
+            String destinatario = request.get(respuesta.getPqrs().getUsuario().getEmail()).toString(); // Usa el valor del request
             // Establece el asunto a un valor fijo
             String asunto = "Respuesta de su PQRS";
-            String mensaje = request.get("mensaje").toString(); // Usa el valor del request
+            String mensaje = request.get(respuesta.getComentario()).toString(); // Usa el valor del request
 
             emailImp.enviarCorreoRespuesta(asunto, destinatario, mensaje);
 

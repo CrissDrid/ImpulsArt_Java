@@ -31,8 +31,6 @@ public class PqrsController {
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> create(
             @RequestParam("descripcion") String descripcion,
-            @RequestParam("estado") String estado,
-            @RequestParam(value = "fechaCierre", required = false) String fechaCierre,
             @RequestParam("fkCod_TipoPQRS") Long fkCod_TipoPqrs,
             @RequestParam("usuarioId") Integer usuarioId) {
 
@@ -42,8 +40,9 @@ public class PqrsController {
             // Instanciar el objeto PQRS y establecer los campos
             Pqrs pqrs = new Pqrs();
             pqrs.setDescripcion(descripcion);
-            pqrs.setEstado(estado);
-            pqrs.setFechaCierre(fechaCierre != null ? LocalDate.parse(fechaCierre) : null);
+            pqrs.setFechaPQRS(LocalDate.now());
+            pqrs.setEstado("Pendiente");
+            pqrs.setFechaCierre(null);
 
             // Obtener y establecer el tipo de PQRS
             TipoPqrs tipoPQRS = tipoPqrsImp.findById(fkCod_TipoPqrs);
