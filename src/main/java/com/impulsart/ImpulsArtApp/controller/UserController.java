@@ -239,7 +239,16 @@ public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object
     public ResponseEntity<Map<String,Object>> update(@PathVariable Integer identificacion, @RequestBody Map<String,Object> request){
         Map<String, Object> response = new HashMap<>();
         try{
+
             Usuario usuario = this.usuarioImp.findById(identificacion);
+
+            // Verifica si el usuario ya existe por el correo electrónico
+            String email = request.get("email").toString();
+            if (usuarioImp.existsByEmail(email)) {
+                response.put("status", "error");
+                response.put("message", "El usuario con el correo " + email + " ya está registrado.");
+                return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            }
 
             //CAMPOS DE LA TABLA USUARIOS
             usuario.setIdentificacion(Integer.parseInt(request.get("identificacion").toString()));
