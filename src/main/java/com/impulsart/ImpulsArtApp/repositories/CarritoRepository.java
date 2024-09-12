@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CarritoRepository extends JpaRepository<Carrito, Long> {
 
-    @Query("SELECT c FROM Carrito c WHERE c.usuario.identificacion = :identificacion")
+    @Query("SELECT c FROM Carrito c WHERE c.usuario.identificacion = :identificacion AND c.id NOT IN (SELECT v.carrito.id FROM Venta v)")
     Carrito findByUsuarioId(@Param("identificacion") Integer identificacion);
 
 

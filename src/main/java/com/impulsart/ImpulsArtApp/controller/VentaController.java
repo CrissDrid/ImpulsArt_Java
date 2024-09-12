@@ -86,6 +86,9 @@ public class VentaController {
             formatoMoneda.setMinimumFractionDigits(0); // Sin decimales
             formatoMoneda.setMaximumFractionDigits(0);
 
+            // Costo de envío fijo
+            BigDecimal costoEnvio = BigDecimal.valueOf(10000);
+
             // Recorrer los elementos del carrito y calcular el costo total
             for (ElementoCarrito elemento : elementos) {
                 Obra obra = obraImp.findById(elemento.getObra().getPkCod_Producto());
@@ -93,6 +96,24 @@ public class VentaController {
                     BigDecimal costoObra = obra.getCosto(); // Ahora es BigDecimal
                     BigDecimal subtotal = costoObra.multiply(BigDecimal.valueOf(elemento.getCantidad()));
                     costoTotal = costoTotal.add(subtotal);
+
+                    // Obtener la cantidad actual de la obra
+                    int cantidadActual = obra.getCantidad(); // Suponiendo que obra.getCantidad() devuelve un int
+                    int cantidadElemento = elemento.getCantidad(); // Suponiendo que elemento.getCantidad() devuelve un int
+
+// Calcular la nueva cantidad
+                    int nuevaCantidad = cantidadActual - cantidadElemento;
+
+// Verificar si hay suficiente cantidad disponible
+                    if (nuevaCantidad < 0) {
+                        throw new IllegalArgumentException("No hay suficiente cantidad disponible para la obra: " + obra.getNombreProducto());
+                    }
+
+// Actualizar la cantidad de la obra
+                    obra.setCantidad(nuevaCantidad);
+
+// Guardar los cambios
+                    obraImp.update(obra);
 
                     // Agregar detalles del producto comprado en formato HTML
                     detalleCompra.append("<tr>")
@@ -113,8 +134,11 @@ public class VentaController {
                 }
             }
 
+            // Agregar el costo de envío al costoTotal
+            BigDecimal costoTotalConEnvio = costoTotal.add(costoEnvio);
+
             // Asignar el costoTotal calculado a la venta
-            venta.setCostoTotal(costoTotal);
+            venta.setCostoTotal(costoTotalConEnvio);
 
             List<Usuario> usuarios = new ArrayList<>();
             for (Integer usuarioId : usuarioIds) {
@@ -163,7 +187,8 @@ public class VentaController {
 
             // Notificar al domiciliario asignado
             String mensajeDomiciliario = "Se le ha asignado un nuevo despacho con el número de referencia: " + referenciaUnica +
-                    "\nEl cliente debe pagar un total de: $" + formatoMoneda.format(costoTotal);
+                    "\nEl cliente debe pagar un total de: $" + formatoMoneda.format(costoTotalConEnvio) +
+                    "\nCosto de envío: $" + formatoMoneda.format(costoEnvio);
 
             emailImp.enviarCorreoDespachoAsignado(
                     domiciliario.getEmail(),
@@ -182,7 +207,7 @@ public class VentaController {
                         "Confirmación de Compra",
                         comprador.getNombre(),
                         detalleCompra.toString(), // Detalles del carrito
-                        "$" + formatoMoneda.format(costoTotal) // Costo total
+                        "$" + formatoMoneda.format(costoTotalConEnvio) // Costo total
                 );
             }
 
@@ -219,6 +244,12 @@ public class VentaController {
                 );
             }
 
+            // Crear un nuevo carrito para el usuario que realizó la compra
+            Usuario comprador = usuarios.get(0); // Suponemos que el primer usuario en la lista es el comprador
+            Carrito nuevoCarrito = new Carrito();
+            nuevoCarrito.setUsuario(comprador);
+            carritoImp.create(nuevoCarrito); // Guardar el nuevo carrito
+
             response.put("status", "success");
             response.put("data", "Registro Exitoso");
         } catch (IllegalArgumentException e) {
@@ -234,26 +265,6 @@ public class VentaController {
             response.put("status", "error");
             response.put("data", "Error inesperado");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-//CONTROLLER UPDATE
-    @PutMapping("/update/{PkCod_Venta}")
-    public ResponseEntity<Map<String,Object>> update(@PathVariable Integer PkCod_Venta, @RequestBody Map<String,Object> request){
-        Map<String,Object> response = new HashMap<>();
-        try{
-            Venta venta = this.ventaImp.findById(PkCod_Venta);
-            //CAMPOS DE LA TABLA USUARIOS
-            venta.setFechaVenta(LocalDate.parse(request.get("fechaVenta").toString()));
-
-            this.ventaImp.update(venta);
-
-            response.put("status","success");
-            response.put("data","Actualizacion Exitosa");
-        }catch (Exception e){
-            response.put("status",HttpStatus.BAD_GATEWAY);
-            response.put("data",e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
