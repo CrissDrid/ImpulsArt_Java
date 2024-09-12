@@ -5,6 +5,8 @@ import com.impulsart.ImpulsArtApp.entities.Usuario;
 import java.util.List;
 
 public interface UsuarioService {
+
+    public Usuario findByVerificationToken(String token);
     public List<Usuario> findAll() throws Exception;
     public Usuario findById(Integer identificacion);
     public Usuario findRandomAsesor();

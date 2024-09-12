@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "/api/usuario", method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.HEAD})
@@ -45,6 +42,9 @@ public class UserController {
  @Autowired
  private JwtGenerador jwtGenerador;
 
+    @Autowired
+    private EmailImp emailImp;
+
  @Autowired
  private CarritoImp carritoImp;
 
@@ -53,7 +53,6 @@ public class UserController {
 public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Object> request) {
     Map<String, Object> response = new HashMap<>();
     try {
-        // Verifica si el usuario ya existe por el correo electrónico
         String email = request.get("email").toString();
         if (usuarioImp.existsByEmail(email)) {
             response.put("status", "error");
@@ -61,9 +60,7 @@ public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Objec
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
 
-        // Instancia del objeto Usuario
         Usuario usuario = new Usuario();
-        // Campos de la tabla Usuarios
         usuario.setIdentificacion(Integer.parseInt(request.get("identificacion").toString()));
         usuario.setNombre(request.get("nombre").toString());
         usuario.setApellido(request.get("apellido").toString());
@@ -77,25 +74,47 @@ public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Objec
         Rol rol = rolImp.findById(Long.parseLong(request.get("fk_Rol").toString()));
         usuario.setRol(rol);
 
-        // Guarda el usuario
+        // Genera un token de verificación
+        String verificationToken = UUID.randomUUID().toString();
+        usuario.setVerificationToken(verificationToken);
+        usuario.setTokenExpiration(LocalDate.now().plusDays(1)); // El token expira en 1 día
+        usuario.setVerificado(false); // Marca al usuario como no verificado
+
         Usuario nuevoUsuario = this.usuarioImp.create(usuario);
 
-        // Instancia y configura el objeto Carrito
-        Carrito carrito = new Carrito();
-        carrito.setUsuario(nuevoUsuario);  // Asocia el carrito con el usuario
-
-        // Guarda el carrito
-        this.carritoImp.create(carrito);
+        // Enviar correo de verificación con el token
+        String verifyUrl = "http://localhost:8086/api/usuario/verify?token=" + verificationToken;
+        emailImp.enviarCorreoVerificacion(usuario.getEmail(), "Verifica tu cuenta", usuario.getNombre(), verifyUrl);
 
         response.put("status", "success");
-        response.put("data", "Registro Exitoso");
+        response.put("message", "Registro Exitoso. Revisa tu correo para verificar tu cuenta.");
     } catch (Exception e) {
         response.put("status", "error");
         response.put("message", "Error al crear el usuario: " + e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
     return new ResponseEntity<>(response, HttpStatus.OK);
 }
+
+    @GetMapping("/verify")
+    public ResponseEntity<String> verifyToken(@RequestParam("token") String token) {
+        Usuario usuario = usuarioImp.findByVerificationToken(token);
+
+        if (usuario != null) {
+            // Verifica si el token ha expirado
+            if (usuario.getTokenExpiration().isAfter(LocalDate.now())) {
+                usuario.setVerificado(true);
+                usuario.setVerificationToken(null); // Limpiar el token después de la verificación
+                usuarioImp.update(usuario); // Guarda los cambios en la base de datos
+
+                return ResponseEntity.ok("<!DOCTYPE html><html><head><script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script></head><body><script>Swal.fire({ title: '¡Verificación exitosa!', text: 'Tu cuenta ha sido verificada con éxito.', icon: 'success', confirmButtonText: 'Aceptar' }).then((result) => { if (result.isConfirmed) { window.close(); } });</script></body></html>");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("<!DOCTYPE html><html><head><script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script></head><body><script>Swal.fire({ title: 'Token expirado', text: 'El token de verificación ha expirado.', icon: 'error', confirmButtonText: 'Aceptar' }).then((result) => { if (result.isConfirmed) { window.close(); } });</script></body></html>");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("<!DOCTYPE html><html><head><script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script></head><body><script>Swal.fire({ title: 'Token inválido', text: 'El token de verificación es inválido.', icon: 'error', confirmButtonText: 'Aceptar' }).then((result) => { if (result.isConfirmed) { window.close(); } });</script></body></html>");
+        }
+    }
 
 
     @PostMapping("/login")
@@ -113,6 +132,16 @@ public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Objec
 
             // Establecer la autenticación en el contexto de seguridad
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Obtener el usuario autenticado
+            Usuario usuario = usuarioImp.findByEmail(email);
+
+            // Verificar si la cuenta está verificada
+            if (usuario != null && !usuario.isVerificado()) {
+                response.put("status", "error");
+                response.put("message", "Por favor, verifica tu cuenta antes de iniciar sesión.");
+                return new ResponseEntity<>(response, HttpStatus.FORBIDDEN); // O puedes usar otro código de estado si lo prefieres
+            }
 
             // Generar el token JWT
             String token = jwtGenerador.generarToken(authentication);

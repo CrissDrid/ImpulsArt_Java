@@ -16,6 +16,11 @@ public class UsuarioImp implements UsuarioService {
     private UsuarioRepositorio usuarioRepositorio;
 
     @Override
+    public Usuario findByVerificationToken(String token) {
+        return usuarioRepositorio.findByVerificationToken(token);
+    }
+
+    @Override
     public List<Usuario> findAll() throws Exception {
         return this.usuarioRepositorio.findAll();
     }

@@ -349,16 +349,12 @@ public class SubastaController {
             @PathVariable Long pkCodSubasta,
             @RequestParam(value = "imagen", required = false) MultipartFile imagen,
             @RequestParam("nombreProducto") String nombreProducto,
-            @RequestParam("costo") BigDecimal costo,
             @RequestParam("peso") String peso,
             @RequestParam("tamano") String tamano,
-            @RequestParam("cantidad") int cantidad,
             @RequestParam("alto") String alto,
             @RequestParam("ancho") String ancho,
             @RequestParam("categoriaId") Long categoriaId,
-            @RequestParam("descripcion") String descripcion,
-            @RequestParam("precioInicial") BigDecimal precioInicial,
-            @RequestParam("fechaFinalizacion") String fechaFinalizacion) {
+            @RequestParam("descripcion") String descripcion) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -377,12 +373,10 @@ public class SubastaController {
 
             // Actualizar los campos de la obra
             obra.setNombreProducto(nombreProducto);
-            obra.setCosto(costo);
             obra.setPeso(peso);
             obra.setTamano(tamano);
             obra.setAlto(alto);
             obra.setAncho(ancho);
-            obra.setCantidad(cantidad);
             obra.setDescripcion(descripcion);
 
             if (imagen != null && !imagen.isEmpty()) {
@@ -401,13 +395,6 @@ public class SubastaController {
 
             // Guardar la obra actualizada
             obraImp.update(obra);
-
-            // Actualizar los campos de la subasta
-            subasta.setPrecioInicial(precioInicial);
-            subasta.setFechaFinalizacion(LocalDateTime.parse(fechaFinalizacion));
-
-            // Guardar la subasta actualizada
-            subastaImp.update(subasta);
 
             response.put("status", "success");
             response.put("data", "Actualización Exitosa");

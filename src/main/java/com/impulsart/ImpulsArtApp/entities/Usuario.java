@@ -33,6 +33,12 @@ public class Usuario {
     private String numCelular;
     @Column(name = "Contrasena", columnDefinition = "TEXT", nullable = false)
     private String contrasena;
+    @Column(name = "Verificado", columnDefinition = "TEXT", nullable = false)
+    private boolean verificado;
+    @Column(name = "VerificationToken")
+    private String verificationToken;
+    @Column(name = "TokenExpiration")
+    private LocalDate tokenExpiration;
     @Column(name = "TipoUsuario", length = 50, nullable = false)
     private String tipoUsuario;
 

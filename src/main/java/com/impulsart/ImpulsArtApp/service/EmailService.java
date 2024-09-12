@@ -2,6 +2,7 @@ package com.impulsart.ImpulsArtApp.service;
 
 public interface EmailService {
 
+    void enviarCorreoVerificacion(String destinatario, String asunto, String nombre, String mensaje);
     void enviarCorreoObraEliminada(String destinatario, String asunto, String mensaje);
     void enviarCorreoVenta(String destinatario, String asunto, String nombre, String detalleCompra, String costoTotal);
     void enviarCorreoPqrsAsignado(String destinatario, String asunto, String nombre, String mensaje);

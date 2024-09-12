@@ -256,6 +256,32 @@ public class EmailImp implements EmailService {
         }
     }
 
+    @Override
+    public void enviarCorreoVerificacion(String destinatario, String asunto, String nombre, String verifyUrl) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+            // Configura el destinatario y el asunto
+            helper.setTo(destinatario);
+            helper.setSubject(asunto);
+
+            // Leer el archivo de plantilla y reemplazar los marcadores de posición
+            String htmlTemplate = readTemplate("EmailVerificacion.html");
+            String htmlContent = htmlTemplate
+                    .replace("[[nombre]]", nombre)
+                    .replace("[[mensaje]]", "Gracias por registrarte en ImpulsArt. Para completar tu registro, por favor verifica tu dirección de correo electrónico haciendo clic en el siguiente botón:")
+                    .replace("[[verificationToken]]", verifyUrl);
+
+            // Configura el contenido HTML del correo
+            helper.setText(htmlContent, true); // true indica que el contenido es HTML
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException | IOException e) {
+            throw new RuntimeException("Error al enviar correo", e);
+        }
+    }
+
     public String readTemplate(String templatePath) throws IOException {
         try {
             Resource resource = new ClassPathResource("templates/" + templatePath);
