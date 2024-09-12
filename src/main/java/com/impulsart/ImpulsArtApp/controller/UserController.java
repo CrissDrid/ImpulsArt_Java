@@ -48,53 +48,57 @@ public class UserController {
  @Autowired
  private CarritoImp carritoImp;
 
-//CONTROLLER CREATE
-@PostMapping("/create")
-public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Object> request) {
-    Map<String, Object> response = new HashMap<>();
-    try {
-        String email = request.get("email").toString();
-        if (usuarioImp.existsByEmail(email)) {
+    @PostMapping("/create")
+    public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Object> request) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            String email = request.get("email").toString();
+            if (usuarioImp.existsByEmail(email)) {
+                response.put("status", "error");
+                response.put("message", "El usuario con el correo " + email + " ya está registrado.");
+                return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            }
+
+            Usuario usuario = new Usuario();
+            usuario.setIdentificacion(Integer.parseInt(request.get("identificacion").toString()));
+            usuario.setNombre(request.get("nombre").toString());
+            usuario.setApellido(request.get("apellido").toString());
+            usuario.setFechaNacimiento(LocalDate.parse(request.get("fechaNacimiento").toString()));
+            usuario.setEmail(request.get("email").toString());
+            usuario.setNumCelular(request.get("numCelular").toString());
+            usuario.setContrasena(passwordEncoder.encode(request.get("contrasena").toString()));
+            usuario.setTipoUsuario(request.get("tipoUsuario").toString());
+            usuario.setUserName(request.get("userName").toString());
+
+            Rol rol = rolImp.findById(Long.parseLong(request.get("fk_Rol").toString()));
+            usuario.setRol(rol);
+
+            // Genera un token de verificación
+            String verificationToken = UUID.randomUUID().toString();
+            usuario.setVerificationToken(verificationToken);
+            usuario.setTokenExpiration(LocalDate.now().plusDays(1)); // El token expira en 1 día
+            usuario.setVerificado(false); // Marca al usuario como no verificado
+
+            Usuario nuevoUsuario = this.usuarioImp.create(usuario);
+
+            // Crear el carrito para el nuevo usuario
+            Carrito carrito = new Carrito();
+            carrito.setUsuario(nuevoUsuario);
+            carritoImp.create(carrito); // Suponiendo que tienes un servicio para manejar el carrito
+
+            // Enviar correo de verificación con el token
+            String verifyUrl = "https://athletic-wholeness-production.up.railway.app/api/usuario/verify?token=" + verificationToken;
+            emailImp.enviarCorreoVerificacion(usuario.getEmail(), "Verifica tu cuenta", usuario.getNombre(), verifyUrl);
+
+            response.put("status", "success");
+            response.put("message", "Registro Exitoso. Revisa tu correo para verificar tu cuenta.");
+        } catch (Exception e) {
             response.put("status", "error");
-            response.put("message", "El usuario con el correo " + email + " ya está registrado.");
-            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            response.put("message", "Error al crear el usuario: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-
-        Usuario usuario = new Usuario();
-        usuario.setIdentificacion(Integer.parseInt(request.get("identificacion").toString()));
-        usuario.setNombre(request.get("nombre").toString());
-        usuario.setApellido(request.get("apellido").toString());
-        usuario.setFechaNacimiento(LocalDate.parse(request.get("fechaNacimiento").toString()));
-        usuario.setEmail(request.get("email").toString());
-        usuario.setNumCelular(request.get("numCelular").toString());
-        usuario.setContrasena(passwordEncoder.encode(request.get("contrasena").toString()));
-        usuario.setTipoUsuario(request.get("tipoUsuario").toString());
-        usuario.setUserName(request.get("userName").toString());
-
-        Rol rol = rolImp.findById(Long.parseLong(request.get("fk_Rol").toString()));
-        usuario.setRol(rol);
-
-        // Genera un token de verificación
-        String verificationToken = UUID.randomUUID().toString();
-        usuario.setVerificationToken(verificationToken);
-        usuario.setTokenExpiration(LocalDate.now().plusDays(1)); // El token expira en 1 día
-        usuario.setVerificado(false); // Marca al usuario como no verificado
-
-        Usuario nuevoUsuario = this.usuarioImp.create(usuario);
-
-        // Enviar correo de verificación con el token
-        String verifyUrl = "https://athletic-wholeness-production.up.railway.app/api/usuario/verify?token=" + verificationToken;
-        emailImp.enviarCorreoVerificacion(usuario.getEmail(), "Verifica tu cuenta", usuario.getNombre(), verifyUrl);
-
-        response.put("status", "success");
-        response.put("message", "Registro Exitoso. Revisa tu correo para verificar tu cuenta.");
-    } catch (Exception e) {
-        response.put("status", "error");
-        response.put("message", "Error al crear el usuario: " + e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    return new ResponseEntity<>(response, HttpStatus.OK);
-}
 
     @GetMapping("/verify")
     public ResponseEntity<String> verifyToken(@RequestParam("token") String token) {
