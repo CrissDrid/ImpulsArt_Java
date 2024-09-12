@@ -83,7 +83,7 @@ public ResponseEntity<Map<String, Object>> create(@RequestBody Map<String, Objec
         Usuario nuevoUsuario = this.usuarioImp.create(usuario);
 
         // Enviar correo de verificación con el token
-        String verifyUrl = "http://localhost:8086/api/usuario/verify?token=" + verificationToken;
+        String verifyUrl = "https://athletic-wholeness-production.up.railway.app/api/usuario/verify?token=" + verificationToken;
         emailImp.enviarCorreoVerificacion(usuario.getEmail(), "Verifica tu cuenta", usuario.getNombre(), verifyUrl);
 
         response.put("status", "success");
