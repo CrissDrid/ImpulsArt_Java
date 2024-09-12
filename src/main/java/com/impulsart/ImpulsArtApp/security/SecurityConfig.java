@@ -80,6 +80,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/reporteObra/**").permitAll()
                                 .requestMatchers("/api/tipoReporte/**").permitAll()
                                 .requestMatchers("/api/pqrs/**").permitAll()
+                                .requestMatchers("/api/despacho/**").permitAll()
                                 .requestMatchers("/api/tipoPQRS/**").permitAll()
                                 .requestMatchers("/api/respuesta/**").permitAll()
                                 .requestMatchers("/api/email/**").permitAll()
