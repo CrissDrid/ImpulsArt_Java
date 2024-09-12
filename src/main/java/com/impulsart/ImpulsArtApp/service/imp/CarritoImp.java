@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -77,8 +78,15 @@ public class CarritoImp implements CarritoService {
             throw new IllegalArgumentException("No hay suficiente stock disponible para la nueva cantidad");
         }
 
-        // Actualizar la cantidad en el elemento del carrito
+        // Obtener el costo unitario de la obra
+        BigDecimal costoUnitario = obra.getCosto();
+
+        // Calcular el costo total basado en la nueva cantidad
+        BigDecimal costoTotal = costoUnitario.multiply(BigDecimal.valueOf(nuevaCantidad));
+
+        // Actualizar la cantidad y el costo total en el elemento del carrito
         elementoCarrito.setCantidad(nuevaCantidad);
+        elementoCarrito.setCostoIndividual(costoTotal);
 
         // Guardar el elemento actualizado
         elementoCarritoImp.create(elementoCarrito);
@@ -101,6 +109,8 @@ public class CarritoImp implements CarritoService {
         // Buscar el elemento del carrito que corresponde a la obra
         ElementoCarrito elementoCarrito = elementoCarritoImp.findByCarritoAndObra(carrito, obra);
 
+        BigDecimal costoIndividual = obra.getCosto(); // Obtener el costo individual de la obra
+
         if (elementoCarrito != null) {
             // Si el elemento ya existe, actualizar la cantidad
             int cantidadActualEnCarrito = elementoCarrito.getCantidad();
@@ -116,6 +126,9 @@ public class CarritoImp implements CarritoService {
 
             // Establecer la nueva cantidad
             elementoCarrito.setCantidad(cantidadNueva);
+            // Actualizar el costo individual total
+            BigDecimal costoTotal = costoIndividual.multiply(BigDecimal.valueOf(cantidadNueva));
+            elementoCarrito.setCostoIndividual(costoTotal);
         } else {
             // Si el elemento no existe, crear uno nuevo
             if (obra.getCantidad() < cantidad) {
@@ -126,6 +139,10 @@ public class CarritoImp implements CarritoService {
             elementoCarrito.setCarrito(carrito);
             elementoCarrito.setObra(obra);
             elementoCarrito.setCantidad(cantidad);
+
+            // Calcular el costo individual total
+            BigDecimal costoTotal = costoIndividual.multiply(BigDecimal.valueOf(cantidad));
+            elementoCarrito.setCostoIndividual(costoTotal);
         }
 
         // Guardar el elemento actualizado o nuevo

@@ -3,6 +3,7 @@ package com.impulsart.ImpulsArtApp.repositories;
 import com.impulsart.ImpulsArtApp.entities.Obra;
 import com.impulsart.ImpulsArtApp.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.repository.query.Param;
@@ -22,5 +23,9 @@ public interface ObraRepositorio extends JpaRepository <Obra ,Integer> {
     List<Obra> findObrasSinSubasta();
 
     List<Obra> findByNombreProductoContainingIgnoreCase(String nombreProducto);
+
+    // Encuentra obras asociadas con un usuario específico
+    @Query("SELECT u FROM Usuario u JOIN u.obras o WHERE o.pkCod_Producto = :obraId")
+    Usuario findCreadorByObraId(@Param("obraId") Integer obraId);
 
 }

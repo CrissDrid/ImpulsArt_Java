@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.security.SecureRandom;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
@@ -80,11 +81,16 @@ public class VentaController {
             // Mapa para almacenar la información de ventas por creador
             Map<Usuario, Map<String, Integer>> ventasPorCreador = new HashMap<>();
 
+            // Formateador de número
+            NumberFormat formatoMoneda = NumberFormat.getInstance(new Locale("es", "CO"));
+            formatoMoneda.setMinimumFractionDigits(0); // Sin decimales
+            formatoMoneda.setMaximumFractionDigits(0);
+
             // Recorrer los elementos del carrito y calcular el costo total
             for (ElementoCarrito elemento : elementos) {
                 Obra obra = obraImp.findById(elemento.getObra().getPkCod_Producto());
                 if (obra != null) {
-                    BigDecimal costoObra = new BigDecimal(obra.getCosto());
+                    BigDecimal costoObra = obra.getCosto(); // Ahora es BigDecimal
                     BigDecimal subtotal = costoObra.multiply(BigDecimal.valueOf(elemento.getCantidad()));
                     costoTotal = costoTotal.add(subtotal);
 
@@ -92,7 +98,7 @@ public class VentaController {
                     detalleCompra.append("<tr>")
                             .append("<td>").append(obra.getNombreProducto()).append("</td>")
                             .append("<td>").append(elemento.getCantidad()).append("</td>")
-                            .append("<td>$").append(subtotal).append("</td>")
+                            .append("<td>").append("$").append(formatoMoneda.format(subtotal)).append("</td>")
                             .append("</tr>");
 
                     // Actualizar el mapa de ventas por creador
@@ -107,7 +113,8 @@ public class VentaController {
                 }
             }
 
-            venta.setCostoTotal(String.valueOf(costoTotal));
+            // Asignar el costoTotal calculado a la venta
+            venta.setCostoTotal(costoTotal);
 
             List<Usuario> usuarios = new ArrayList<>();
             for (Integer usuarioId : usuarioIds) {
@@ -156,7 +163,7 @@ public class VentaController {
 
             // Notificar al domiciliario asignado
             String mensajeDomiciliario = "Se le ha asignado un nuevo despacho con el número de referencia: " + referenciaUnica +
-                    "\nEl cliente debe pagar un total de: $" + costoTotal.toString();
+                    "\nEl cliente debe pagar un total de: $" + formatoMoneda.format(costoTotal);
 
             emailImp.enviarCorreoDespachoAsignado(
                     domiciliario.getEmail(),
@@ -175,7 +182,7 @@ public class VentaController {
                         "Confirmación de Compra",
                         comprador.getNombre(),
                         detalleCompra.toString(), // Detalles del carrito
-                        "$" + costoTotal.toString() // Costo total
+                        "$" + formatoMoneda.format(costoTotal) // Costo total
                 );
             }
 
@@ -191,7 +198,7 @@ public class VentaController {
                     for (ElementoCarrito elemento : elementos) {
                         Obra obra = elemento.getObra();
                         if (obra.getNombreProducto().equals(nombreObra)) {
-                            subtotalObra = subtotalObra.add(new BigDecimal(obra.getCosto()).multiply(BigDecimal.valueOf(elemento.getCantidad())));
+                            subtotalObra = subtotalObra.add(obra.getCosto().multiply(BigDecimal.valueOf(elemento.getCantidad())));
                         }
                     }
                     mensajeCreador.append("Le han comprado su obra '")
@@ -199,7 +206,7 @@ public class VentaController {
                             .append("' (x")
                             .append(cantidad)
                             .append(") por un total de $")
-                            .append(subtotalObra.toString())
+                            .append(formatoMoneda.format(subtotalObra))
                             .append("\n");
                 }
 

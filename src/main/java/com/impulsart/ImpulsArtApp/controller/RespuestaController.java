@@ -53,11 +53,14 @@ public class RespuestaController {
             // Guardar la respuesta
             this.respuestaImp.create(respuesta);
 
+            // Actualizar el estado de PQRS a "Respondida"
+            pqrs.setEstado("Respondida");
+            reclamoImp.update(pqrs); // Asegúrate de tener un método para actualizar PQRS en reclamoImp
+
             // Enviar correo
-            String destinatario = request.get(respuesta.getPqrs().getUsuario().getEmail()).toString(); // Usa el valor del request
-            // Establece el asunto a un valor fijo
+            String destinatario = respuesta.getPqrs().getUsuario().getEmail(); // Accede al email desde Pqrs
             String asunto = "Respuesta de su PQRS";
-            String mensaje = request.get(respuesta.getComentario()).toString(); // Usa el valor del request
+            String mensaje = respuesta.getComentario(); // Accede al comentario directamente desde Respuesta
 
             emailImp.enviarCorreoRespuesta(asunto, destinatario, mensaje);
 

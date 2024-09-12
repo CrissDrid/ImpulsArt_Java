@@ -16,7 +16,7 @@ public interface PqrsRepository extends JpaRepository<Pqrs, Long> {
 
 
     //Buscar pqrs asignado a asesores
-    @Query("SELECT p FROM Pqrs p JOIN p.usuarios u JOIN u.rol r WHERE r.nombre = 'ASESOR' AND u.identificacion = :identificacion")
+    @Query("SELECT p FROM Pqrs p JOIN p.usuarios u JOIN u.rol r WHERE r.nombre = 'ASESOR' AND u.identificacion = :identificacion AND p.estado = 'Pendiente'")
     List<Pqrs> findPqrsAsignadoAsesores(@Param("identificacion") Integer identificacion);
     //Buscar pqrs asignado a asesores
 

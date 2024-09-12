@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name="ElementosCarritos")
 @Data
@@ -19,6 +21,8 @@ public class ElementoCarrito {
     private Long PkCod_Elemento;
     @Column(name = "Cantidad",length = 200)
     private int cantidad;
+    @Column(name = "costoIndividual",length = 200)
+    private BigDecimal costoIndividual;
 
     @ManyToOne
     @JsonIgnore

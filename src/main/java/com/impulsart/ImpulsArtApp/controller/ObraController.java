@@ -3,6 +3,7 @@ package com.impulsart.ImpulsArtApp.controller;
 
 import com.impulsart.ImpulsArtApp.entities.*;
 import com.impulsart.ImpulsArtApp.service.imp.CategoriaImp;
+import com.impulsart.ImpulsArtApp.service.imp.EmailImp;
 import com.impulsart.ImpulsArtApp.service.imp.ObraImp;
 import com.impulsart.ImpulsArtApp.service.imp.UsuarioImp;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,6 +21,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -36,18 +38,20 @@ import java.util.stream.Collectors;
 public class ObraController {
 
     //INYECCION DE DEPENDECIAS
-@Autowired
-private ObraImp obraImp;
-@Autowired
-private CategoriaImp categoriaImp;
-@Autowired
-private UsuarioImp usuarioImp;
+    @Autowired
+    private ObraImp obraImp;
+    @Autowired
+    private CategoriaImp categoriaImp;
+    @Autowired
+    private UsuarioImp usuarioImp;
+    @Autowired
+    private EmailImp emailImp;
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createObra(
             @RequestParam("nombreProducto") String nombreProducto,
             @RequestParam("descripcion") String descripcion,
-            @RequestParam("costo") String costo,
+            @RequestParam("costo") BigDecimal costo,
             @RequestParam("peso") String peso,
             @RequestParam("ancho") String ancho,
             @RequestParam("alto") String alto,
@@ -113,19 +117,19 @@ private UsuarioImp usuarioImp;
         }
     }
 
-//CONTROLLER READ
+    //CONTROLLER READ
     //READ ALL
     @GetMapping("/all")
-    public ResponseEntity<Map<String,Object>> findObraSinSubasta(){
-        Map<String,Object> response = new HashMap<>();
+    public ResponseEntity<Map<String, Object>> findObraSinSubasta() {
+        Map<String, Object> response = new HashMap<>();
 
-        try{
+        try {
             List<Obra> obraList = this.obraImp.findObrasSinSubasta();
-            response.put("status","success");
-            response.put("data",obraList);
-        }catch (Exception e){
+            response.put("status", "success");
+            response.put("data", obraList);
+        } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
-            response.put("data",e.getMessage());
+            response.put("data", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -150,16 +154,16 @@ private UsuarioImp usuarioImp;
 
     //READ ID
     @GetMapping("/list/{PkCod_Producto}")
-    public ResponseEntity<Map<String,Object>> findById(@PathVariable Integer PkCod_Producto){
-        Map<String,Object> response = new HashMap<>();
+    public ResponseEntity<Map<String, Object>> findById(@PathVariable Integer PkCod_Producto) {
+        Map<String, Object> response = new HashMap<>();
 
-        try{
+        try {
             Obra obra = this.obraImp.findById(PkCod_Producto);
-            response.put("status","success");
-            response.put("data",obra);
-        }catch (Exception e){
+            response.put("status", "success");
+            response.put("data", obra);
+        } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
-            response.put("data",e.getMessage());
+            response.put("data", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -173,7 +177,7 @@ private UsuarioImp usuarioImp;
             @PathVariable Integer PkCod_Producto,
             @RequestParam(value = "imagen", required = false) MultipartFile imagen,
             @RequestParam("nombreProducto") String nombreProducto,
-            @RequestParam("costo") String costo,
+            @RequestParam("costo") BigDecimal costo,
             @RequestParam("peso") String peso,
             @RequestParam("ancho") String ancho,
             @RequestParam("alto") String alto,
@@ -254,22 +258,63 @@ private UsuarioImp usuarioImp;
     //FIND HISTORIAL OBRAS
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//CONTROLLER DELETE
+    //CONTROLLER DELETE
     @DeleteMapping("/delete/{PkCod_Producto}")
-    public ResponseEntity<Map<String,Object>> delete(@PathVariable Integer PkCod_Producto){
-        Map<String,Object> response = new HashMap<>();
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable Integer PkCod_Producto) {
+        Map<String, Object> response = new HashMap<>();
 
-        try{
+        try {
             Obra obra = this.obraImp.findById(PkCod_Producto);
             obraImp.delete(obra);
 
-            response.put("status","success");
-            response.put("data","Registro Eliminado Correctamente");
-        }catch (Exception e){
+            response.put("status", "success");
+            response.put("data", "Registro Eliminado Correctamente");
+        } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
-            response.put("data",e.getMessage());
+            response.put("data", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
-   }
+    }
+
+    @DeleteMapping("/deleteObraAsesor/{PkCod_Producto}")
+    public ResponseEntity<Map<String, Object>> deleteObraAsesor(@PathVariable Integer PkCod_Producto) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            // Encuentra la obra
+            Obra obra = obraImp.findById(PkCod_Producto);
+            if (obra == null) {
+                response.put("status", "error");
+                response.put("data", "La obra no existe");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+
+            // Encuentra al creador de la obra
+            Usuario creador = obraImp.findCreadorByObraId(PkCod_Producto);
+            if (creador == null) {
+                response.put("status", "error");
+                response.put("data", "El creador de la obra no encontrado");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+
+            // Eliminar la obra
+            obraImp.delete(obra);
+
+            // Enviar el correo al creador
+            emailImp.enviarCorreoObraEliminada(
+                    creador.getEmail(),
+                    obra.getNombreProducto(),
+                    "Tu obra ha sido eliminada debido a una infracción de las políticas de la página."
+            );
+
+            response.put("status", "success");
+            response.put("data", "Obra eliminada y correo enviado al creador");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

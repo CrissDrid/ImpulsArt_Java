@@ -8,6 +8,7 @@ import java.util.List;
 public interface ReporteObraService {
     public List<ReporteObra> findAll() throws Exception;
     public ReporteObra findById(Long pkCod_Reporte);
+    public List<ReporteObra> findReportesObrasPorRevisar();
     public void create (ReporteObra reporteObra);
     public void update (ReporteObra reporteObra);
     public void delete (ReporteObra reporteObra);

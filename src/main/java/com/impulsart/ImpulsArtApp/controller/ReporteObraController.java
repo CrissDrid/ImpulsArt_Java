@@ -43,7 +43,8 @@ public class ReporteObraController {
             ReporteObra reporteObra = new ReporteObra();
             //CAMPOS DE LA TABLA PEDIDO PERSONALIZADO
             reporteObra.setComentario(request.get("comentario").toString());
-            reporteObra.setFechaReporte(LocalDate.parse(request.get("fechaReporte").toString()));
+            reporteObra.setEstado("Por resolver");
+            reporteObra.setFechaReporte(LocalDate.now());
 
             Obra obra = obraImp.findById(Integer.parseInt(request.get("fk_obra").toString()));
             reporteObra.setObra(obra);
@@ -64,6 +65,24 @@ public class ReporteObraController {
     }
 
     //CONTROLLER READ
+
+    //READ ALL
+    @GetMapping("/porRevisar")
+    public ResponseEntity<Map<String,Object>> findReportesObrasPorRevisar(){
+        Map<String,Object> response = new HashMap<>();
+
+        try {
+            List<ReporteObra> reporteObraList = this.reporteObraImp.findReportesObrasPorRevisar();
+            response.put("status","success");
+            response.put("data", reporteObraList);
+        }catch (Exception e){
+            response.put("status",HttpStatus.BAD_GATEWAY);
+            response.put("data",e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     //READ ALL
     @GetMapping("/all")
     public ResponseEntity<Map<String,Object>> findAll(){

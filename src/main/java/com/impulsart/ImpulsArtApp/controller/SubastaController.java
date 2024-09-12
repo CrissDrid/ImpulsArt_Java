@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -49,7 +50,7 @@ public class SubastaController {
     public ResponseEntity<Map<String, Object>> create(
             @RequestParam(value = "imagen", required = false) MultipartFile imagen,
             @RequestParam("nombreProducto") String nombreProducto,
-            @RequestParam("costo") String costo,
+            @RequestParam("costo") BigDecimal costo,
             @RequestParam("peso") String peso,
             @RequestParam("tamano") String tamano,
             @RequestParam("alto") String alto,
@@ -58,7 +59,7 @@ public class SubastaController {
             @RequestParam("categoriaId") Long categoriaId,
             @RequestParam("descripcion") String descripcion,
             @RequestParam("estadoSubasta") String estadoSubasta,
-            @RequestParam("precioInicial") String precioInicial,
+            @RequestParam("precioInicial") BigDecimal precioInicial,
             @RequestParam("fechaInicio") String fechaInicio,
             @RequestParam("fechaFinalizacion") String fechaFinalizacion,
             @RequestParam("usuarioIds") List<Integer> usuarioIds) {
@@ -160,7 +161,7 @@ public class SubastaController {
     @PutMapping("/updatePrice/{pkCodSubasta}")
     public ResponseEntity<Map<String, Object>> updatePrice(
             @PathVariable Long pkCodSubasta,
-            @RequestParam("precioInicial") String precioInicial) {
+            @RequestParam("precioInicial") BigDecimal precioInicial) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -348,7 +349,7 @@ public class SubastaController {
             @PathVariable Long pkCodSubasta,
             @RequestParam(value = "imagen", required = false) MultipartFile imagen,
             @RequestParam("nombreProducto") String nombreProducto,
-            @RequestParam("costo") String costo,
+            @RequestParam("costo") BigDecimal costo,
             @RequestParam("peso") String peso,
             @RequestParam("tamano") String tamano,
             @RequestParam("cantidad") int cantidad,
@@ -356,7 +357,7 @@ public class SubastaController {
             @RequestParam("ancho") String ancho,
             @RequestParam("categoriaId") Long categoriaId,
             @RequestParam("descripcion") String descripcion,
-            @RequestParam("precioInicial") String precioInicial,
+            @RequestParam("precioInicial") BigDecimal precioInicial,
             @RequestParam("fechaFinalizacion") String fechaFinalizacion) {
 
         Map<String, Object> response = new HashMap<>();

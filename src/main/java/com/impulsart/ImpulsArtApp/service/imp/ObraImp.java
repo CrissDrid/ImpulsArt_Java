@@ -1,6 +1,7 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
 import com.impulsart.ImpulsArtApp.entities.Obra;
+import com.impulsart.ImpulsArtApp.entities.Usuario;
 import com.impulsart.ImpulsArtApp.repositories.ObraRepositorio;
 import com.impulsart.ImpulsArtApp.service.ObraService;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,7 +21,6 @@ public class ObraImp implements ObraService {
         return this.obraRepositorio.findAll();
     }
 
-
     @Override
     public List<Obra> findHistorialObras(Integer identificacion) {
         List<Obra> obras = this.obraRepositorio.findHistorialObras(identificacion);
@@ -32,6 +32,19 @@ public class ObraImp implements ObraService {
 
     public List<Obra> findByNombreProductoContainingIgnoreCase(String nombreProducto) {
         return obraRepositorio.findByNombreProductoContainingIgnoreCase(nombreProducto);
+    }
+
+    @Override
+    public Usuario findCreadorByObraId(Integer obraId) {
+
+        Usuario usuario = obraRepositorio.findCreadorByObraId(obraId);
+
+        // Verificar si no hay asesores disponibles
+        if (usuario == null) {
+            throw new RuntimeException("No se encontro el creador de la obra.");
+        }
+
+        return usuario;
     }
 
     @Override

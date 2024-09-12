@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,8 +27,8 @@ public class Subasta {
     @Column(name = "EstadoSubasta", nullable = false, length = 50)
     private String estadoSubasta;
 
-    @Column(name = "PrecioInicial", nullable = false, length = 255)
-    private String precioInicial;
+    @Column(name = "PrecioInicial", nullable = false)
+    private BigDecimal precioInicial;
 
     @Column(name = "FechaInicio", nullable = false)
     private LocalDateTime fechaInicio;

@@ -23,7 +23,7 @@ public class Venta {
     @Column(name = "FechaVenta",nullable = false)
     private LocalDate fechaVenta;
     @Column(name = "costoTotal")
-    private String costoTotal;
+    private BigDecimal costoTotal;
 
     // Relación muchos a uno con Despacho
     @ManyToOne

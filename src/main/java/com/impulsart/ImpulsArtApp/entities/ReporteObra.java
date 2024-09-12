@@ -26,6 +26,8 @@ public class ReporteObra {
     private String comentario;
     @Column(name = "FechaReporte", length = 200, nullable = false)
     private LocalDate fechaReporte;
+    @Column(name = "Estado", length = 200, nullable = false)
+    private String estado;
 
     @ManyToOne
     @JoinColumn(name = "fk_obra", nullable = false)

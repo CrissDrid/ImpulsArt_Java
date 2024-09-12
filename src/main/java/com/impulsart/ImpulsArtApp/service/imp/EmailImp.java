@@ -6,13 +6,11 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -21,6 +19,37 @@ import java.nio.charset.StandardCharsets;
 public class EmailImp implements EmailService {
     @Autowired
     private JavaMailSender mailSender;
+
+    @Override
+    public void enviarCorreoObraEliminada(String destinatario, String nombreProducto, String mensaje) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+            // Configura el destinatario y el asunto
+            helper.setTo(destinatario);
+            helper.setSubject("Obra Eliminada");
+
+            // Leer el archivo de plantilla y reemplazar los marcadores de posición
+            String htmlTemplate = readTemplate("EmailObraEliminada.html");
+            String htmlContent = htmlTemplate
+                    .replace("[[nombreProducto]]", nombreProducto)
+                    .replace("[[mensaje]]", mensaje);
+
+            // Configura el contenido HTML del correo
+            helper.setText(htmlContent, true); // true indica que el contenido es HTML
+
+            // Adjuntar una imagen desde el directorio de recursos
+            ClassPathResource imageFile = new ClassPathResource("imagen/logo_impulsart.jpg");
+            if (imageFile.exists()) {
+                helper.addInline("imagen", imageFile);
+            }
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException | IOException e) {
+            throw new RuntimeException("Error al enviar correo", e);
+        }
+    }
 
     @Override
     public void enviarCorreo(String destinatario, String asunto, String nombre, String mensaje) {

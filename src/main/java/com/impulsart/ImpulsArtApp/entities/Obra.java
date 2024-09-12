@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -21,8 +22,8 @@ public class Obra {
     private int pkCod_Producto;
     @Column(name = "NombreProducto",length = 200)
     private String nombreProducto;
-    @Column(name = "Costo",nullable = false)
-    private String costo;
+    @Column(name = "Costo", nullable = false)
+    private BigDecimal costo; // Cambiado a BigDecimal
     @Column(name = "Peso",length = 10,nullable = false)
     private String peso;
     @Column(name = "Tamano",length = 50,nullable = false)
@@ -62,9 +63,9 @@ public class Obra {
     @JsonIgnore
     private List<ElementoCarrito> elementoCarrito;
 
-    @OneToMany(mappedBy = "obra")
+    @OneToMany(mappedBy = "obra", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<ReporteObra> reportesObras; // Relación con ReporteObra
+    private List<ReporteObra> reportesObras;
 
     // Método para eliminar la asociación con los usuarios
     @PreRemove

@@ -26,6 +26,11 @@ public class ReporteObraImp implements ReporteObraService {
     }
 
     @Override
+    public List<ReporteObra> findReportesObrasPorRevisar() {
+        return this.reporteObraRepository.findAll();
+    }
+
+    @Override
     public void create(ReporteObra reporteObra) {
         this.reporteObraRepository.save(reporteObra);
     }
