@@ -122,11 +122,6 @@ public class SubastaImp implements SubastaService {
     }
 
     @Override
-    public List<Subasta> findSubastaAndObras() {
-        return this.subastaRepository.findSubastaAndObras();
-    }
-
-    @Override
     public List<Subasta> findAll() throws Exception {
         return this.subastaRepository.findAll();
     }

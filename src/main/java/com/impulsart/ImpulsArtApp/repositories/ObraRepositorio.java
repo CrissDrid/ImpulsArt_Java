@@ -1,6 +1,7 @@
 package com.impulsart.ImpulsArtApp.repositories;
 
 import com.impulsart.ImpulsArtApp.entities.Obra;
+import com.impulsart.ImpulsArtApp.entities.Subasta;
 import com.impulsart.ImpulsArtApp.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,6 +13,11 @@ import java.util.List;
 
 @Repository
 public interface ObraRepositorio extends JpaRepository <Obra ,Integer> {
+
+    //Buscar obras en subasta
+    @Query("SELECT o FROM Obra o INNER JOIN o.subastas s")
+    List<Obra>findSubastaAndObras();
+    //Buscar obras en subasta
 
     @Query("SELECT o FROM Obra o " +
             "INNER JOIN o.usuarios u " +

@@ -22,6 +22,15 @@ public class ObraImp implements ObraService {
     }
 
     @Override
+    public List<Obra> findSubastaAndObras() {
+        List<Obra> obras = this.obraRepositorio.findSubastaAndObras();
+        if (obras.isEmpty()) {
+            throw new EntityNotFoundException("Obras en subastas no encontradas");
+        }
+        return obras;
+    }
+
+    @Override
     public List<Obra> findHistorialObras(Integer identificacion) {
         List<Obra> obras = this.obraRepositorio.findHistorialObras(identificacion);
         if (obras.isEmpty()) {

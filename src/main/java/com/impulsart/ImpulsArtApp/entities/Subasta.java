@@ -39,6 +39,7 @@ public class Subasta {
     //FOREING KEYS
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "FkCod_Producto", nullable = false)
+    @JsonIgnore
     private Obra obras;
 
     @OneToMany(mappedBy = "Subastas", cascade = CascadeType.ALL)

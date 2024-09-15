@@ -43,7 +43,6 @@ public class Obra {
     private String imagen;
 
     @OneToMany(mappedBy = "obras",cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<Subasta> subastas;
 
     @OneToMany(mappedBy = "obra", cascade = CascadeType.ALL)

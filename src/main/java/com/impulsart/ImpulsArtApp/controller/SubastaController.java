@@ -275,28 +275,6 @@ public class SubastaController {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //FIND SUBASTA Y OBRAS
 
-    @GetMapping("subastaYobras")
-    public ResponseEntity<Map<String, Object>> findSubastaAndObras(){
-
-        Map<String,Object> response = new HashMap<>();
-
-        try {
-
-            List<Subasta> subastaList = this.subastaImp.findSubastaAndObras();
-            response.put("status","success");
-            response.put("data",subastaList);
-
-        } catch (Exception e){
-
-            response.put("status",HttpStatus.BAD_GATEWAY);
-            response.put("data",e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
-
-        }
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-
-    }
 
     //FIND SUBASTA Y OBRAS
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

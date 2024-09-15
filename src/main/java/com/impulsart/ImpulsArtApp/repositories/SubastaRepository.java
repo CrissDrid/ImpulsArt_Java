@@ -27,16 +27,10 @@ public interface SubastaRepository extends JpaRepository<Subasta, Long> {
     List<Subasta> findHistorialObrasSubasta(@Param("identificacion") Integer identificacion);
     //Historial de obras en subasta
 
-
     //Buscar obras con subasta por id
     @Query("SELECT s FROM Subasta s INNER JOIN s.obras o WHERE s.pkCodSubasta = :pkCodSubasta")
     List<Subasta> findSubastaByIdWithObras(@Param("pkCodSubasta") Long pkCodSubasta);
     //Buscar obras con subasta por id
-
-    //Buscar obras en subasta
-    @Query("SELECT s FROM Subasta s INNER JOIN s.obras o")
-    List<Subasta>findSubastaAndObras();
-    //Buscar obras en subasta
 
     //BUSCAR EL USUARIO QUE CREO LA SUBASTA
     @Query("SELECT u FROM Usuario u " +
@@ -45,7 +39,6 @@ public interface SubastaRepository extends JpaRepository<Subasta, Long> {
             "WHERE s.pkCodSubasta = :pkCodSubasta")
     Usuario findUsuarioBySubastaId(@Param("pkCodSubasta") Long pkCodSubasta);
     //BUSCAR EL USUARIO QUE CREO LA SUBASTA
-
 
     //Buscar subastas en estado activo y con fecha de finalizacion vencidas
     @Query("SELECT s FROM Subasta s WHERE s.estadoSubasta = 'Activo' AND s.fechaFinalizacion <= :ahora")

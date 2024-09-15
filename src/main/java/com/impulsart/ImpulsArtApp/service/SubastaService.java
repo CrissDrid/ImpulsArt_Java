@@ -17,7 +17,6 @@ public interface SubastaService {
     Usuario findUsuarioBySubastaId(@Param("pkCodSubasta") Long pkCodSubasta);
     List<Subasta> findSubastasActivasParaFinalizar(@Param("ahora") LocalDateTime ahora);
     String finalizarSubastas();
-    List<Subasta>findSubastaAndObras();
     public List<Subasta> findAll() throws Exception;
     Subasta findById(Long pkCodSubasta);
     public void create(Subasta subasta);

@@ -116,15 +116,49 @@ public class ObraController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
-
     //CONTROLLER READ
+
     //READ ALL
     @GetMapping("/all")
-    public ResponseEntity<Map<String, Object>> findObraSinSubasta() {
+    public ResponseEntity<Map<String, Object>> findAll() {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Obra> obraList = this.obraImp.findAll();
+            response.put("status", "success");
+            response.put("data", obraList);
+        } catch (Exception e) {
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //READ ALL
+    @GetMapping("/obrasEnVenta")
+    public ResponseEntity<Map<String, Object>> obrasEnVenta() {
         Map<String, Object> response = new HashMap<>();
 
         try {
             List<Obra> obraList = this.obraImp.findObrasSinSubasta();
+            response.put("status", "success");
+            response.put("data", obraList);
+        } catch (Exception e) {
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //READ OBRAS EN SUBASTA
+    @GetMapping("/obrasEnSubasta")
+    public ResponseEntity<Map<String, Object>> obrasEnSubasta() {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Obra> obraList = this.obraImp.findSubastaAndObras();
             response.put("status", "success");
             response.put("data", obraList);
         } catch (Exception e) {
