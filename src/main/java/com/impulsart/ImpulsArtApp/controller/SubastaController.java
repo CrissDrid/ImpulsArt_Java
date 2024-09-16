@@ -140,9 +140,9 @@ public class SubastaController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<Subasta> subastas = this.subastaImp.findHistorialObrasSubasta(identificacion);
+            List<Obra> obras = this.subastaImp.findHistorialObrasSubasta(identificacion);
             response.put("status", "success");
-            response.put("data", subastas);
+            response.put("data", obras);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             response.put("status", "error");
@@ -253,9 +253,9 @@ public class SubastaController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            List<Subasta> subastas = this.subastaImp.findSubastaByIdWithObras(pkCodSubasta);
+            List<Obra> obras = this.subastaImp.findSubastaByIdWithObras(pkCodSubasta);
             response.put("status", "success");
-            response.put("data", subastas);
+            response.put("data", obras);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             response.put("status", "error");

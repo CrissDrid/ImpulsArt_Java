@@ -1,5 +1,6 @@
 package com.impulsart.ImpulsArtApp.service.imp;
 
+import com.impulsart.ImpulsArtApp.entities.Obra;
 import com.impulsart.ImpulsArtApp.entities.Oferta;
 import com.impulsart.ImpulsArtApp.entities.Subasta;
 import com.impulsart.ImpulsArtApp.entities.Usuario;
@@ -89,21 +90,21 @@ public class SubastaImp implements SubastaService {
     }
 
     @Override
-    public List<Subasta> findHistorialObrasSubasta(Integer identificacion) {
-        List<Subasta> subastas = this.subastaRepository.findHistorialObrasSubasta(identificacion);
-        if (subastas.isEmpty()) {
+    public List<Obra> findHistorialObrasSubasta(Integer identificacion) {
+        List<Obra> obras = this.subastaRepository.findHistorialObrasSubasta(identificacion);
+        if (obras.isEmpty()) {
             throw new EntityNotFoundException("Subastas no encontradas");
         }
-        return subastas;
+        return obras;
     }
 
     @Override
-    public List<Subasta> findSubastaByIdWithObras(Long pkCodSubasta) {
-        List<Subasta> subastas = this.subastaRepository.findSubastaByIdWithObras(pkCodSubasta);
-        if (subastas.isEmpty()) {
+    public List<Obra> findSubastaByIdWithObras(Long pkCodSubasta) {
+        List<Obra> obras = this.subastaRepository.findSubastaByIdWithObras(pkCodSubasta);
+        if (obras.isEmpty()) {
             throw new EntityNotFoundException("Subasta no encontrada");
         }
-        return subastas;
+        return obras;
     }
 
     @Override

@@ -12,8 +12,8 @@ import java.util.List;
 
 public interface SubastaService {
 
-    List<Subasta> findHistorialObrasSubasta(@Param("identificacion") Integer identificacion);
-    List<Subasta> findSubastaByIdWithObras(@Param("pkCodSubasta") Long pkCodSubasta);
+    List<Obra> findHistorialObrasSubasta(@Param("identificacion") Integer identificacion);
+    List<Obra> findSubastaByIdWithObras(@Param("pkCodSubasta") Long pkCodSubasta);
     Usuario findUsuarioBySubastaId(@Param("pkCodSubasta") Long pkCodSubasta);
     List<Subasta> findSubastasActivasParaFinalizar(@Param("ahora") LocalDateTime ahora);
     String finalizarSubastas();
