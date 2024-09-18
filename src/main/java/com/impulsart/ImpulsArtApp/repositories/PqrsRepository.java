@@ -20,4 +20,7 @@ public interface PqrsRepository extends JpaRepository<Pqrs, Long> {
     List<Pqrs> findPqrsAsignadoAsesores(@Param("identificacion") Integer identificacion);
     //Buscar pqrs asignado a asesores
 
+    @Query("SELECT COUNT(p) FROM Pqrs p")
+    int contarPqrs();
+
 }

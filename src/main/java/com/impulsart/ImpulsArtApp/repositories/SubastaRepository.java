@@ -47,4 +47,7 @@ public interface SubastaRepository extends JpaRepository<Subasta, Long> {
 
     List<Subasta> findByEstadoSubastaContainingIgnoreCase(String estadoSubasta);
 
+    @Query("SELECT COUNT(s) FROM Subasta s")
+    int contarSubastas();
+
 }

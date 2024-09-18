@@ -34,4 +34,7 @@ public interface UsuarioRepositorio extends JpaRepository<Usuario, Integer> {
 
     List<Usuario> findByRolNombre(String nombreRol);
 
+    @Query("SELECT COUNT(u) FROM Usuario u")
+    int contarUsuarios();
+
 }

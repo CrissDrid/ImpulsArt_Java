@@ -167,35 +167,8 @@ public class VentaController {
             String referenciaUnica = CodigoReferenciaGenerator.generarCodigoReferencia();
             despacho.setReferencia(referenciaUnica);
 
-            // Buscar un domiciliario disponible
-            List<Usuario> domiciliarios = usuarioImp.findByRolNombre("DOMICILIARIO");
-            if (domiciliarios.isEmpty()) {
-                throw new RuntimeException("No hay domiciliarios disponibles");
-            }
-
-            // Seleccionar un domiciliario aleatoriamente
-            Collections.shuffle(domiciliarios);
-            Usuario domiciliario = domiciliarios.get(0);
-
-            // Asignar el domiciliario al despacho
-            despacho.setUsuario(Collections.singletonList(domiciliario));
-
-            // Sincronizar la relación bidireccional
-            domiciliario.getDespacho().add(despacho);
-
+            // Guardar el despacho en la base de datos
             despachoImp.create(despacho);
-
-            // Notificar al domiciliario asignado
-            String mensajeDomiciliario = "Se le ha asignado un nuevo despacho con el número de referencia: " + referenciaUnica +
-                    "\nEl cliente debe pagar un total de: $" + formatoMoneda.format(costoTotalConEnvio) +
-                    "\nCosto de envío: $" + formatoMoneda.format(costoEnvio);
-
-            emailImp.enviarCorreoDespachoAsignado(
-                    domiciliario.getEmail(),
-                    "Nuevo Despacho Asignado",
-                    domiciliario.getNombre(),
-                    mensajeDomiciliario
-            );
 
             // Notificar al usuario de la venta realizada, los productos y el costo total
             if (!usuarios.isEmpty()) {
@@ -280,6 +253,25 @@ public class VentaController {
 
             response.put("status","success");
             response.put("data","Registro Eliminado Corectamente");
+        } catch (Exception e) {
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //CONTROLLER DELETE
+    @GetMapping("/all")
+    public ResponseEntity<Map<String, Object>> findAll() {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+
+            List<Venta> ventas = this.ventaImp.findAll();
+            response.put("status", "success");
+            response.put("data", ventas);
+
         } catch (Exception e) {
             response.put("status", HttpStatus.BAD_GATEWAY);
             response.put("data", e.getMessage());

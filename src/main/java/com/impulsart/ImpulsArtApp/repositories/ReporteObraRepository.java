@@ -13,5 +13,7 @@ public interface ReporteObraRepository extends JpaRepository<ReporteObra, Long> 
     @Query("SELECT r FROM ReporteObra r WHERE r.estado = 'Por resolver'")
     List<ReporteObra> findReportesObrasPorRevisar();
 
+    @Query("SELECT COUNT(d) FROM Despacho d")
+    int contarReporte();
 
 }
