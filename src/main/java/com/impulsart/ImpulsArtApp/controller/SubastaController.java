@@ -94,7 +94,7 @@ public class SubastaController {
 
             // Obtener los usuarios por sus IDs
             List<Usuario> usuarios = usuarioIds.stream()
-                    .map(id -> usuarioImp.findById(id))
+                    .map(id -> usuarioImp.findById(Long.valueOf(id)))
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
 
@@ -136,7 +136,7 @@ public class SubastaController {
     //FIND HISTORIAL OBRAS SUBASTAS
 
     @GetMapping("/historialSubastas/{identificacion}")
-    public ResponseEntity<Map<String, Object>> findHistorialObrasSubasta(@PathVariable Integer identificacion) {
+    public ResponseEntity<Map<String, Object>> findHistorialObrasSubasta(@PathVariable Long identificacion) {
         Map<String, Object> response = new HashMap<>();
 
         try {

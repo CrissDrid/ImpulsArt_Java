@@ -142,7 +142,7 @@ public class VentaController {
 
             List<Usuario> usuarios = new ArrayList<>();
             for (Integer usuarioId : usuarioIds) {
-                Usuario usuario = usuarioImp.findById(usuarioId);
+                Usuario usuario = usuarioImp.findById(Long.valueOf(usuarioId));
                 if (usuario != null) {
                     usuarios.add(usuario);
                 }

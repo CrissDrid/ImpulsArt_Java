@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DireccionService {
     public List<Direccion> findAll() throws Exception;
-    List<Direccion> findHistorialDireccion(@Param("identificacion") Integer identificacion);
+    List<Direccion> findHistorialDireccion(@Param("identificacion") Long identificacion);
     public boolean existsByCiudadAndDireccionAndUsuario(String ciudad, String direccion, Usuario usuario);
     public Direccion findById(Long id);
     public void create(Direccion direccion);

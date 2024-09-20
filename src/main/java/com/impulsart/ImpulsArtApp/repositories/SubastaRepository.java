@@ -24,7 +24,7 @@ public interface SubastaRepository extends JpaRepository<Subasta, Long> {
             "INNER JOIN s.obras o " +
             "INNER JOIN o.usuarios u " +
             "WHERE u.identificacion = :identificacion")
-    List<Obra> findHistorialObrasSubasta(@Param("identificacion") Integer identificacion);
+    List<Obra> findHistorialObrasSubasta(@Param("identificacion") Long identificacion);
     //Historial de obras en subasta
 
     //Buscar obras con subasta por id

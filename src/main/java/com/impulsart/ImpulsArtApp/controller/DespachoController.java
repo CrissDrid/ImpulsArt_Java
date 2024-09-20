@@ -72,7 +72,7 @@ public class DespachoController {
     }
 
     @PostMapping("/asignarDespacho")
-    public ResponseEntity<?> asignarDespacho(@RequestParam Long pkCod_Despacho, @RequestParam int identificacion) {
+    public ResponseEntity<?> asignarDespacho(@RequestParam Long pkCod_Despacho, @RequestParam Long identificacion) {
         try {
             Usuario usuarioAsignado = despachoImp.asignarDespachoAUsuario(pkCod_Despacho, identificacion);
             return ResponseEntity.ok(usuarioAsignado);
@@ -125,7 +125,7 @@ public class DespachoController {
 
     //READ DESPACHOS ASIGNADOS
     @GetMapping("/despachosAsignados/{identificacion}")
-    public ResponseEntity<Map<String, Object>> findByDespachosAsignados(@PathVariable int identificacion) {
+    public ResponseEntity<Map<String, Object>> findByDespachosAsignados(@PathVariable Long identificacion) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -146,7 +146,7 @@ public class DespachoController {
 
     //READ DESPACHOS ENTREGADOS
     @GetMapping("/despachosEntregados/{identificacion}")
-    public ResponseEntity<Map<String, Object>> findByDespachosEntregados(@PathVariable int identificacion) {
+    public ResponseEntity<Map<String, Object>> findByDespachosEntregados(@PathVariable Long identificacion) {
         Map<String, Object> response = new HashMap<>();
 
         try {

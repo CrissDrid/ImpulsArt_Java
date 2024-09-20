@@ -31,7 +31,7 @@ public class ObraImp implements ObraService {
     }
 
     @Override
-    public List<Obra> findHistorialObras(Integer identificacion) {
+    public List<Obra> findHistorialObras(Long identificacion) {
         List<Obra> obras = this.obraRepositorio.findHistorialObras(identificacion);
         if (obras.isEmpty()) {
             throw new EntityNotFoundException("Obras no encontradas");

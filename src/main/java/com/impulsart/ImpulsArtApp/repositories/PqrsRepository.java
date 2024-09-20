@@ -11,13 +11,13 @@ public interface PqrsRepository extends JpaRepository<Pqrs, Long> {
 
     //Historial de pqrs
     @Query("SELECT r FROM Pqrs r JOIN r.usuarios u WHERE u.identificacion = :identificacion")
-    List<Pqrs> findHistorialPqrs(@Param("identificacion") Integer identificacion);
+    List<Pqrs> findHistorialPqrs(@Param("identificacion") Long identificacion);
     //Historial de pqrs
 
 
     //Buscar pqrs asignado a asesores
     @Query("SELECT p FROM Pqrs p JOIN p.usuarios u JOIN u.rol r WHERE r.nombre = 'ASESOR' AND u.identificacion = :identificacion AND p.estado = 'Pendiente'")
-    List<Pqrs> findPqrsAsignadoAsesores(@Param("identificacion") Integer identificacion);
+    List<Pqrs> findPqrsAsignadoAsesores(@Param("identificacion") Long identificacion);
     //Buscar pqrs asignado a asesores
 
     @Query("SELECT COUNT(p) FROM Pqrs p")

@@ -20,7 +20,7 @@ public interface OfertaRepository extends JpaRepository<Oferta, Long> {
 
     // Nuevo método para encontrar oferta por subasta y usuario
     @Query("SELECT o FROM Oferta o WHERE o.Subastas.pkCodSubasta = :subastaId AND o.Usuarios.identificacion = :usuarioId")
-    Oferta findBySubastaIdAndUsuarioId(@Param("subastaId") Long subastaId, @Param("usuarioId") int usuarioId);
+    Oferta findBySubastaIdAndUsuarioId(@Param("subastaId") Long subastaId, @Param("usuarioId") Long usuarioId);
     // Nuevo método para encontrar oferta por subasta y usuario
 
 }

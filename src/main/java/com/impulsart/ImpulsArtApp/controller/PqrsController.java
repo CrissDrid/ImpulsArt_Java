@@ -52,7 +52,7 @@ public class PqrsController {
             pqrs.setTipoPQRS(tipoPQRS);
 
             // Obtener el usuario creador
-            Usuario usuarioCreador = usuarioImp.findById(usuarioId);
+            Usuario usuarioCreador = usuarioImp.findById(Long.valueOf(usuarioId));
             if (usuarioCreador == null) {
                 throw new RuntimeException("Usuario creador no encontrado");
             }
@@ -103,7 +103,7 @@ public class PqrsController {
     //FIND HISTORIAL PQRS
 
     @GetMapping("/historialPqrs/{identificacion}")
-    public ResponseEntity<Map<String, Object>> findHistorialPqrs(@PathVariable Integer identificacion) {
+    public ResponseEntity<Map<String, Object>> findHistorialPqrs(@PathVariable Long identificacion) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -129,7 +129,7 @@ public class PqrsController {
     //FIND PQRS ASIGNADOS A ASESORES
 
     @GetMapping("/PqrsAsignados/{identificacion}")
-    public ResponseEntity<Map<String, Object>> findPqrsAsignadoAsesores(@PathVariable Integer identificacion) {
+    public ResponseEntity<Map<String, Object>> findPqrsAsignadoAsesores(@PathVariable Long identificacion) {
         Map<String, Object> response = new HashMap<>();
 
         try {

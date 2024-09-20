@@ -1,9 +1,6 @@
 package com.impulsart.ImpulsArtApp.controller;
 
-import com.impulsart.ImpulsArtApp.entities.Carrito;
-import com.impulsart.ImpulsArtApp.entities.Obra;
-import com.impulsart.ImpulsArtApp.entities.Rol;
-import com.impulsart.ImpulsArtApp.entities.Usuario;
+import com.impulsart.ImpulsArtApp.entities.*;
 import com.impulsart.ImpulsArtApp.security.JwtGenerador;
 import com.impulsart.ImpulsArtApp.service.imp.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,14 +57,13 @@ public class UserController {
             }
 
             Usuario usuario = new Usuario();
-            usuario.setIdentificacion(Integer.parseInt(request.get("identificacion").toString()));
+            usuario.setIdentificacion(Long.parseLong(request.get("identificacion").toString()));
             usuario.setNombre(request.get("nombre").toString());
             usuario.setApellido(request.get("apellido").toString());
             usuario.setFechaNacimiento(LocalDate.parse(request.get("fechaNacimiento").toString()));
             usuario.setEmail(request.get("email").toString());
             usuario.setNumCelular(request.get("numCelular").toString());
             usuario.setContrasena(passwordEncoder.encode(request.get("contrasena").toString()));
-            usuario.setTipoUsuario(request.get("tipoUsuario").toString());
             usuario.setUserName(request.get("userName").toString());
 
             Rol rol = rolImp.findById(Long.parseLong(request.get("fk_Rol").toString()));
@@ -251,7 +247,7 @@ public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object
         Map<String, Object> response = new HashMap<>();
 
         try {
-            Usuario usuario = this.usuarioImp.findById(identificacion);
+            Usuario usuario = this.usuarioImp.findById(Long.valueOf(identificacion));
             if (usuario != null) {
                 response.put("status", "success");
                 response.put("data", usuario);
@@ -269,45 +265,68 @@ public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object
 
     //CONTROLLER UPDATE
     @PutMapping("update/{identificacion}")
-    public ResponseEntity<Map<String,Object>> update(@PathVariable Integer identificacion, @RequestBody Map<String,Object> request){
+    public ResponseEntity<Map<String,Object>> update(@PathVariable Long identificacion, @RequestBody Map<String,Object> request) {
         Map<String, Object> response = new HashMap<>();
-        try{
-
+        try {
             Usuario usuario = this.usuarioImp.findById(identificacion);
 
-            // Verifica si el usuario ya existe por el correo electrónico
-            String email = request.get("email").toString();
-            if (usuarioImp.existsByEmail(email)) {
-                response.put("status", "error");
-                response.put("message", "El usuario con el correo " + email + " ya está registrado.");
-                return new ResponseEntity<>(response, HttpStatus.CONFLICT);
-            }
-
-            //CAMPOS DE LA TABLA USUARIOS
-            usuario.setIdentificacion(Integer.parseInt(request.get("identificacion").toString()));
+            // CAMPOS DE LA TABLA USUARIOS
             usuario.setNombre(request.get("nombre").toString());
             usuario.setApellido(request.get("apellido").toString());
-            usuario.setEmail(request.get("email").toString());
             usuario.setFechaNacimiento(LocalDate.parse(request.get("fechaNacimiento").toString()));
             usuario.setNumCelular(request.get("numCelular").toString());
-            usuario.setContrasena(request.get("contrasena").toString());
-            usuario.setTipoUsuario(request.get("tipoUsuario").toString());
             usuario.setUserName(request.get("userName").toString());
 
+            // ACTUALIZAR EL USUARIO
             this.usuarioImp.update(usuario);
 
-            response.put("status","success");
-            response.put("data","Actualizacion Exitosa");
-        }catch (Exception e){
-            response.put("status",HttpStatus.BAD_GATEWAY);
-            response.put("data",e.getMessage());
+            // RESPUESTA EXITOSA
+            response.put("status", "success");
+            response.put("data", "Actualización Exitosa");
+        } catch (Exception e) {
+            // MANEJO DE ERRORES
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
         }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //CONTROLLER UPDATE
+    @PutMapping("updateRol/{identificacion}")
+    public ResponseEntity<Map<String,Object>> updateRol(@PathVariable Long identificacion, @RequestBody Map<String,Object> request) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Usuario usuario = this.usuarioImp.findById(identificacion);
+
+            // OBTENER EL ID DEL ROL DESDE LA SOLICITUD (por ejemplo, "rolId" como clave)
+            Rol rol = rolImp.findById(Long.parseLong(request.get("rolId").toString()));
+            if (rol == null) {
+                throw new RuntimeException("Rol no encontrado");
+            }
+
+            // ASIGNAR EL ROL AL USUARIO
+            usuario.setRol(rol);
+
+            // ACTUALIZAR EL USUARIO
+            this.usuarioImp.update(usuario);
+
+            // RESPUESTA EXITOSA
+            response.put("status", "success");
+            response.put("data", "Actualización Exitosa");
+        } catch (Exception e) {
+            // MANEJO DE ERRORES
+            response.put("status", HttpStatus.BAD_GATEWAY);
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
+        }
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 //CONTROLLER DELETE
     @DeleteMapping("/delete/{identificacion}")
-    public ResponseEntity<Map<String, Object>> delete(@PathVariable Integer identificacion){
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable Long identificacion){
         Map<String,Object> response = new HashMap<>();
 
         try{

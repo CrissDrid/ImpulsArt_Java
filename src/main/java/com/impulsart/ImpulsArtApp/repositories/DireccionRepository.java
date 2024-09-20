@@ -14,7 +14,7 @@ import java.util.List;
 public interface DireccionRepository extends JpaRepository<Direccion, Long> {
 
     @Query("SELECT d FROM Direccion d WHERE d.usuario.identificacion = :identificacion")
-    List<Direccion> findHistorialDireccion(@Param("identificacion") Integer identificacion);
+    List<Direccion> findHistorialDireccion(@Param("identificacion") Long identificacion);
 
     //Verificar si existe la direccion
     // Verifica si ya existe una dirección para un usuario en una ciudad específica

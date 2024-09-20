@@ -35,7 +35,7 @@ public class OfertaController {
     @PostMapping("/actualizarOferta")
     public ResponseEntity<String> findBySubastaIdAndUsuarioId(
             @RequestParam Long subastaId,
-            @RequestParam int usuarioId,
+            @RequestParam Long usuarioId,
             @RequestBody Oferta nuevaOferta) {
 
         Oferta ofertaExistente = ofertaImp.findBySubastaIdAndUsuarioId(subastaId, usuarioId);
@@ -71,7 +71,7 @@ public class OfertaController {
             System.out.println("@@@@" + request);
             int monto = Integer.parseInt(request.get("monto").toString());
             LocalDateTime fechaOferta = LocalDateTime.parse(request.get("fechaOferta").toString());
-            int usuarioId = Integer.parseInt(request.get("fk_Identificacion").toString());
+            long usuarioId = Long.parseLong(request.get("fk_Identificacion").toString());
             long subastaId = Long.parseLong(request.get("fk_subasta").toString());
 
             // Buscar usuario y subasta

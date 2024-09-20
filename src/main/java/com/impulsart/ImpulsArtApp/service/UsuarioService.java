@@ -8,7 +8,7 @@ public interface UsuarioService {
 
     public Usuario findByVerificationToken(String token);
     public List<Usuario> findAll() throws Exception;
-    public Usuario findById(Integer identificacion);
+    public Usuario findById(Long identificacion);
     public Usuario findRandomAsesor();
     List<Usuario> findByRolNombre(String nombreRol);
 

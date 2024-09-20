@@ -26,7 +26,7 @@ public class UsuarioImp implements UsuarioService {
     }
 
     @Override
-    public Usuario findById(Integer identificacion) {
+    public Usuario findById(Long identificacion) {
         return this.usuarioRepositorio.findById(identificacion).orElse(null);
     }
 

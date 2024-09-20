@@ -54,7 +54,7 @@ public class CarritoController {
     }
 
     @GetMapping("/usuarioPorCarrito/{identificacion}")
-    public ResponseEntity<Map<String, Object>> findByUsuarioId(@PathVariable int identificacion) {
+    public ResponseEntity<Map<String, Object>> findByUsuarioId(@PathVariable Long identificacion) {
         Map<String, Object> response = new HashMap<>();
         try {
 
@@ -137,7 +137,7 @@ public class CarritoController {
             if (carrito != null) {
 
                 // Actualizar los campos del carrito
-                Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("fk_Usuario").toString()));
+                Usuario usuario = usuarioImp.findById(Long.parseLong(request.get("fk_Usuario").toString()));
                 carrito.setUsuario(usuario);
 
                 this.carritoImp.update(carrito);

@@ -147,7 +147,7 @@ public class ObraController {
 
             // Obtener los usuarios por sus IDs
             List<Usuario> usuarios = usuarioIds.stream()
-                    .map(id -> usuarioImp.findById(id))
+                    .map(id -> usuarioImp.findById(Long.valueOf(id)))
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
 
@@ -325,7 +325,7 @@ public class ObraController {
     //FIND HISTORIAL OBRAS
 
     @GetMapping("/historialObras/{identificacion}")
-    public ResponseEntity<Map<String, Object>> findHistorialObras(@PathVariable Integer identificacion) {
+    public ResponseEntity<Map<String, Object>> findHistorialObras(@PathVariable Long identificacion) {
         Map<String, Object> response = new HashMap<>();
 
         try {

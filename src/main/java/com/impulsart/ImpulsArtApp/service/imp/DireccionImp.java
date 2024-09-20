@@ -23,7 +23,7 @@ public class DireccionImp implements DireccionService {
     }
 
     @Override
-    public List<Direccion> findHistorialDireccion(Integer identificacion) {
+    public List<Direccion> findHistorialDireccion(Long identificacion) {
         List<Direccion> direcciones = this.direccionRepositorio.findHistorialDireccion(identificacion);
         if (direcciones.isEmpty()) {
             throw new EntityNotFoundException("Direcciones no encontradas");

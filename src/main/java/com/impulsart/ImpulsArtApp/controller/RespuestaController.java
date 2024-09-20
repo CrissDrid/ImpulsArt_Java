@@ -47,7 +47,7 @@ public class RespuestaController {
             Pqrs pqrs = reclamoImp.findById(Long.parseLong(request.get("fk_Pqrs").toString()));
             respuesta.setPqrs(pqrs);
 
-            Usuario usuario = usuarioImp.findById(Integer.parseInt(request.get("fk_Identificacion").toString()));
+            Usuario usuario = usuarioImp.findById(Long.parseLong(request.get("fk_Identificacion").toString()));
             respuesta.setUsuario(usuario);
 
             // Guardar la respuesta

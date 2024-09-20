@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface SubastaService {
 
-    List<Obra> findHistorialObrasSubasta(@Param("identificacion") Integer identificacion);
+    List<Obra> findHistorialObrasSubasta(@Param("identificacion") Long identificacion);
     List<Obra> findSubastaByIdWithObras(@Param("pkCodSubasta") Long pkCodSubasta);
     Usuario findUsuarioBySubastaId(@Param("pkCodSubasta") Long pkCodSubasta);
     List<Subasta> findSubastasActivasParaFinalizar(@Param("ahora") LocalDateTime ahora);

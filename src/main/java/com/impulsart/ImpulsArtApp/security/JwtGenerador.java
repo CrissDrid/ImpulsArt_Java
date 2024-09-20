@@ -39,7 +39,7 @@ public class JwtGenerador {
         }
 
         // Obtener datos del usuario
-        int identificacion = usuario.getIdentificacion();
+        Long identificacion = usuario.getIdentificacion();
         String userName = usuario.getUserName();
 
         Date tiempoActual = new Date();

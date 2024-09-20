@@ -26,7 +26,7 @@ public class CarritoImp implements CarritoService {
     private ElementoCarritoImp elementoCarritoImp;
 
     @Override
-    public Carrito findByUsuarioId(Integer identificacion) {
+    public Carrito findByUsuarioId(Long identificacion) {
         return this.carritoRepository.findByUsuarioId(identificacion);
     }
 

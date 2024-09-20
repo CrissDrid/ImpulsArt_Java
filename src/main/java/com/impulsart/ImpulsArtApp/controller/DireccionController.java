@@ -57,7 +57,7 @@ public class DireccionController {
 
             // Manejo de la llave foránea (Usuario)
             if (request.get("fkUsuario") != null) {
-                Usuario usuario = usuarioImp.findById((int) Long.parseLong(request.get("fkUsuario").toString()));
+                Usuario usuario = usuarioImp.findById(Long.parseLong(request.get("fkUsuario").toString()));
                 if (usuario != null) {
                     direccion.setUsuario(usuario);
                 } else {
@@ -133,7 +133,7 @@ public class DireccionController {
     //FIND HISTORIAL DIRECCIONES
 
     @GetMapping("/historialDirecciones/{identificacion}")
-    public ResponseEntity<Map<String, Object>> findHistorialDireccion(@PathVariable Integer identificacion) {
+    public ResponseEntity<Map<String, Object>> findHistorialDireccion(@PathVariable Long identificacion) {
         Map<String, Object> response = new HashMap<>();
 
         try {

@@ -21,7 +21,7 @@ public class PqrsImp implements PqrsService {
     }
 
     @Override
-    public List<Pqrs> findHistorialPqrs(Integer identificacion) {
+    public List<Pqrs> findHistorialPqrs(Long identificacion) {
         List<Pqrs> pqrs = this.pqrsRepository.findHistorialPqrs(identificacion);
         if (pqrs.isEmpty()) {
             throw new EntityNotFoundException("Reporte de las obras no encontradas");
@@ -30,7 +30,7 @@ public class PqrsImp implements PqrsService {
     }
 
     @Override
-    public List<Pqrs> findPqrsAsignadoAsesores(Integer identificacion) {
+    public List<Pqrs> findPqrsAsignadoAsesores(Long identificacion) {
         List<Pqrs> pqrs = this.pqrsRepository.findPqrsAsignadoAsesores(identificacion);
         if (pqrs.isEmpty()) {
             throw new EntityNotFoundException("Pqrs asignado a asesores no encontradas");

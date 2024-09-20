@@ -18,7 +18,7 @@ import java.util.List;
 public class Usuario {
     @Id
     @Column(name = "Pk_Identificacion")
-    private int identificacion;
+    private long identificacion;
     @Column(name = "Nombre", length = 20, nullable = false)
     private String nombre;
     @Column(name = "Apellido", length = 20, nullable = false)
@@ -39,8 +39,6 @@ public class Usuario {
     private String verificationToken;
     @Column(name = "TokenExpiration")
     private LocalDate tokenExpiration;
-    @Column(name = "TipoUsuario", length = 50, nullable = false)
-    private String tipoUsuario;
 
     @OneToMany(mappedBy = "Usuarios", cascade = CascadeType.ALL)
     @JsonIgnore

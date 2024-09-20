@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CarritoService {
 
-    Carrito findByUsuarioId(@Param("identificacion") Integer identificacion);
+    Carrito findByUsuarioId(@Param("identificacion") Long identificacion);
 
     List<Carrito> findAll() throws Exception;
 

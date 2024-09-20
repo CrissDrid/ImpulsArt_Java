@@ -23,7 +23,7 @@ public interface ObraRepositorio extends JpaRepository <Obra ,Integer> {
             "INNER JOIN o.usuarios u " +
             "WHERE u.identificacion = :identificacion " +
             "AND o.pkCod_Producto NOT IN (SELECT s.obras.pkCod_Producto FROM Subasta s)")
-    List<Obra> findHistorialObras(@Param("identificacion") Integer identificacion);
+    List<Obra> findHistorialObras(@Param("identificacion") Long identificacion);
 
     @Query("SELECT o FROM Obra o WHERE o.pkCod_Producto NOT IN (SELECT s.obras.pkCod_Producto FROM Subasta s)")
     List<Obra> findObrasSinSubasta();

@@ -23,7 +23,7 @@ public class DespachoImp implements DespachoService {
     }
 
     @Override
-    public Usuario asignarDespachoAUsuario(Long pkCod_Despacho, int identificacion) {
+    public Usuario asignarDespachoAUsuario(Long pkCod_Despacho, Long identificacion) {
         // Buscar el despacho por ID
         Despacho despacho = despachoRepository.findById(pkCod_Despacho)
                 .orElseThrow(() -> new IllegalArgumentException("Despacho no encontrado"));
@@ -62,7 +62,7 @@ public class DespachoImp implements DespachoService {
     }
 
     @Override
-    public List<Despacho> findDespachosAsignados(int identificacion) {
+    public List<Despacho> findDespachosAsignados(Long identificacion) {
         List<Despacho> despachos = despachoRepository.findDespachosAsignados(identificacion);
 
         // Verificar si no hay despachos asignados
@@ -74,7 +74,7 @@ public class DespachoImp implements DespachoService {
     }
 
     @Override
-    public List<Despacho> findDespachosEntregados(int identificacion) {
+    public List<Despacho> findDespachosEntregados(Long identificacion) {
         List<Despacho> despachos = despachoRepository.findDespachosEntregados(identificacion);
 
         // Verificar si no hay despachos asignados

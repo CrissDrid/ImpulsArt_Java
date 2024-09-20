@@ -32,7 +32,7 @@ public class OfertaImp implements OfertaService {
     }
 
     @Override
-    public Oferta findBySubastaIdAndUsuarioId(Long subastaId, int usuarioId) {
+    public Oferta findBySubastaIdAndUsuarioId(Long subastaId, Long usuarioId) {
 
         // Buscar oferta existente
         return ofertaRepository.findBySubastaIdAndUsuarioId(subastaId, usuarioId);
