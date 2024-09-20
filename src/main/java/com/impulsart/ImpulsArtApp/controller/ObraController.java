@@ -47,6 +47,61 @@ public class ObraController {
     @Autowired
     private EmailImp emailImp;
 
+    @GetMapping("/random")
+    public ResponseEntity<Map<String, Object>> getRandomObras(@RequestParam(defaultValue = "10") int limit) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Obra> allObras = this.obraImp.findAll();
+            Collections.shuffle(allObras);
+            List<Obra> randomObras = allObras.stream().limit(limit).collect(Collectors.toList());
+
+            response.put("status", "success");
+            response.put("data", randomObras);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/autocomplete")
+    public ResponseEntity<Map<String, Object>> autocomplete(@RequestParam String query) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Obra> obras = obraImp.findByNombreProductoContainingIgnoreCase(query);
+            List<String> nombresObras = obras.stream()
+                    .map(Obra::getNombreProducto)
+                    .collect(Collectors.toList());
+
+            response.put("status", "success");
+            response.put("data", nombresObras);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<Map<String, Object>> buscarObras(@RequestParam String query) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            List<Obra> obras = obraImp.findByNombreProductoContainingIgnoreCase(query);
+            response.put("status", "success");
+            response.put("data", obras);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("data", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createObra(
             @RequestParam("nombreProducto") String nombreProducto,

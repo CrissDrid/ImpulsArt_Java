@@ -27,7 +27,7 @@ public class Despacho {
     @Column(name = "comprobante",length = 100)
     private String comprobante;
     @Column(name = "FechaEntrega",length = 100)
-    private LocalDate FechaEntrega;
+    private LocalDate fechaEntrega;
 
     //FOREING KEY (asignacion de envios)
     @ManyToMany(mappedBy = "despacho")

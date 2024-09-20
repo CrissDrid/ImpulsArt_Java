@@ -21,6 +21,31 @@ public class EmailImp implements EmailService {
     private JavaMailSender mailSender;
 
     @Override
+    public void enviarCorreoEstado(String destinatario, String nombre, String estado) {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+            // Configura el destinatario y el asunto
+            helper.setTo(destinatario);
+            helper.setSubject("Actualización del Estado de su Pedido");
+
+            // Leer el archivo de plantilla y reemplazar los marcadores de posición
+            String htmlTemplate = readTemplate("EmailEstadoDespacho.html");
+            String htmlContent = htmlTemplate
+                    .replace("[[nombre]]", nombre)
+                    .replace("[[estado]]", estado);
+
+            // Configura el contenido HTML del correo
+            helper.setText(htmlContent, true); // true indica que el contenido es HTML
+
+            mailSender.send(mimeMessage);
+        } catch (MessagingException | IOException e) {
+            throw new RuntimeException("Error al enviar correo", e);
+        }
+    }
+
+    @Override
     public void enviarCorreoObraEliminada(String destinatario, String nombreProducto, String mensaje) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {

@@ -42,10 +42,6 @@ public class Pqrs {
     @JoinColumn(name = "fkCod_TipoPqrs",nullable = false)
     private TipoPqrs tipoPQRS;
 
-    @OneToMany(mappedBy = "pqrs")
-    @JsonIgnore
-    private List<Reembolso> reembolso;
-
     @OneToMany(mappedBy = "pqrs", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Respuesta> respuestas;

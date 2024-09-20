@@ -11,11 +11,14 @@ import java.util.List;
 @Repository
 public interface DespachoRepository extends JpaRepository<Despacho, Long> {
 
-    @Query("SELECT d FROM Despacho d WHERE d.usuario IS EMPTY")
+    @Query("SELECT d FROM Despacho d JOIN d.venta v WHERE d.usuario IS EMPTY ORDER BY v.fechaVenta ASC")
     List<Despacho> findDespachos();
 
-    @Query("SELECT d FROM Despacho d JOIN d.usuario u WHERE u.identificacion = :identificacion")
+    @Query("SELECT d FROM Despacho d JOIN d.venta v JOIN d.usuario u WHERE u.identificacion = :identificacion AND d.estado != 'entregado' ORDER BY v.fechaVenta ASC")
     List<Despacho> findDespachosAsignados(@Param("identificacion") int identificacion);
+
+    @Query("SELECT d FROM Despacho d JOIN d.venta v JOIN d.usuario u WHERE u.identificacion = :identificacion AND d.estado = 'entregado' ORDER BY v.fechaVenta ASC")
+    List<Despacho> findDespachosEntregados(@Param("identificacion") int identificacion);
 
     @Query("SELECT COUNT(d) FROM Despacho d")
     int contarDespachos();

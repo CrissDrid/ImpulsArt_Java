@@ -54,10 +54,6 @@ public class Usuario {
     @JsonIgnore
     private List<Respuesta> respuesta;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Resena> resenas;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "Fk_Rol", nullable = false)
     private Rol rol;
@@ -82,15 +78,6 @@ public class Usuario {
             inverseJoinColumns = @JoinColumn(name = "FkCod_Despacho", referencedColumnName = "pkCod_Despacho")
     )
     private List<Despacho> despacho;
-
-    @ManyToMany
-    @JsonIgnore
-    @JoinTable(
-            name = "Usuarios_Pedidos",
-            joinColumns = @JoinColumn(name = "Fk_Identificacion", referencedColumnName = "Pk_Identificacion"),
-            inverseJoinColumns = @JoinColumn(name = "FkCod_Pedido", referencedColumnName = "pk_CodPedido")
-    )
-    private List<PedidoPersonalizado> pedidoPersonalizados;
 
     @ManyToMany
     @JsonIgnore

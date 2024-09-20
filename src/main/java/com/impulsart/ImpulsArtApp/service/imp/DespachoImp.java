@@ -26,10 +26,20 @@ public class DespachoImp implements DespachoService {
     public Usuario asignarDespachoAUsuario(Long pkCod_Despacho, int identificacion) {
         // Buscar el despacho por ID
         Despacho despacho = despachoRepository.findById(pkCod_Despacho)
-                .orElseThrow(() -> new RuntimeException("Despacho no encontrado"));
+                .orElseThrow(() -> new IllegalArgumentException("Despacho no encontrado"));
 
         // Buscar el usuario por identificación
         Usuario usuario = usuarioImp.findById(identificacion);
+
+        // Verificar cuántos despachos asignados al usuario no están en estado "entregado"
+        long despachosNoEntregados = usuario.getDespacho().stream()
+                .filter(d -> !d.getEstado().equalsIgnoreCase("entregado"))
+                .count();
+
+        // Verificar si el usuario ya tiene dos o más despachos no entregados
+        if (despachosNoEntregados >= 2) {
+            throw new IllegalStateException("No puedes tener más de dos despachos activos.");
+        }
 
         // Asignar el despacho al usuario
         usuario.getDespacho().add(despacho);
@@ -37,6 +47,7 @@ public class DespachoImp implements DespachoService {
         // Guardar la asignación en la base de datos
         return usuarioImp.create(usuario);
     }
+
 
     @Override
     public List<Despacho> findDespachos() {
@@ -57,6 +68,18 @@ public class DespachoImp implements DespachoService {
         // Verificar si no hay despachos asignados
         if (despachos == null || despachos.isEmpty()) {
             throw new RuntimeException("No hay despachos asignados para este usuario");
+        }
+
+        return despachos;
+    }
+
+    @Override
+    public List<Despacho> findDespachosEntregados(int identificacion) {
+        List<Despacho> despachos = despachoRepository.findDespachosEntregados(identificacion);
+
+        // Verificar si no hay despachos asignados
+        if (despachos == null || despachos.isEmpty()) {
+            throw new RuntimeException("No hay despachos entregados para este usuario");
         }
 
         return despachos;

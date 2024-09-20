@@ -39,7 +39,4 @@ public class Venta {
     @ManyToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
     private List<Usuario> usuarios;
 
-    @OneToMany(mappedBy = "ventas", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Reembolso> reembolso;
 }
