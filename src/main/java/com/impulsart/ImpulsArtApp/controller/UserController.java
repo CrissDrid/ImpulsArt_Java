@@ -282,7 +282,7 @@ public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object
 
             // RESPUESTA EXITOSA
             response.put("status", "success");
-            response.put("data", "Actualización Exitosa");
+            response.put("data", "ActualizaciÃ³n Exitosa");
         } catch (Exception e) {
             // MANEJO DE ERRORES
             response.put("status", HttpStatus.BAD_GATEWAY);
